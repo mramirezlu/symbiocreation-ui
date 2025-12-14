@@ -42,3 +42,8 @@
 
 # 02/08/25 mramirez
 ✔ Corregido problema de paginación en la lista de simbiocreaciones
+
+# 14/12/24
+✔ Movidas las credenciales de Auth0 a los archivos de environment (environment.ts y environment.prod.ts)
+✔ Corregido problema de redirección cuando el usuario tiene sesión activa y entra a la web
+✔ Actualizado README.md con instrucciones de instalación y comandos de build

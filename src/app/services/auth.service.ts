@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { UserService } from './user.service';
 import { User } from '../models/symbioTypes';
 import { SharedService } from './shared.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class AuthService {
   // Create an observable of Auth0 instance of client
   auth0Client$ = (from(
     createAuth0Client({
-      domain: "symbiocreation.auth0.com",
-      client_id: "YyQ7sR9V17cAQcw9dg7I3snysr843n7l",
+      domain: environment.auth0.domain,
+      client_id: environment.auth0.clientId,
       redirect_uri: `${window.location.origin}`
     })
   ) as Observable<Auth0Client>).pipe(
@@ -47,8 +48,8 @@ export class AuthService {
   loggedIn: boolean = null;
 
   constructor(
-    private router: Router, 
-    private location: Location, 
+    private router: Router,
+    private location: Location,
     private userService: UserService,
     private sharedService: SharedService) {
     // On initial load, check authentication state with authorization server
@@ -67,7 +68,7 @@ export class AuthService {
     );
   }
 
-  // The localAuthSetup() method uses the auth0-spa-js SDK to check if the user is still logged in with the authorization server after a refresh or reload. 
+  // The localAuthSetup() method uses the auth0-spa-js SDK to check if the user is still logged in with the authorization server after a refresh or reload.
   private localAuthSetup() {
     // This should only be called on app initialization
     // Set up local authentication streams
@@ -82,7 +83,16 @@ export class AuthService {
         return of(loggedIn);
       })
     );
-    checkAuth$.subscribe();
+    checkAuth$.subscribe(() => {
+      // Navigate to current path or default route after auth check
+      // This handles the case when initialNavigation is disabled
+      const path = this.location.path();
+      if (path && !path.includes('code=')) {
+        this.router.navigateByUrl(path);
+      } else if (!path) {
+        this.router.navigateByUrl('/');
+      }
+    });
   }
 
   login(redirectPath: string = '/') {
@@ -133,9 +143,9 @@ export class AuthService {
           console.log('new user!');
 
           // create new user
-          let newUser: User = {name: usr.name, firstName: usr.given_name, lastName: usr.family_name, 
+          let newUser: User = {name: usr.name, firstName: usr.given_name, lastName: usr.family_name,
                                 email: usr.email, pictureUrl: usr.picture, role: 'USER'};
-          
+
           this.userService.createUser(newUser).subscribe(createdUser => {
             this.sharedService.nextAppUser(createdUser);
             this.router.navigate([targetRoute]);
@@ -147,7 +157,7 @@ export class AuthService {
           if (usr.given_name) u.firstName = usr.given_name;
           if (usr.family_name) u.lastName = usr.family_name;
           if (usr.picture) u.pictureUrl = usr.picture;
-          
+
           this.userService.updateUser(u).subscribe(updatedUser => {
             // console.log(updatedUser);
             this.sharedService.nextAppUser(updatedUser);
@@ -155,7 +165,7 @@ export class AuthService {
           });
         }
       });
-      
+
       // Subscribe to authentication completion observable
       // Response will be an array of user and login status
       /*authComplete$.subscribe(([user, loggedIn]) => {
@@ -164,7 +174,8 @@ export class AuthService {
       }); */
     } else {
       //console.log('location: ', this.location.path());
-      this.router.navigateByUrl(this.location.path());
+      const path = this.location.path();
+      this.router.navigateByUrl(path || '/');
     }
   }
 
@@ -173,7 +184,7 @@ export class AuthService {
     this.auth0Client$.subscribe((client: Auth0Client) => {
       // Call method to log out
       client.logout({
-        client_id: "YyQ7sR9V17cAQcw9dg7I3snysr843n7l",
+        client_id: environment.auth0.clientId,
         returnTo: `${window.location.origin}`
       });
     });

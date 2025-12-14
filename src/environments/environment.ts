@@ -6,7 +6,11 @@ export const environment = {
   production: false,
   resApiUrl: 'http://localhost:8080',
   localhost: 'http://localhost:4200',
-  socketUrl: 'ws://localhost:8080/rsocket'
+  socketUrl: 'ws://localhost:8080/rsocket',
+  auth0: {
+    domain: 'dev-8eijwzo853nvei2s.us.auth0.com',
+    clientId: '9GBmsRDCamscnjmDQwK62wb9aCXpoWZZ'
+  }
 };
 
 /*
