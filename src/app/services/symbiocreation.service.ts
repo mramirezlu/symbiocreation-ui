@@ -42,20 +42,29 @@ export class SymbiocreationService {
     }
 
     // find all public symbiocreations
-    getAllPublicSymbiocreations(page: number): Observable<Symbiocreation[]> {
+    getAllPublicSymbiocreations(page: number, name?: string): Observable<Symbiocreation[]> {
         let API_URL = `${this.apiUrl}/symbiocreations/getAllPublic/${page}`;
+        if (name) {
+            API_URL += `?name=${encodeURIComponent(name)}`;
+        }
         return this.http.get<Symbiocreation[]>(API_URL);
     }
 
     // find all upcoming symbiocreations
-    getUpcomingPublicSymbiocreations(page: number): Observable<Symbiocreation[]> {
+    getUpcomingPublicSymbiocreations(page: number, name?: string): Observable<Symbiocreation[]> {
         let API_URL = `${this.apiUrl}/symbiocreations/getUpcomingPublic/${page}`;
+        if (name) {
+            API_URL += `?name=${encodeURIComponent(name)}`;
+        }
         return this.http.get<Symbiocreation[]>(API_URL);
     }
 
     // find all past symbiocreations
-    getPastPublicSymbiocreations(page: number): Observable<Symbiocreation[]> {
+    getPastPublicSymbiocreations(page: number, name?: string): Observable<Symbiocreation[]> {
         let API_URL = `${this.apiUrl}/symbiocreations/getPastPublic/${page}`;
+        if (name) {
+            API_URL += `?name=${encodeURIComponent(name)}`;
+        }
         return this.http.get<Symbiocreation[]>(API_URL);
     }
 
@@ -64,18 +73,27 @@ export class SymbiocreationService {
         return this.http.get<number>(API_URL);
     }
 
-    countPublicSymbiocreations(): Observable<number> {
+    countPublicSymbiocreations(name?: string): Observable<number> {
         let API_URL = `${this.apiUrl}/symbiocreations/countPublic`;
+        if (name) {
+            API_URL += `?name=${encodeURIComponent(name)}`;
+        }
         return this.http.get<number>(API_URL);
     }
 
-    countPastPublicSymbiocreations(): Observable<number> {
+    countPastPublicSymbiocreations(name?: string): Observable<number> {
         let API_URL = `${this.apiUrl}/symbiocreations/countPastPublic`;
+        if (name) {
+            API_URL += `?name=${encodeURIComponent(name)}`;
+        }
         return this.http.get<number>(API_URL);
     }
 
-    countUpcomingPublicSymbiocreations(): Observable<number> {
+    countUpcomingPublicSymbiocreations(name?: string): Observable<number> {
         let API_URL = `${this.apiUrl}/symbiocreations/countUpcomingPublic`;
+        if (name) {
+            API_URL += `?name=${encodeURIComponent(name)}`;
+        }
         return this.http.get<number>(API_URL);
     }
 

@@ -25,6 +25,7 @@ export class ExploreComponent implements OnInit {
   symbiocreations: Symbiocreation[] = [];
   filter: string = 'all';
   totalCount: number;
+  searchName: string = '';
 
   constructor(
     private symbioService: SymbiocreationService,
@@ -50,18 +51,18 @@ export class ExploreComponent implements OnInit {
   filterChanged() {
     this.symbiocreations = [];
     this.paginator.firstPage();
+    const name = this.sanitizeSearchName() || undefined;
 
     switch(this.filter) {
       case "upcoming": {
         this.sharedService.nextIsLoading(true);
-        this.symbioService.countUpcomingPublicSymbiocreations()
+        this.symbioService.countUpcomingPublicSymbiocreations(name)
           .subscribe(count => this.totalCount = count);
-        this.symbioService.getUpcomingPublicSymbiocreations(0)
+        this.symbioService.getUpcomingPublicSymbiocreations(0, name)
           .subscribe(
             symbios => {
               this.sharedService.nextIsLoading(false);
               this.symbiocreations = symbios;
-              //console.log(symbios);
               this.symbiocreations.forEach(symbio => symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants));
             }
           );
@@ -69,9 +70,9 @@ export class ExploreComponent implements OnInit {
       }
       case "past": {
         this.sharedService.nextIsLoading(true);
-        this.symbioService.countPastPublicSymbiocreations()
+        this.symbioService.countPastPublicSymbiocreations(name)
           .subscribe(count => this.totalCount = count);
-        this.symbioService.getPastPublicSymbiocreations(0)
+        this.symbioService.getPastPublicSymbiocreations(0, name)
           .subscribe(
             symbios => {
               this.sharedService.nextIsLoading(false);
@@ -83,9 +84,9 @@ export class ExploreComponent implements OnInit {
       }
       case "all": {
         this.sharedService.nextIsLoading(true);
-        this.symbioService.countPublicSymbiocreations()
+        this.symbioService.countPublicSymbiocreations(name)
           .subscribe(count => this.totalCount = count);
-        this.symbioService.getAllPublicSymbiocreations(0)
+        this.symbioService.getAllPublicSymbiocreations(0, name)
           .subscribe(
             symbios => {
               this.sharedService.nextIsLoading(false);
@@ -156,12 +157,24 @@ export class ExploreComponent implements OnInit {
     return moment(lastModified).fromNow();
   }
 
+  private sanitizeSearchName(): string {
+    if (!this.searchName) return '';
+    return this.searchName.trim().substring(0, 50).replace(/[<>]/g, '');
+  }
+
+  search(): void {
+    this.paginator.firstPage();
+    this.filterChanged();
+  }
+
   onPageFired(event) {
+    const name = this.sanitizeSearchName() || undefined;
+
     switch(this.filter) {
       case "upcoming": {
         this.sharedService.nextIsLoading(true);
         this.symbiocreations = [];
-        this.symbioService.getUpcomingPublicSymbiocreations(event.pageIndex)
+        this.symbioService.getUpcomingPublicSymbiocreations(event.pageIndex, name)
           .subscribe(
             symbios => {
               this.sharedService.nextIsLoading(false);
@@ -174,7 +187,7 @@ export class ExploreComponent implements OnInit {
       case "past": {
         this.sharedService.nextIsLoading(true);
         this.symbiocreations = [];
-        this.symbioService.getPastPublicSymbiocreations(event.pageIndex)
+        this.symbioService.getPastPublicSymbiocreations(event.pageIndex, name)
           .subscribe(
             symbios => {
               this.sharedService.nextIsLoading(false);
@@ -187,7 +200,7 @@ export class ExploreComponent implements OnInit {
       case "all": {
         this.sharedService.nextIsLoading(true);
         this.symbiocreations = [];
-        this.symbioService.getAllPublicSymbiocreations(event.pageIndex)
+        this.symbioService.getAllPublicSymbiocreations(event.pageIndex, name)
           .subscribe(
             symbios => {
               this.sharedService.nextIsLoading(false);

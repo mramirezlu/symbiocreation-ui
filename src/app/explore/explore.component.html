@@ -16,6 +16,18 @@
         </mat-button-toggle-group>
     </div>
 
+    <div class="container-80 search-container">
+        <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Buscar por nombre</mat-label>
+            <input matInput
+                   [(ngModel)]="searchName"
+                   (keyup.enter)="search()"
+                   placeholder="Ej: clima"
+                   maxlength="50">
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="search-button" (click)="search()">Buscar</button>
+    </div>
+
     <div *ngIf="symbiocreations?.length === 0" class="container-80 centered gray-600" style="margin-top: 15px;">
         No se encontraron simbiocreaciones.
     </div>

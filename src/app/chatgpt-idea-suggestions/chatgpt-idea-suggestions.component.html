@@ -1,4 +1,4 @@
-<mat-progress-spinner *ngIf="isLoadingLlmResponse" 
+<mat-progress-spinner *ngIf="isLoadingLlmResponse"
         style="margin: 40px auto 0;"
         color="accent"
         diameter="40"
@@ -12,7 +12,7 @@
 
 <div *ngIf="ideasSuggested">
 
-    <h3 class="gray-800 font-17 bold" style="margin-top: 50px;">Ideas de ChatGPT:</h3>
+    <h3 class="gray-800 font-17 bold" style="margin-top: 50px;">Generación de Ideas:</h3>
 
     <mat-list>
         <ng-container *ngFor="let idea of ideasSuggested; last as last">
