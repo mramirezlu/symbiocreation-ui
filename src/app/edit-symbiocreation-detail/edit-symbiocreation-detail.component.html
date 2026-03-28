@@ -1,59 +1,59 @@
 <div style="padding: 15px;">
     <div class="container-80" style="margin-top: 40px; margin-bottom: 35px;">
-        <h2 class="font-26 bolder gray-900" style="display: inline-block;">Editar simbiocreación</h2>
+        <h2 class="font-26 bolder gray-900" style="display: inline-block;">{{ 'SYMBIO.EDIT_SYMBIOCREATION' | translate }}</h2>
     </div>
 
     <form #form="ngForm" (ngSubmit)="onSubmit()" *ngIf="symbio" class="container-60">
         <div fxLayout="row">
             <mat-form-field fxFlex="80" style="padding-right: 20px;">
-                <mat-label>Nombre de la simbiocreación</mat-label>
+                <mat-label>{{ 'SYMBIO.SYMBIOCREATION_NAME' | translate }}</mat-label>
                 <input matInput cdkFocusInitial required [(ngModel)]="symbio.name" name="name">
             </mat-form-field>
 
-            <mat-checkbox fxFlex="20" [(ngModel)]="isPrivate" name="isPrivate">Es un evento privado</mat-checkbox>
+            <mat-checkbox fxFlex="20" [(ngModel)]="isPrivate" name="isPrivate">{{ 'SYMBIO.IS_PRIVATE_EVENT' | translate }}</mat-checkbox>
         </div>
 
         <div>
             <mat-form-field style="width: 80%; padding-right: 20px;">
-                <mat-label>Lugar</mat-label>
+                <mat-label>{{ 'SYMBIO.PLACE' | translate }}</mat-label>
                 <input matInput type="text" [(ngModel)]="symbio.place" name="place">
             </mat-form-field>
         </div>
 
         <div fxLayout="row">
             <mat-form-field appearance="fill" style="padding-right: 10px;">
-                <mat-label>Fecha</mat-label>
+                <mat-label>{{ 'SYMBIO.DATE' | translate }}</mat-label>
                 <input matInput [matDatepicker]="datePicker" touchUi [(ngModel)]="eventDate" name="eventDate">
 
                 <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
                 <mat-datepicker #datePicker></mat-datepicker>
             </mat-form-field>
 
-            <mat-checkbox fxFlex="20" [(ngModel)]="symbio.hasStartTime" name="hasStartTime">Establecer hora de inicio</mat-checkbox>
+            <mat-checkbox fxFlex="20" [(ngModel)]="symbio.hasStartTime" name="hasStartTime">{{ 'SYMBIO.SET_START_TIME' | translate }}</mat-checkbox>
         </div>
 
         <div *ngIf="symbio.hasStartTime" fxLayout="row">
             <mat-form-field appearance="fill" style="padding-right: 10px;">
-                <mat-label>Hora</mat-label>
+                <mat-label>{{ 'SYMBIO.TIME' | translate }}</mat-label>
                 <input matInput type="time" [(ngModel)]="eventTime" name="eventTime">
             </mat-form-field>
 
             <ng-moment-timezone-picker [(ngModel)]="eventTz" name="eventTz"
-                            [customPlaceholderText]="'Zona horaria'"
-                            [customNotFoundText]="'No se encontró zona'">
+                            [customPlaceholderText]="'CREATE_SYMBIO.TIMEZONE_PLACEHOLDER' | translate"
+                            [customNotFoundText]="'CREATE_SYMBIO.TIMEZONE_NOT_FOUND' | translate">
             </ng-moment-timezone-picker>
         </div>
 
         <div>
             <mat-form-field fxFlex appearance="fill">
-                <mat-label>Descripción</mat-label>
+                <mat-label>{{ 'SYMBIO.DESCRIPTION' | translate }}</mat-label>
                 <textarea matInput [(ngModel)]="symbio.description" name="description" rows="9"></textarea>
             </mat-form-field>
         </div>
 
         <div>
             <mat-form-field fxFlex>
-                <mat-label>Link con información del evento</mat-label>
+                <mat-label>{{ 'SYMBIO.INFO_URL' | translate }}</mat-label>
                 <input matInput type="url" [(ngModel)]="symbio.infoUrl" name="infoUrl">
             </mat-form-field>
         </div>
@@ -65,7 +65,7 @@
                         {{tag}}
                         <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip-row>
-                    <input placeholder="Tags"
+                    <input [placeholder]="'CREATE_SYMBIO.TAGS' | translate"
                             [matChipInputFor]="tagList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                             [matChipInputAddOnBlur]="true"
@@ -81,7 +81,7 @@
                         {{url}}
                         <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip-row>
-                    <input style="flex: 1 0 40px;" placeholder="Extra URLs"
+                    <input style="flex: 1 0 40px;" [placeholder]="'CREATE_SYMBIO.EXTRA_URLS' | translate"
                             [matChipInputFor]="extraUrlsList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                             [matChipInputAddOnBlur]="true"
@@ -97,7 +97,7 @@
                         {{sdg}}
                         <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip-row>
-                    <input placeholder="Objetivos de Desarrollo Sostenible"
+                    <input [placeholder]="'CREATE_SYMBIO.SDG' | translate"
                             #sdgInput
                             [formControl]="sdgCtrl"
                             [matAutocomplete]="auto"
@@ -115,10 +115,10 @@
 
 
         <div>
-            <button mat-button type="button" (click)="location.back()">Cancelar</button>
+            <button mat-button type="button" (click)="location.back()">{{ 'COMMON.CANCEL' | translate }}</button>
             <span fxFlex></span>
             <button mat-raised-button color="accent" type="submit" [disabled]="!form.valid">
-                <span>Guardar</span>
+                <span>{{ 'COMMON.SAVE' | translate }}</span>
             </button>
         </div>
     </form>

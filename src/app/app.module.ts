@@ -4,13 +4,16 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppMaterialModule } from './app-material.module';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { CloudinaryModule } from '@cloudinary/ng';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS, provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MomentTimezonePickerModule } from 'moment-timezone-picker';
 import { LinkyModule } from 'ngx-linky';
+
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -99,6 +102,14 @@ import { ChatgptIdeaSuggestionsComponent } from './chatgpt-idea-suggestions/chat
     MatMomentDateModule,
     MomentTimezonePickerModule,
     LinkyModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'es',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (http: HttpClient) => new TranslateHttpLoader(http, './assets/i18n/', '.json'),
+        deps: [HttpClient]
+      }
+    }),
     // MatSidenavModule,
     // MatGridListModule,
     // CdkAccordionModule,

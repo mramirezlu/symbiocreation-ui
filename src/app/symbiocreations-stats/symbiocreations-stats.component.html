@@ -1,6 +1,6 @@
 <mat-toolbar color="accent">
-    <span class="ellipsed">Stats de Simbiocreación</span>
-    
+    <span class="ellipsed">{{ 'SYMBIO.SYMBIO_STATS' | translate }}</span>
+
     <span fxFlex></span>
 
     <button mat-icon-button (click)="closeSidenavAnalytics()">
@@ -11,17 +11,17 @@
 <div style="padding: 35px 25px 25px;">
     <div>
         <p>
-            <span class="font-14 gray-700">Participantes: </span>
+            <span class="font-14 gray-700">{{ 'SYMBIO.PARTICIPANTS' | translate }}: </span>
             <span class="bold font-17 symbio-stat-value" style="margin-left: 10px;">{{ totalUsers }}</span>
         </p>
         <p>
-            <span class="font-14 gray-700">Ideas: </span>
+            <span class="font-14 gray-700">{{ 'SYMBIO.IDEAS' | translate }}: </span>
             <span class="bold font-17 symbio-stat-value" style="margin-left: 10px;">{{ totalIdeas }}</span>
         </p>
     </div>
 
     <mat-tab-group style="margin-top: 40px;">
-        <mat-tab label="Top Usuarios">
+        <mat-tab [label]="'STATS.TOP_USERS' | translate">
 
             <mat-list>
                 <mat-list-item *ngFor="let item of usersRanking; index as i; last as last">
@@ -40,13 +40,13 @@
                                     {{ item.user.email }}
                                   </span>
                             </div>
-                
+
                             <div>
-                                <span class="bold font-12 gray-700">PUNTAJE: {{ item.score }}</span>
+                                <span class="bold font-12 gray-700">{{ 'SYMBIO.SCORE' | translate }}: {{ item.score }}</span>
                             </div>
                         </div>
                     </div>
-            
+
                     <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
 
                 </mat-list-item>
@@ -54,8 +54,8 @@
 
         </mat-tab>
 
-        <mat-tab label="Tendencias">
-            
+        <mat-tab [label]="'SYMBIO.TRENDS' | translate">
+
             <mat-list>
                 <mat-list-item *ngFor="let item of trends; last as last">
                   <div matLine>
@@ -63,7 +63,7 @@
                       {{ item.term }}
                     </span>
                   </div>
-            
+
                   <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
                 </mat-list-item>
             </mat-list>

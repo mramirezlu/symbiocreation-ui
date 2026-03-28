@@ -1,36 +1,36 @@
 <div #container style="height: 100%;">
-    
+
     <mat-menu #nodeContextMenu="matMenu">
         <ng-template matMenuContent let-node="node">
 
-            <button mat-menu-item 
+            <button mat-menu-item
                 (click)="openIdeaDetailSidenav(node)">
-                Ver idea
+                {{ 'SYMBIO.VIEW_IDEA' | translate }}
             </button>
 
             <button *ngIf="participant.isModerator || isAmbassadorOfAnyGroupBelow(node) || node.u_id === participant?.u_id"
-                mat-menu-item 
-                [matMenuTriggerFor]="groupsSubMenu" 
+                mat-menu-item
+                [matMenuTriggerFor]="groupsSubMenu"
                 [matMenuTriggerData]="{node: node}">
-                Asignar grupo
+                {{ 'SYMBIO.ASSIGN_GROUP' | translate }}
             </button>
 
             <button *ngIf="!node.u_id && ( participant.isModerator || isAmbassadorOfAnyGroupBelow(node) )"
-                mat-menu-item 
+                mat-menu-item
                 (click)="setNodeName(node)">
-                Cambiar nombre
+                {{ 'SYMBIO.CHANGE_NAME' | translate }}
             </button>
 
             <button *ngIf="node.u_id && participant.isModerator && node.role !== 'ambassador'"
-                mat-menu-item 
+                mat-menu-item
                 (click)="setNodeRole(node, 'ambassador')">
-                Asignar como embajador
+                {{ 'SYMBIO.ASSIGN_AMBASSADOR' | translate }}
             </button>
 
-            <button *ngIf="participant.isModerator || isAmbassadorOfAnyGroupBelow(node)" 
-                mat-menu-item 
+            <button *ngIf="participant.isModerator || isAmbassadorOfAnyGroupBelow(node)"
+                mat-menu-item
                 (click)="deleteNode(node)">
-                Eliminar
+                {{ 'COMMON.DELETE' | translate }}
             </button>
         </ng-template>
     </mat-menu>
@@ -38,7 +38,7 @@
     <mat-menu #groupsSubMenu="matMenu">
         <ng-template matMenuContent let-node="node">
             <button mat-menu-item (click)="setNodeParent(node.id, 'none')">
-                <span>Sin Grupo</span>
+                <span>{{ 'SYMBIO.NO_GROUP' | translate }}</span>
             </button>
             <button mat-menu-item *ngFor="let g of filterGroups(groups, node)" (click)="setNodeParent(node.id, g.id)"> <!-- filter because a node cannot be its own parent! -->
                 <span>{{g.name}}</span>

@@ -1,12 +1,12 @@
-<h1 mat-dialog-title>Nuevo grupo</h1>
+<h1 mat-dialog-title>{{ 'DIALOG.NEW_GROUP' | translate }}</h1>
 <mat-dialog-content>
     <mat-form-field style="width: 100%;">
-      <mat-label>Nombre</mat-label>
+      <mat-label>{{ 'DIALOG.NAME' | translate }}</mat-label>
       <input matInput cdkFocusInitial [(ngModel)]="groupName">
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
     <span fxFlex></span>
-    <button mat-flat-button [mat-dialog-close]="groupName" color="accent" [disabled]="!groupName">OK</button>
+    <button mat-flat-button [mat-dialog-close]="groupName" color="accent" [disabled]="!groupName">{{ 'COMMON.OK' | translate }}</button>
 </mat-dialog-actions>

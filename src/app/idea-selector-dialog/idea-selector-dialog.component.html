@@ -1,13 +1,13 @@
-<h1 mat-dialog-title>Seleccione una de las ideas del participante:</h1>
+<h1 mat-dialog-title>{{ 'DIALOG.SELECT_PARTICIPANT_IDEA' | translate }}</h1>
 <mat-dialog-content>
     <mat-action-list>
         <mat-list-item *ngFor="let node of data.nodes">
             <button *ngIf="node.idea" mat-list-item [mat-dialog-close]="node"> {{node.idea.title}} </button>
-            <button *ngIf="!node.idea" mat-list-item [mat-dialog-close]="node"> (vacío) </button>
+            <button *ngIf="!node.idea" mat-list-item [mat-dialog-close]="node"> ({{ 'SYMBIO.EMPTY' | translate }}) </button>
         </mat-list-item>
     </mat-action-list>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
 </mat-dialog-actions>

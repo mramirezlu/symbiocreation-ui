@@ -10,7 +10,7 @@
       </div>
 
       <div matLine style="padding-left: 5px;">
-        <span class="bold font-13 gray-700">PUNTAJE: {{ user.score }}</span>
+        <span class="bold font-13 gray-700">{{ 'STATS.SCORE' | translate }}: {{ user.score }}</span>
       </div>
 
       <mat-divider [inset]="true" *ngIf="!last"></mat-divider>

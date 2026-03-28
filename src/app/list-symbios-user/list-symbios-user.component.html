@@ -8,8 +8,8 @@
     <mat-list *ngIf="symbiocreations?.length > 0">
         <h3 matSubheader class="oculto-mobile font-14 gray-600">
             <span fxFlex></span>
-            <span fxFlex="15">Número de participantes</span>
-            <span fxFlex="15">Última modificación</span>
+            <span fxFlex="15">{{ 'MY_SYMBIOS.NUMBER_OF_PARTICIPANTS' | translate }}</span>
+            <span fxFlex="15">{{ 'MY_SYMBIOS.LAST_MODIFIED' | translate }}</span>
             <span fxFlex="40px"></span>
         </h3>
 
@@ -20,7 +20,7 @@
                     <a [routerLink]="['/symbiocreation/', s.id]" class="bold font-18 teal-700" style="max-width: 55%;">
                         {{s.name}}
                     </a>
-                    <span *ngIf="isModeratorList[i]" class="chip-role small moderator" style="margin-left: 12px;">Moderador</span>
+                    <span *ngIf="isModeratorList[i]" class="chip-role small moderator" style="margin-left: 12px;">{{ 'MY_SYMBIOS.MODERATOR' | translate }}</span>
                     
                     <mat-icon class="font-20 gray-600" 
                         style="margin-left: 8px;" 
@@ -29,8 +29,8 @@
                         {{s.visibility === 'public' ? 'public' : 'lock'}}
                     </mat-icon>
 
-                    <button mat-icon-button 
-                        matTooltip="Ver más información" matTooltipPosition="above"
+                    <button mat-icon-button
+                        [matTooltip]="'MY_SYMBIOS.VIEW_MORE_INFO' | translate" matTooltipPosition="above"
                         (click)="openSymbioDetailDialog(s, isModeratorList[i])">
                         <mat-icon class="font-20 gray-600">info</mat-icon>
                     </button>
@@ -47,27 +47,27 @@
                     <mat-menu #simbioMenu="matMenu">
                         <button mat-menu-item (click)="openSymbioDetailDialog(s, isModeratorList[i])">
                             <mat-icon>info</mat-icon>
-                            <span>Ver más información</span>
+                            <span>{{ 'MY_SYMBIOS.VIEW_MORE_INFO' | translate }}</span>
                         </button>
                         <button *ngIf="isModeratorList[i]" mat-menu-item (click)="changeNameSymbiocreation(s)">
                             <mat-icon>text_fields</mat-icon>
-                            <span>Cambiar nombre</span>
+                            <span>{{ 'MY_SYMBIOS.CHANGE_NAME' | translate }}</span>
                         </button>
                         <button *ngIf="isModeratorList[i]" mat-menu-item (click)="editSymbiocreationInfo(s)">
                             <mat-icon>edit</mat-icon>
-                            <span>Editar evento</span>
+                            <span>{{ 'MY_SYMBIOS.EDIT_EVENT' | translate }}</span>
                         </button>
                         <button *ngIf="isModeratorList[i]" mat-menu-item (click)="deleteSymbiocreation(s.id)">
                             <mat-icon>delete</mat-icon>
-                            <span>Eliminar</span>
+                            <span>{{ 'COMMON.DELETE' | translate }}</span>
                         </button>
                     </mat-menu>
             </div>
 
-            
+
             <div>
                 <mat-form-field fxFlex="33">
-                        <mat-label>Link para compartir</mat-label>
+                        <mat-label>{{ 'MY_SYMBIOS.SHARE_LINK' | translate }}</mat-label>
                         <input matInput type="text" value="{{environment.localhost}}/symbiocreation/{{s.id}}" class="font-14" readonly>
                         <button mat-icon-button matSuffix cdkCopyToClipboard="{{environment.localhost}}/symbiocreation/{{s.id}}">
                             <mat-icon>content_copy</mat-icon>

@@ -109,6 +109,46 @@ mat-toolbar{
     background-color: #BABDC1;
 }
 
+.lang-selector {
+    margin-right: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    min-width: 40px;
+    width: 40px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .lang-code {
+        font-weight: 600;
+        font-size: 13px;
+        color: white;
+        line-height: 1;
+    }
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+}
+
+.lang-selector-mobile {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    button {
+        min-width: 50px;
+    }
+}
+
+.active-lang {
+    background-color: rgba(40, 121, 135, 0.15);
+    font-weight: 600;
+}
+
 @media (max-width: 768px) {
 
     .menu-desktop{

@@ -1,14 +1,14 @@
-<h1 mat-dialog-title>Idea de {{data.name}}</h1>
+<h1 mat-dialog-title>{{ 'IDEA.IDEA_OF' | translate }} {{data.name}}</h1>
 
 <mat-dialog-content>
     <mat-form-field style="width: 100%;">
-      <mat-label>Título</mat-label>
-      <input matInput cdkFocusInitial required [(ngModel)]="idea.title" placeholder="Ej. Un robot que limpie la atmósfera.">
+      <mat-label>{{ 'IDEA.TITLE' | translate }}</mat-label>
+      <input matInput cdkFocusInitial required [(ngModel)]="idea.title" [placeholder]="'IDEA.TITLE_PLACEHOLDER' | translate">
     </mat-form-field>
-    
+
     <mat-form-field style="width: 100%;">
-      <mat-label>Descripción</mat-label>
-      <textarea matInput required [(ngModel)]="idea.description" placeholder="Descripción larga de mi idea." rows="9"></textarea>
+      <mat-label>{{ 'IDEA.DESCRIPTION' | translate }}</mat-label>
+      <textarea matInput required [(ngModel)]="idea.description" [placeholder]="'IDEA.DESCRIPTION_PLACEHOLDER' | translate" rows="9"></textarea>
     </mat-form-field>
 
     <mat-form-field style="width: 100%;">
@@ -17,23 +17,23 @@
               {{url}}
               <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip-row>
-          <input style="flex: 1 0 40px;" placeholder="Enlaces externos"
+          <input style="flex: 1 0 40px;" [placeholder]="'IDEA.EXTERNAL_LINKS' | translate"
                   [matChipInputFor]="externalUrlList"
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   [matChipInputAddOnBlur]="true"
                   (matChipInputTokenEnd)="addExternalUrl($event)">
       </mat-chip-grid>
   </mat-form-field>
-    
+
     <div class="centered" style="padding-bottom: 25px;">
       <button mat-raised-button color="accent" style="margin-right: 5px;" (click)="openCamera()">
         <mat-icon>camera_alt</mat-icon>
-        <span>Tomar foto</span>
+        <span>{{ 'IDEA.TAKE_PHOTO' | translate }}</span>
       </button>
 
       <button mat-raised-button color="accent" style="margin-right: 5px;" (click)="imageInput.click()">
         <mat-icon>add_photo_alternate</mat-icon>
-        <span>Agregar imagen</span>
+        <span>{{ 'IDEA.ADD_IMAGE' | translate }}</span>
       </button>
       <input #imageInput
               hidden
@@ -43,7 +43,7 @@
 
       <button #generateImageBtn mat-raised-button color="accent" style="margin-right: 5px;" (click)="generateImageWithLlm(generateImageBtn)">
         <mat-icon>camera_alt</mat-icon>
-        <span>Generar imagen con AI</span>
+        <span>{{ 'IDEA.GENERATE_AI_IMAGE' | translate }}</span>
       </button>
     </div>
 
@@ -55,20 +55,20 @@
               mode="indeterminate">
       </mat-progress-spinner>
     </div>
-    
+
     <div *ngFor="let cloudinaryImg of idea.cloudinaryImages; index as i" style="margin-top: 20px;">
       <advanced-image [cldImg]="cloudinaryImg" width="60%" height="auto"></advanced-image>
-      <button mat-button color="warn" (click)="deletePublicId(i)">Eliminar</button>
+      <button mat-button color="warn" (click)="deletePublicId(i)">{{ 'COMMON.DELETE' | translate }}</button>
     </div>
 
     <div *ngFor="let img of selectedImgs" style="margin-top: 20px;">
       <img [src]="img.src" style="width: 60%; height: auto;" /><br />
-      <button mat-button color="warn" (click)="deleteSelectedImg(img)">Eliminar</button>
+      <button mat-button color="warn" (click)="deleteSelectedImg(img)">{{ 'COMMON.DELETE' | translate }}</button>
     </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
     <span fxFlex></span>
-    <button #okButton mat-flat-button color="primary" (click)="onOkClick(okButton)" [disabled]="!idea.title || !idea.description">OK</button>
+    <button #okButton mat-flat-button color="primary" (click)="onOkClick(okButton)" [disabled]="!idea.title || !idea.description">{{ 'COMMON.OK' | translate }}</button>
 </mat-dialog-actions>

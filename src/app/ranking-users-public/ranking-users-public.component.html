@@ -1,6 +1,6 @@
 <div class="container-80 container-general">
 
-    <h2 class="font-26 bolder gray-900 container-header">Top 100 Usuarios</h2>
+    <h2 class="font-26 bolder gray-900 container-header">{{ 'RANKING.TITLE' | translate }}</h2>
 
     <mat-list class="list-ranking">
         <ng-container *ngFor="let user of users; index as i; last as last">
@@ -14,7 +14,7 @@
                 </div>
 
                 <div matListItemLine>
-                    <span class="font-14 gray-700">PUNTAJE: {{ user.score }}</span>
+                    <span class="font-14 gray-700">{{ 'RANKING.SCORE' | translate }} {{ user.score }}</span>
                 </div>
 
                 <!-- <div class="list-item-ranking-container" fxLayout="row">

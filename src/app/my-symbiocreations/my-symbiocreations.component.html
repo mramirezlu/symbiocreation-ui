@@ -10,31 +10,31 @@
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
-            <h2 class="font-26 bolder gray-900 main-title">Mis Stats</h2>
+            <h2 class="font-26 bolder gray-900 main-title">{{ 'MY_SYMBIOS.MY_STATS' | translate }}</h2>
         </div>
 
 
         <div class="container-group-symbio" style="margin-top: 20px;padding-bottom: 10px;" fxLayout="row">
             <div class="single-stat-my-symbios-1 container-item-symbio">
-                <span class="label">Puntaje</span> 
+                <span class="label">{{ 'MY_SYMBIOS.SCORE' | translate }}</span>
                 <br class="oculto-mobile"/>
                 <span class="value">{{ score }}</span>
             </div>
-    
+
             <div class="single-stat-my-symbios-2 container-item-symbio">
-                <span class="label">Total Simbiocreaciones</span> 
+                <span class="label">{{ 'MY_SYMBIOS.TOTAL_SYMBIOCREATIONS' | translate }}</span>
                 <br class="oculto-mobile"/>
                 <span class="value">{{ totalSymbiocreations }}</span>
             </div>
-    
+
             <div class="single-stat-my-symbios-3 container-item-symbio">
-                <span class="label">Total Ideas</span> 
+                <span class="label">{{ 'MY_SYMBIOS.TOTAL_IDEAS' | translate }}</span>
                 <br class="oculto-mobile"/>
                 <span class="value">{{ totalIdeas }}</span>
             </div>
-    
+
             <div class="single-stat-my-symbios-4 container-item-symbio">
-                <span class="label">Grupos como Embajador</span> 
+                <span class="label">{{ 'MY_SYMBIOS.AMBASSADOR_GROUPS' | translate }}</span>
                 <br class="oculto-mobile"/>
                 <span class="value">{{ totalGroupsAsAmbassador }}</span>
             </div>
@@ -42,12 +42,12 @@
     </div>
 
     <div class="container-90 container-my-symbio" style="margin-top: 20px; margin-bottom: 15px;box-sizing: border-box;display: flex;">
-        <h2 class="font-26 bolder gray-900 title-symbio" style="flex: 1 1 0%;">Mis Simbiocreaciones</h2>
+        <h2 class="font-26 bolder gray-900 title-symbio" style="flex: 1 1 0%;">{{ 'MY_SYMBIOS.TITLE' | translate }}</h2>
 
         <div style="display: flex; flex-direction: row; align-items: center;">
             <button *ngIf="!isGridViewOn"
                 mat-icon-button
-                matTooltip="Vista de cuadrícula" matTooltipPosition="above"
+                [matTooltip]="'MY_SYMBIOS.GRID_VIEW' | translate" matTooltipPosition="above"
                 style="margin-right: 10px;"
                 (click)="toggleViewMode()">
                 <mat-icon>grid_on</mat-icon>
@@ -55,7 +55,7 @@
 
             <button *ngIf="isGridViewOn"
                 mat-icon-button
-                matTooltip="Vista de lista" matTooltipPosition="above"
+                [matTooltip]="'MY_SYMBIOS.LIST_VIEW' | translate" matTooltipPosition="above"
                 style="margin-right: 10px;"
                 (click)="toggleViewMode()">
                 <mat-icon>view_list</mat-icon>
@@ -63,7 +63,7 @@
 
             <button class="btn-add-symbio-2" routerLink="/create" mat-raised-button color="accent">
                 <mat-icon>add</mat-icon>
-                <span>Nueva simbiocreación</span>
+                <span>{{ 'MY_SYMBIOS.NEW_SYMBIOCREATION' | translate }}</span>
             </button>
         </div>
     </div>
@@ -72,7 +72,7 @@
     <app-grid-symbios-user *ngIf="isGridViewOn" [symbiocreations]="symbiocreations" [isModeratorList]="isModeratorList"></app-grid-symbios-user>
 
     <div class="container-90" style="margin-top: 15px;">
-        <mat-paginator 
+        <mat-paginator
               style="background-color: inherit !important;"
               [length]="totalCount"
               [pageSize]="12"

@@ -1,7 +1,7 @@
 <div>
     <mat-button-toggle-group value="0" (change)="onDataSelectorChange(+$event.value)">
-        <mat-button-toggle value="0">Simbiocreaciones</mat-button-toggle>
-        <mat-button-toggle value="1">Usuarios</mat-button-toggle>
+        <mat-button-toggle value="0">{{ 'STATS.SYMBIOCREATIONS' | translate }}</mat-button-toggle>
+        <mat-button-toggle value="1">{{ 'STATS.USERS' | translate }}</mat-button-toggle>
     </mat-button-toggle-group>
 </div>
 

@@ -1,6 +1,6 @@
 <div style="padding: 15px;">
     <div class="container-80 title-container" style="margin-top: 40px; margin-bottom: 15px;">
-        <h2 class="font-26 bolder gray-900" style="display: inline-block;">Explora</h2>
+        <h2 class="font-26 bolder gray-900" style="display: inline-block;">{{ 'EXPLORE.TITLE' | translate }}</h2>
         <mat-paginator [length]="totalCount"
               [pageSize]="20"
               [hidePageSize]="true"
@@ -10,26 +10,26 @@
 
     <div class="container-80">
         <mat-button-toggle-group [(ngModel)]="filter" (change)="filterChanged()" class="btn-group-explore">
-            <mat-button-toggle class="btn-explore" value="all">Todas</mat-button-toggle>
-            <mat-button-toggle class="btn-explore" value="upcoming">Próximas</mat-button-toggle>
-            <mat-button-toggle class="btn-explore" value="past">Pasadas</mat-button-toggle>
+            <mat-button-toggle class="btn-explore" value="all">{{ 'EXPLORE.FILTER_ALL' | translate }}</mat-button-toggle>
+            <mat-button-toggle class="btn-explore" value="upcoming">{{ 'EXPLORE.FILTER_UPCOMING' | translate }}</mat-button-toggle>
+            <mat-button-toggle class="btn-explore" value="past">{{ 'EXPLORE.FILTER_PAST' | translate }}</mat-button-toggle>
         </mat-button-toggle-group>
     </div>
 
     <div class="container-80 search-container">
         <mat-form-field appearance="outline" class="search-field">
-            <mat-label>Buscar por nombre</mat-label>
+            <mat-label>{{ 'EXPLORE.SEARCH_LABEL' | translate }}</mat-label>
             <input matInput
                    [(ngModel)]="searchName"
                    (keyup.enter)="search()"
-                   placeholder="Ej: clima"
+                   [placeholder]="'EXPLORE.SEARCH_PLACEHOLDER' | translate"
                    maxlength="50">
         </mat-form-field>
-        <button mat-raised-button color="primary" class="search-button" (click)="search()">Buscar</button>
+        <button mat-raised-button color="primary" class="search-button" (click)="search()">{{ 'EXPLORE.SEARCH_BUTTON' | translate }}</button>
     </div>
 
     <div *ngIf="symbiocreations?.length === 0" class="container-80 centered gray-600" style="margin-top: 15px;">
-        No se encontraron simbiocreaciones.
+        {{ 'EXPLORE.NO_RESULTS' | translate }}
     </div>
 
     <div class="container-80" fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="9px">
@@ -58,24 +58,24 @@
                         [matTooltip]="p.user.name" matTooltipPosition="above">
                     </advanced-image>
 
-                    <span *ngIf="s.participantsToDisplay.length > 0 && s.participants.length - s.participantsToDisplay.length > 0" 
-                        class="font-12 gray-300 txt-2" style="position: absolute; top: 10px;" 
+                    <span *ngIf="s.participantsToDisplay.length > 0 && s.participants.length - s.participantsToDisplay.length > 0"
+                        class="font-12 gray-300 txt-2" style="position: absolute; top: 10px;"
                         [style.left]="(s.participantsToDisplay.length - 1) * 24 + 45 + 'px'">
-                        {{s.participants.length - s.participantsToDisplay.length}} más
+                        {{s.participants.length - s.participantsToDisplay.length}} {{ 'EXPLORE.MORE_PARTICIPANTS' | translate }}
                     </span>
             </div>
 
             <div style="margin-top: 20px; height: 30px;">
-                <div [matTooltip]="'Actualizado ' + getTimeAgo(s.lastModified)" matTooltipPosition="above" style="max-width: 151px; display: flex; align-items: center;" fxFlex>
+                <div [matTooltip]="('EXPLORE.UPDATED' | translate) + ' ' + getTimeAgo(s.lastModified)" matTooltipPosition="above" style="max-width: 151px; display: flex; align-items: center;" fxFlex>
                     <mat-icon class="font-17 gray-300 txt-2">update</mat-icon>
                     <span class="font-12 gray-300 txt-2" style="position: relative; left: -4px;">{{getTimeAgo(s.lastModified)}}</span>
                 </div>
 
                 <div fxFlex="30px">
                     <button class="infoButton"
-                            mat-icon-button 
-                            matTooltip="Ver más información" matTooltipPosition="above"
-                            style="position: relative; top: -5px;" 
+                            mat-icon-button
+                            [matTooltip]="'EXPLORE.VIEW_MORE_INFO' | translate" matTooltipPosition="above"
+                            style="position: relative; top: -5px;"
                             (click)="openSymbioDetailDialog(s)">
                             <mat-icon class="font-20 gray-400">info</mat-icon>
                     </button>

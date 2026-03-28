@@ -1,12 +1,12 @@
-<h1 mat-dialog-title>Nuevo nombre</h1>
+<h1 mat-dialog-title>{{ 'DIALOG.NEW_NAME' | translate }}</h1>
 <mat-dialog-content>
     <mat-form-field style="width: 100%;">
-      <mat-label>Nombre</mat-label>
+      <mat-label>{{ 'DIALOG.NAME' | translate }}</mat-label>
       <input matInput cdkFocusInitial [(ngModel)]="name">
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
     <span fxFlex></span>
-    <button mat-flat-button [mat-dialog-close]="name" color="accent" [disabled]="!name">OK</button>
+    <button mat-flat-button [mat-dialog-close]="name" color="accent" [disabled]="!name">{{ 'COMMON.OK' | translate }}</button>
 </mat-dialog-actions>

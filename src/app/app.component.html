@@ -11,13 +11,26 @@
 
     <!-- Menu Desktop -->
     <div class="only-desktop">
-        <a class="no-hover bold font-18" routerLink="/" style="display: flex; align-items: center; margin-right: 15px;">{{title}}</a>
-        <a class="no-hover" mat-button routerLink="/dashboard/my-symbios" *ngIf="auth.loggedIn">Dashboard</a>
-        <a class="no-hover" mat-button routerLink="/explore">Explora</a>
-        <a class="no-hover" mat-button routerLink="/ranking">Ranking</a>
+        <a class="no-hover bold font-18" routerLink="/" style="display: flex; align-items: center; margin-right: 15px;">{{ 'APP.TITLE' | translate }}</a>
+        <a class="no-hover" mat-button routerLink="/dashboard/my-symbios" *ngIf="auth.loggedIn">{{ 'NAV.DASHBOARD' | translate }}</a>
+        <a class="no-hover" mat-button routerLink="/explore">{{ 'NAV.EXPLORE' | translate }}</a>
+        <a class="no-hover" mat-button routerLink="/ranking">{{ 'NAV.RANKING' | translate }}</a>
     </div>
 
     <span fxFlex></span>
+
+    <!-- Selector de idioma -->
+    <button mat-icon-button [matMenuTriggerFor]="langMenu" class="lang-selector" matTooltip="Idioma / Language">
+        <span class="lang-code">{{ currentLang | uppercase }}</span>
+    </button>
+    <mat-menu #langMenu="matMenu">
+        <button mat-menu-item (click)="switchLanguage('es')" [class.active-lang]="currentLang === 'es'">
+            <span>Español</span>
+        </button>
+        <button mat-menu-item (click)="switchLanguage('en')" [class.active-lang]="currentLang === 'en'">
+            <span>English</span>
+        </button>
+    </mat-menu>
 
     <button *ngIf="auth.userProfile$ | async as profile" mat-stroked-button [matMenuTriggerFor]="userMenu">
         <span>{{profile.name.split(" ")[0]}}</span>
@@ -27,16 +40,16 @@
     <mat-menu #userMenu="matMenu">
         <button mat-menu-item routerLink="/profile">
             <mat-icon>settings</mat-icon>
-            <span>Configuraciones</span>
+            <span>{{ 'NAV.SETTINGS' | translate }}</span>
         </button>
         <button mat-menu-item (click)="auth.logout()">
             <mat-icon>exit_to_app</mat-icon>
-            <span>Salir</span>
+            <span>{{ 'NAV.LOGOUT' | translate }}</span>
         </button>
     </mat-menu>
 
     <button *ngIf="!auth.loggedIn" mat-stroked-button (click)="auth.login()">
-        <span>Accede</span>
+        <span>{{ 'NAV.LOGIN' | translate }}</span>
     </button>
 </mat-toolbar>
 
@@ -57,22 +70,28 @@
 <mat-sidenav #menuMobile class="menu-mobile-container" [(opened)]="isMenuMobileOpen">
 
     <mat-toolbar color="accent" style="background-color: #287987;">
-        <span class="ellipsed" style="color: #FFFFFF;">Simbiocreación</span>
-        
+        <span class="ellipsed" style="color: #FFFFFF;">{{ 'APP.TITLE' | translate }}</span>
+
         <span fxFlex></span>
-    
+
         <button mat-icon-button (click)="menuMobile.close()" style="color: #FFFFFF;">
             <mat-icon>menu</mat-icon>
         </button>
     </mat-toolbar>
-    
+
     <div class="menu-body">
 
-        <a class="no-hover menu-item-mobile menu-profile" mat-button routerLink="/profile" *ngIf="auth.loggedIn" (click)="menuMobile.close()">Mi Perfil</a>
-        <a class="no-hover menu-item-mobile menu-dashboard" mat-button routerLink="/dashboard/my-symbios" *ngIf="auth.loggedIn" (click)="menuMobile.close()">Dashboard</a>
-        <a class="no-hover menu-item-mobile menu-explore" mat-button routerLink="/explore" (click)="menuMobile.close()">Explora</a>
-        <a class="no-hover menu-item-mobile menu-ranking" mat-button routerLink="/ranking" (click)="menuMobile.close()">Ranking</a>
-        <button class="no-hover menu-item-mobile menu-logout" mat-icon-button (click)="auth.logout()" >Salir</button>
+        <!-- Selector de idioma mobile -->
+        <div class="lang-selector-mobile">
+            <button mat-stroked-button (click)="switchLanguage('es')" [class.active-lang]="currentLang === 'es'">ES</button>
+            <button mat-stroked-button (click)="switchLanguage('en')" [class.active-lang]="currentLang === 'en'">EN</button>
+        </div>
+
+        <a class="no-hover menu-item-mobile menu-profile" mat-button routerLink="/profile" *ngIf="auth.loggedIn" (click)="menuMobile.close()">{{ 'NAV.MY_PROFILE' | translate }}</a>
+        <a class="no-hover menu-item-mobile menu-dashboard" mat-button routerLink="/dashboard/my-symbios" *ngIf="auth.loggedIn" (click)="menuMobile.close()">{{ 'NAV.DASHBOARD' | translate }}</a>
+        <a class="no-hover menu-item-mobile menu-explore" mat-button routerLink="/explore" (click)="menuMobile.close()">{{ 'NAV.EXPLORE' | translate }}</a>
+        <a class="no-hover menu-item-mobile menu-ranking" mat-button routerLink="/ranking" (click)="menuMobile.close()">{{ 'NAV.RANKING' | translate }}</a>
+        <button class="no-hover menu-item-mobile menu-logout" mat-icon-button (click)="auth.logout()" >{{ 'NAV.LOGOUT' | translate }}</button>
 
     </div>
 

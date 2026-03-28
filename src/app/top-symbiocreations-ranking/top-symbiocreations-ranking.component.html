@@ -7,8 +7,8 @@
       </div>
 
       <div matLine style="padding-left: 5px;">
-        <span class="font-13 gray-700">{{ item.symbiocreation.nparticipants }} participantes</span>
-        <span class="font-13 gray-700"> · Puntaje: {{ item.relevanceMetric }}</span>
+        <span class="font-13 gray-700">{{ item.symbiocreation.nparticipants }} {{ 'STATS.PARTICIPANTS' | translate }}</span>
+        <span class="font-13 gray-700"> · {{ 'STATS.SCORE' | translate }}: {{ item.relevanceMetric }}</span>
       </div>
 
       <mat-divider [inset]="true" *ngIf="!last"></mat-divider>

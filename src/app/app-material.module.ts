@@ -27,6 +27,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 
@@ -58,6 +59,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatPaginatorModule,
     MatAutocompleteModule,
     MatSliderModule,
+    MatDividerModule,
+    MatTabsModule,
+    MatProgressSpinnerModule,
 
   ],
   exports: [
@@ -89,7 +93,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTabsModule,
     MatSliderModule,
     MatProgressSpinnerModule,
-    
+    MatDividerModule,
+
   ],
 })
 export class AppMaterialModule { }

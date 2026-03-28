@@ -1,18 +1,18 @@
 <mat-progress-spinner *ngIf="isLoadingLlmResponse"
-        style="margin: 40px auto 0;"
-        color="accent"
-        diameter="40"
-        mode="indeterminate">
+    style="margin: 40px auto 0;"
+    color="accent"
+    diameter="40"
+    mode="indeterminate">
 </mat-progress-spinner>
 <p *ngIf="isLoadingLlmResponse" class="centered gray-700 font-15">
-    <span *ngIf="!node?.children">Obteniendo sugerencias de IA...</span>
-    <span *ngIf="node?.children">Obteniendo sugerencias de IA para este grupo...</span>
+    <span *ngIf="!node?.children">{{ 'AI.GETTING_SUGGESTIONS' | translate }}</span>
+    <span *ngIf="node?.children">{{ 'AI.GETTING_GROUP_SUGGESTIONS' | translate }}</span>
 </p>
 
 
 <div *ngIf="ideasSuggested">
 
-    <h3 class="gray-800 font-17 bold" style="margin-top: 50px;">Generación de Ideas:</h3>
+    <h3 class="gray-800 font-17 bold" style="margin-top: 50px;">{{ 'AI.IDEA_GENERATION' | translate }}:</h3>
 
     <mat-list>
         <ng-container *ngFor="let idea of ideasSuggested; last as last">

@@ -1,22 +1,22 @@
 <div style="padding: 15px 25px;">
 
-    <h2 class="font-26 bolder gray-900">Estadísticas Resumen</h2>
+    <h2 class="font-26 bolder gray-900">{{ 'STATS.OVERVIEW_TITLE' | translate }}</h2>
 
     <div fxLayout="row" style="margin-top: 40px;">
         <!-- Summary stats in column -->
         <div fxLayout="column" fxLayoutGap="8px">
             <div class="single-stat-summary">
-                <span class="label">Total Simbiocreaciones</span> 
+                <span class="label">{{ 'STATS.TOTAL_SYMBIOCREATIONS' | translate }}</span>
                 <br />
                 <span class="value-1">{{ totalSymbiocreations }}</span>
             </div>
             <div class="single-stat-summary">
-                <span class="label">Total Usuarios</span> 
+                <span class="label">{{ 'STATS.TOTAL_USERS' | translate }}</span>
                 <br />
                 <span class="value-2">{{ totalUsers }}</span>
             </div>
             <div class="single-stat-summary">
-                <span class="label">Total Ideas</span> 
+                <span class="label">{{ 'STATS.TOTAL_IDEAS' | translate }}</span>
                 <br />
                 <span class="value-3">{{ totalIdeas }}</span>
             </div>
@@ -28,17 +28,17 @@
     </div>
 
     <div style="margin-top: 40px; margin-bottom: 15px;">
-        
+
         <mat-tab-group>
-            <mat-tab label="Tendencias en Ideas">
+            <mat-tab [label]="'STATS.IDEA_TRENDS' | translate">
                 <app-trending-topics-ideas></app-trending-topics-ideas>
             </mat-tab>
 
-            <mat-tab label="Top Simbiocreaciones">
+            <mat-tab [label]="'STATS.TOP_SYMBIOCREATIONS' | translate">
                 <app-top-symbiocreations-ranking></app-top-symbiocreations-ranking>
             </mat-tab>
 
-            <mat-tab label="Top Usuarios">
+            <mat-tab [label]="'STATS.TOP_USERS' | translate">
                 <app-top-users-ranking></app-top-users-ranking>
             </mat-tab>
         </mat-tab-group>

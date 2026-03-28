@@ -1,33 +1,33 @@
 <div style="padding: 15px;">
     <div class="container-80" style="margin-top: 40px; margin-bottom: 35px;">
-        <h2 class="font-26 bolder gray-900" style="display: inline-block;">Nuevo SymbioGame</h2>
+        <h2 class="font-26 bolder gray-900" style="display: inline-block;">{{ 'ONEDOT.NEW_SYMBIOGAME' | translate }}</h2>
     </div>
     
     <form #form="ngForm" (ngSubmit)="onSubmit()" class="container-60">
         <div>
             <mat-form-field fxFlex>
-                <mat-label>Nombre de la sesión</mat-label>
+                <mat-label>{{ 'ONEDOT.SESSION_NAME' | translate }}</mat-label>
                 <input matInput cdkFocusInitial type="text" required [(ngModel)]="model.name" name="name">
             </mat-form-field>
         </div>
 
         <div fxLayout="row">
             <mat-form-field fxFlex="20" style="margin-right: 20px;">
-                <mat-label>Ancho de cuadrícula</mat-label>
+                <mat-label>{{ 'ONEDOT.GRID_WIDTH' | translate }}</mat-label>
                 <input matInput type="number" min="5" value="10" [(ngModel)]="model.gridWidth" name="width">
             </mat-form-field>
 
             <mat-form-field fxFlex="20">
-                <mat-label>Alto de cuadrícula</mat-label>
+                <mat-label>{{ 'ONEDOT.GRID_HEIGHT' | translate }}</mat-label>
                 <input matInput type="number" min="5" value="10" [(ngModel)]="model.gridHeight" name="height">
             </mat-form-field>
         </div>
 
         <div>
-            <button mat-button type="button" (click)="location.back()">Cancelar</button>
+            <button mat-button type="button" (click)="location.back()">{{ 'COMMON.CANCEL' | translate }}</button>
             <span fxFlex></span>
             <button mat-raised-button color="accent" type="submit" [disabled]="!form.valid">
-                <span>Crear</span>
+                <span>{{ 'COMMON.CREATE' | translate }}</span>
             </button>
         </div>
     </form>

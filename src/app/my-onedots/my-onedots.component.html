@@ -1,74 +1,57 @@
 <div style="padding: 15px;">
 
     <div class="container-90 container-my-games" style="margin-top: 70px; margin-bottom: 15px;box-sizing: border-box;display: flex;">
-        <h2 class="font-26 bolder gray-900" style="flex: 1 1 0%;">Mis SymbioGames</h2>
+        <h2 class="font-26 bolder gray-900" style="flex: 1 1 0%;">{{ 'ONEDOT.MY_SYMBIOGAMES' | translate }}</h2>
 
         <div>
             <button routerLink="/create-onedot" mat-raised-button color="primary" style="background-color: #E91D63;">
                 <mat-icon>add</mat-icon>
-                <span>Nuevo SymbioGame</span>
+                <span>{{ 'ONEDOT.NEW_SYMBIOGAME' | translate }}</span>
             </button>
         </div>
     </div>
 
     <div *ngIf="oneDots?.length === 0" class="container-90 centered gray-600" style="margin-top: 15px;">
-        Aún no tienes SymbioGames.
+        {{ 'ONEDOT.NO_SYMBIOGAMES' | translate }}
     </div>
-    
+
     <div class="container-90">
-            
+
         <mat-list *ngIf="oneDots?.length > 0">
-            <h3 matSubheader class="oculto-mobile">
+            <h3 matSubheader class="oculto-mobile font-14 gray-600">
                 <span fxFlex></span>
-                <span fxFlex="15">Número de participantes</span>
-                <span fxFlex="15">Última modificación</span>
+                <span fxFlex="15">{{ 'MY_SYMBIOS.NUMBER_OF_PARTICIPANTS' | translate }}</span>
+                <span fxFlex="15">{{ 'MY_SYMBIOS.LAST_MODIFIED' | translate }}</span>
                 <span fxFlex="10px"></span>
             </h3>
-    
-            <mat-list-item *ngFor="let o of oneDots; index as i; last as last" style="margin-top: 70px; margin-bottom: 50px;" class="symbio-item">
-               <div matLine class="grid-group">
-                    <a [routerLink]="['/onedot/', o.id]" class="bold font-18 teal-700 grid-name" style="max-width: 55%; padding-left: 5px;color: #287987;">
-                        {{o.name}}
-                    </a>
-        
-                    <span fxFlex></span>
-                    
-                    <span fxFlex="15" class="gray-500 font-14 grid-members" style="padding: 5px;">{{o.participants.length}} {{o.nparticipants === 1 ? 'participante' : 'participantes'}}</span>
-                    <span fxFlex="15" class="gray-500 font-14 grid-date" style="padding: 5px;">{{o.lastModifiedAt | date: 'd MMM y'}}</span>
-                    
-                    <!-- <mat-menu #simbioMenu="matMenu">
-                        <button mat-menu-item (click)="openSymbioDetailDialog(s, isModeratorList[i])">
-                            <mat-icon>info</mat-icon>
-                            <span>Ver más información</span>
-                        </button>
-                        <button *ngIf="isModeratorList[i]" mat-menu-item (click)="changeNameSymbiocreation(s)">
-                            <mat-icon>text_fields</mat-icon>
-                            <span>Cambiar nombre</span>
-                        </button>
-                        <button *ngIf="isModeratorList[i]" mat-menu-item (click)="editSymbiocreationInfo(s)">
-                            <mat-icon>edit</mat-icon>
-                            <span>Editar evento</span>
-                        </button>
-                        <button *ngIf="isModeratorList[i]" mat-menu-item (click)="deleteSymbiocreation(s.id)">
-                            <mat-icon>delete</mat-icon>
-                            <span>Eliminar</span>
-                        </button>
-                    </mat-menu> -->
-               </div>
-    
-               <div matLine class="symbio-item-line">
-                   <mat-form-field fxFlex="50" class="share-link">
-                        <mat-label>Link para compartir</mat-label>
-                        <input matInput type="text" value="{{environment.localhost}}/onedot/{{o.id}}" readonly>
-                        <button mat-icon-button matSuffix cdkCopyToClipboard="{{environment.localhost}}/onedot/{{o.id}}">
-                            <mat-icon>content_copy</mat-icon>
-                        </button>
-                   </mat-form-field>
-               </div>
-    
-               <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-                
-            </mat-list-item>
+
+            <ng-container *ngFor="let o of oneDots; index as i; last as last">
+
+                <mat-list-item style="height: 125px;" class="symbio-item">
+                    <div matListItemTitle style="align-items: center;">
+                        <a [routerLink]="['/onedot/', o.id]" class="bold font-18 teal-700 grid-name" style="max-width: 55%; padding-left: 5px; color: #287987;">
+                            {{o.name}}
+                        </a>
+
+                        <span fxFlex></span>
+
+                        <span fxFlex="15" class="gray-500 font-14 grid-members" style="padding: 5px;">{{o.participants.length}} {{ 'STATS.PARTICIPANTS' | translate }}</span>
+                        <span fxFlex="15" class="gray-500 font-14 grid-date" style="padding: 5px;">{{o.lastModifiedAt | date: 'd MMM y'}}</span>
+                    </div>
+
+                    <div class="symbio-item-line">
+                        <mat-form-field fxFlex="33" class="share-link">
+                            <mat-label>{{ 'MY_SYMBIOS.SHARE_LINK' | translate }}</mat-label>
+                            <input matInput type="text" value="{{environment.localhost}}/onedot/{{o.id}}" readonly>
+                            <button mat-icon-button matSuffix cdkCopyToClipboard="{{environment.localhost}}/onedot/{{o.id}}">
+                                <mat-icon>content_copy</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                </mat-list-item>
+
+                <mat-divider *ngIf="!last"></mat-divider>
+            </ng-container>
          </mat-list>
     </div>
 

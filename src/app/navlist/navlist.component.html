@@ -1,17 +1,17 @@
 <mat-nav-list class="main-navlist">
     <a mat-list-item routerLink="/dashboard/my-symbios">
         <mat-icon class="icon-dashboard">dashboard</mat-icon>
-        Mis Simbios
+        {{ 'NAV.MY_SYMBIOS' | translate }}
     </a>
     <a mat-list-item routerLink="/dashboard/my-onedots">
         <mat-icon  class="icon-interests">interests</mat-icon>
-        Mis SymbioGames
+        {{ 'NAV.MY_SYMBIOGAMES' | translate }}
     </a>
     <ng-container *ngIf="sharedService.appUser$ | async as appUser">
         <a *ngIf="appUser?.role === 'SUPER_ADMIN'"
             mat-list-item routerLink="/dashboard/stats-overview">
             <mat-icon style="margin-right: 20px;">bar_chart</mat-icon>
-            Stats Generales
+            {{ 'NAV.GENERAL_STATS' | translate }}
         </a>
     </ng-container>
 </mat-nav-list>

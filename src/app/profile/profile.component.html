@@ -6,18 +6,18 @@
 
     <mat-card>
         <mat-card-header>
-          <mat-card-title>Perfil</mat-card-title>
+          <mat-card-title>{{ 'PROFILE.TITLE' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div style="text-align:center;">
             <img [src]="profile.picture" alt="Profile Picture" style="border-radius: 50%; width: 150px; height: 150px;">
           </div>
-          <p><strong>Nombre:</strong> {{ profile.given_name }} {{ profile.family_name }}</p>
-          <p><strong>Apodo:</strong> {{ profile.nickname }}</p>
-          <p><strong>Nombre Completo:</strong> {{ profile.name }}</p>
-          <p><strong>Email:</strong> {{ profile.email }}</p>
-          <p><strong>Email Verificado:</strong> {{ profile.email_verified ? 'Sí' : 'No' }}</p>
-          <p><strong>Última Actualización:</strong> {{ profile.updated_at | date:'medium' }}</p>
+          <p><strong>{{ 'PROFILE.NAME' | translate }}</strong> {{ profile.given_name }} {{ profile.family_name }}</p>
+          <p><strong>{{ 'PROFILE.NICKNAME' | translate }}</strong> {{ profile.nickname }}</p>
+          <p><strong>{{ 'PROFILE.FULL_NAME' | translate }}</strong> {{ profile.name }}</p>
+          <p><strong>{{ 'PROFILE.EMAIL' | translate }}</strong> {{ profile.email }}</p>
+          <p><strong>{{ 'PROFILE.EMAIL_VERIFIED' | translate }}</strong> {{ profile.email_verified ? ('PROFILE.YES' | translate) : ('PROFILE.NO' | translate) }}</p>
+          <p><strong>{{ 'PROFILE.LAST_UPDATE' | translate }}</strong> {{ profile.updated_at | date:'medium' }}</p>
         </mat-card-content>
       </mat-card>
 

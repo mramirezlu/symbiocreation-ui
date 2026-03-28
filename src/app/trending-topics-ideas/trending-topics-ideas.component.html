@@ -16,8 +16,8 @@
 
       <div matLine style="padding-left: 5px;">
         <span class="font-13 gray-600">
-            Usadas {{ topic.termCounts[0] + topic.termCounts[1] + 
-            topic.termCounts[2] + topic.termCounts[3]}} veces en total
+            {{ 'STATS.USED' | translate }} {{ topic.termCounts[0] + topic.termCounts[1] +
+            topic.termCounts[2] + topic.termCounts[3]}} {{ 'STATS.TIMES_TOTAL' | translate }}
         </span>
       </div>
 

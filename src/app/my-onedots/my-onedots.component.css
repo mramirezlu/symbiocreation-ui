@@ -2,10 +2,14 @@
     flex-direction: column;
 }
 .symbio-item-line{
-    padding-bottom: 50px;
+    padding-bottom: 10px;
 }
 .share-link{
     padding-left: 5px;
+}
+
+.symbio-item {
+    height: 125px !important;
 }
 
 @media only screen and (max-width: 768px) {

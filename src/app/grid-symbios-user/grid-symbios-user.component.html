@@ -62,19 +62,19 @@
                 <mat-menu #simbioMenu="matMenu">
                     <button mat-menu-item (click)="openSymbioDetailDialog(s, isModeratorList[i])">
                         <mat-icon>info</mat-icon>
-                        <span>Ver más información</span>
+                        <span>{{ 'MY_SYMBIOS.VIEW_MORE_INFO' | translate }}</span>
                     </button>
                     <button *ngIf="isModeratorList[i]" mat-menu-item (click)="changeNameSymbiocreation(s)">
                         <mat-icon>text_fields</mat-icon>
-                        <span>Cambiar nombre</span>
+                        <span>{{ 'MY_SYMBIOS.CHANGE_NAME' | translate }}</span>
                     </button>
                     <button *ngIf="isModeratorList[i]" mat-menu-item (click)="editSymbiocreationInfo(s)">
                         <mat-icon>edit</mat-icon>
-                        <span>Editar evento</span>
+                        <span>{{ 'MY_SYMBIOS.EDIT_EVENT' | translate }}</span>
                     </button>
                     <button *ngIf="isModeratorList[i]" mat-menu-item (click)="deleteSymbiocreation(s.id)">
                         <mat-icon>delete</mat-icon>
-                        <span>Eliminar</span>
+                        <span>{{ 'COMMON.DELETE' | translate }}</span>
                     </button>
                 </mat-menu>
             </div>

@@ -47,3 +47,10 @@
 ✔ Movidas las credenciales de Auth0 a los archivos de environment (environment.ts y environment.prod.ts)
 ✔ Corregido problema de redirección cuando el usuario tiene sesión activa y entra a la web
 ✔ Actualizado README.md con instrucciones de instalación y comandos de build
+
+# 26/03/26
+✔ Cambiado mensaje generado por chatgpt
+✔ Agregado buscador de vista Explore
+
+# 27/03/26
+✔ Agregada librerias de traduccion @ngx-translate/core y @ngx-translate/http-loader

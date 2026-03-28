@@ -81,7 +81,7 @@ export class CreateSymbioComponent implements OnInit {
         this.model.dateTime.setUTCHours(this.eventTime.split(':')[0]);
         this.model.dateTime.setUTCMinutes(this.eventTime.split(':')[1]);
 
-        this.model.timeZone = this.eventTz.name;
+        this.model.timeZone = this.eventTz?.name || moment.tz.guess();
       }
     }
     

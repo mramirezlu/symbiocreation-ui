@@ -1,9 +1,9 @@
-<h2 mat-dialog-title>¿Quieres participar con una idea nueva?</h2>
+<h2 mat-dialog-title>{{ 'DIALOG.WANT_TO_PARTICIPATE' | translate }}</h2>
 <mat-dialog-content>
-  <p>Se agregará un nueva idea (nodo) al grafo de la simbiocreación.</p>
+  <p>{{ 'SYMBIO.ADD_IDEA_DESCRIPTION' | translate }}</p>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
   <span fxFlex></span>
-  <button mat-flat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial class="btn-confirm">Confirmar</button>
+  <button mat-flat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial class="btn-confirm">{{ 'COMMON.CONFIRM' | translate }}</button>
 </mat-dialog-actions>

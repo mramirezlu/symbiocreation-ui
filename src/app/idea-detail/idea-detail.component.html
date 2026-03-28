@@ -8,12 +8,12 @@
 
     <mat-menu #ideaSidenavMenu="matMenu">
         <button mat-menu-item (click)="openEditIdeaDialog()">
-            <span>Editar idea</span>
+            <span>{{ 'IDEA.EDIT_IDEA' | translate }}</span>
         </button>
     </mat-menu>
 
-    <button mat-icon-button 
-        [matTooltip]="sidenavService.isOpenInFullscreen ? 'Cerrar pantalla completa' : 'Abrir en pantalla completa'" 
+    <button mat-icon-button
+        [matTooltip]="sidenavService.isOpenInFullscreen ? ('IDEA.CLOSE_FULLSCREEN' | translate) : ('IDEA.OPEN_FULLSCREEN' | translate)"
         matTooltipPosition="above"
         (click)="toggleFullscreen()">
         <mat-icon>{{sidenavService.isOpenInFullscreen ? 'close_fullscreen' : 'open_in_full'}}</mat-icon>
@@ -24,28 +24,28 @@
     </button>
 </mat-toolbar>
 
-<div class="ellipsed idea-name">Idea de {{node?.name}}</div>
+<div class="ellipsed idea-name">{{ 'IDEA.IDEA_OF' | translate }} {{node?.name}}</div>
 
 <div class="idea-body" [style.padding]="sidenavService.isOpenInFullscreen ? '30px 35px' : '30px 15px'">
 
     <div *ngIf="!node?.idea">
         <p class="centered gray-700 font-15">
-            No hay ninguna idea registrada.
+            {{ 'IDEA.NO_IDEA_REGISTERED' | translate }}
         </p>
         <div class="centered" *ngIf="sharedService.isIdeaEditable$ | async">
             <button mat-flat-button color="primary" (click)="openEditIdeaDialog()">
-                Registrar idea
+                {{ 'IDEA.REGISTER_IDEA' | translate }}
             </button><br />
 
             <button mat-button color="accent" (click)="showAiSuggestedIdeas = true;" style="margin-top: 5px;">
-                Generar ideas con IA
+                {{ 'IDEA.GENERATE_AI_IDEAS' | translate }}
             </button>
         </div>
     </div>
 
 
     <!-- ChatGPT results -->
-    <app-chatgpt-idea-suggestions *ngIf="showAiSuggestedIdeas" 
+    <app-chatgpt-idea-suggestions *ngIf="showAiSuggestedIdeas"
         [symbiocreationId]="idSymbio"
         [node]="node"
         (changedIdea)="onIdeaChanged($event)">
@@ -78,11 +78,11 @@
         </div>
 
     </div>
-    
+
     <mat-divider style="margin: 15px auto 15px;" *ngIf="node?.idea?.externalUrls"></mat-divider>
 
     <div *ngIf="node?.idea?.externalUrls">
-        <span>Enlaces externos</span>
+        <span>{{ 'IDEA.EXTERNAL_LINKS' | translate }}</span>
 
         <ul>
             <li class="gray-700" *ngFor="let url of node.idea.externalUrls">
@@ -108,7 +108,7 @@
     <mat-divider style="margin: 15px auto 15px;" *ngIf="node?.idea"></mat-divider>
 
     <div *ngIf="node?.idea">
-        <span>{{node.idea.comments ? node.idea.comments.length : '0' }} comentarios</span>
+        <span>{{node.idea.comments ? node.idea.comments.length : '0' }} {{ 'IDEA.COMMENTS' | translate }}</span>
 
         <!-- Visible to logged-in users -->
         <div *ngIf="appUser" style="margin-top: 20px; margin-bottom: 40px;" [style.padding]="sidenavService.isOpenInFullscreen ? '0 55px' : '0'" class="clearfix" fxLayout="row">
@@ -117,12 +117,12 @@
             </div>
             <div fxFlex>
                 <mat-form-field style="width: 100%;">
-                    <textarea matInput [(ngModel)]="comment" rows="2" placeholder="Escribe tu comentario..." (click)="hiddenCommentButtons = false"></textarea>
+                    <textarea matInput [(ngModel)]="comment" rows="2" [placeholder]="'IDEA.WRITE_COMMENT' | translate" (click)="hiddenCommentButtons = false"></textarea>
                 </mat-form-field>
 
                 <div style="text-align: right;" [hidden]="hiddenCommentButtons">
-                    <button mat-button (click)="cancelCommentPost()">Cancelar</button>
-                    <button mat-flat-button (click)="postComment()" color="primary" [disabled]="!comment.trim()">Guardar</button>
+                    <button mat-button (click)="cancelCommentPost()">{{ 'COMMON.CANCEL' | translate }}</button>
+                    <button mat-flat-button (click)="postComment()" color="primary" [disabled]="!comment.trim()">{{ 'COMMON.SAVE' | translate }}</button>
                 </div>
             </div>
         </div>
