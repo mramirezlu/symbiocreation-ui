@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { User } from '../models/symbioTypes';
 import { OneDot, OneDotParticipant } from '../models/oneDotTypes';
@@ -12,13 +12,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { OneDotService } from '../services/onedot.service';
-import { concatMap, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { concatMap, tap, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-onedot',
     templateUrl: './onedot.component.html',
     styleUrls: ['./onedot.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class OnedotComponent implements OnInit, OnDestroy {
@@ -30,10 +31,12 @@ export class OnedotComponent implements OnInit, OnDestroy {
   _listFilter1: string = '';
   filteredParticipants: OneDotParticipant[];
 
+  private destroy$ = new Subject<void>();
+
   @ViewChild('sidenav') sidenav: MatSidenav;
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private route: ActivatedRoute,
     public sidenavService: SidenavService,
     private oneDotService: OneDotService,
@@ -42,13 +45,19 @@ export class OnedotComponent implements OnInit, OnDestroy {
     private rSocketService: RSocketService,
     public sharedService: SharedService,
     private _snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) {
 
   }
 
   ngOnInit(): void {
-    this.sharedService.appUser$.subscribe(appUser => this.appUser = appUser);
+    this.sharedService.appUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(appUser => {
+        this.appUser = appUser;
+        this.cdr.markForCheck();
+      });
     this.getData();
   }
 
@@ -57,8 +66,9 @@ export class OnedotComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.rSocketService.disconnect();
-    // console.log('ngOnDestroy');
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.rSocketService.disconnect();
   }
 
   getData(): void {
@@ -68,13 +78,11 @@ export class OnedotComponent implements OnInit, OnDestroy {
     this.oneDotService.getOneDot(id)
     .pipe(
       tap(o => {
-        // console.log(o);
         this.oneDot = o;
         this.filteredParticipants = this.oneDot.participants;
       }),
       concatMap(o => this.auth.userProfile$),
     ).subscribe(usrProfile => {
-      //console.log(usrProfile);
       if (this.auth.loggedIn) {
         for (let p of this.oneDot.participants) {
           if (p.user.email === usrProfile.email) {
@@ -85,15 +93,17 @@ export class OnedotComponent implements OnInit, OnDestroy {
       }
 
       this.sharedService.nextIsLoading(false);
-      
+      this.cdr.markForCheck();
+
       // connect to socket for updates
       this.rSocketService.connectToOneDot(this.oneDot.id);
       this.rSocketService.oneDot$
+        .pipe(takeUntil(this.destroy$))
         .subscribe(oneDot => {
-          if (oneDot?.id === this.oneDot.id) { // to avoid pulling last oneDot with another id
-            // console.log(oneDot);
+          if (oneDot?.id === this.oneDot.id) {
             this.oneDot = oneDot;
             this.updateReferences();
+            this.cdr.markForCheck();
           }
         });
     });
@@ -107,7 +117,7 @@ export class OnedotComponent implements OnInit, OnDestroy {
     }
 
     btnParticipate.disabled = true;
-    
+
     // add logged-in user as participant
     this.auth.userProfile$.pipe(
       concatMap(user => this.userService.getUserByEmail(user.email)),
@@ -119,21 +129,16 @@ export class OnedotComponent implements OnInit, OnDestroy {
       this._snackBar.open('Se te agregó como participante.', 'ok', {
         duration: 2000,
       });
+      this.cdr.markForCheck();
     });
   }
 
-  // propagates changes to child graph component
-  // called when received a new one dot from socket
   updateReferences(): void {
-    // this.oneDot.grid = this.oneDot.grid.slice();
     this.filteredParticipants = this.oneDot.participants;
 
-    // update logged-in user
     if (this.participant) {
-      // look for my participant object
       for (let p of this.oneDot.participants) {
         if (p.user.email === this.participant.user.email) {
-          //console.log(p);
           this.participant = p;
           break;
         }
@@ -143,32 +148,31 @@ export class OnedotComponent implements OnInit, OnDestroy {
 
   onGridUpdated(arr: number[]): void {
     this.oneDot.grid[arr[0]][arr[1]] = arr[2];
-    this.oneDotService.updateGridStatus(this.oneDot).subscribe(); 
+    this.oneDotService.updateGridStatus(this.oneDot).subscribe();
   }
-  
 
 
 
 
   // setter and getter for _listFilters
-  get listFilter1(): string { 
-    return this._listFilter1; 
-  }
-   
-  set listFilter1(value: string) { 
-    this._listFilter1 = value; 
-    this.filteredParticipants = this.listFilter1 ? this.performFilter1(this.listFilter1) : this.oneDot.participants; 
+  get listFilter1(): string {
+    return this._listFilter1;
   }
 
-  performFilter1(filterBy: string): OneDotParticipant[] { 
-    filterBy = filterBy.toLocaleLowerCase();  
+  set listFilter1(value: string) {
+    this._listFilter1 = value;
+    this.filteredParticipants = this.listFilter1 ? this.performFilter1(this.listFilter1) : this.oneDot.participants;
+  }
+
+  performFilter1(filterBy: string): OneDotParticipant[] {
+    filterBy = filterBy.toLocaleLowerCase();
 
     return this.oneDot.participants.filter(
       (p: OneDotParticipant) => {
-        const name = p.user.firstName && p.user.lastName ? p.user.firstName + " " + p.user.lastName : p.user.name; 
+        const name = p.user.firstName && p.user.lastName ? p.user.firstName + " " + p.user.lastName : p.user.name;
         return name.toLocaleLowerCase().indexOf(filterBy) !== -1;
       }
-    ); 
+    );
   }
 
 }

@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth.service';
     selector: 'app-onedot-grid',
     templateUrl: './onedot-grid.component.html',
     styleUrls: ['./onedot-grid.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class OnedotGridComponent implements OnInit, AfterViewInit, OnChanges {
@@ -26,6 +26,8 @@ export class OnedotGridComponent implements OnInit, AfterViewInit, OnChanges {
   wrapper: any;
   bounds: any;
 
+  private previousGrid: number[][];
+
   @ViewChild('container', {static: true}) container: ElementRef;
 
   constructor() {
@@ -41,7 +43,7 @@ export class OnedotGridComponent implements OnInit, AfterViewInit, OnChanges {
       width: 350,
     }
     this.dimensions = {
-      ...this.dimensions, 
+      ...this.dimensions,
       boundedHeight: Math.max(this.dimensions.height - this.dimensions.marginTop - this.dimensions.marginBottom, 0),
       boundedWidth: Math.max(this.dimensions.width - this.dimensions.marginLeft - this.dimensions.marginRight, 0),
     }
@@ -51,16 +53,23 @@ export class OnedotGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   }
 
-  ngOnChanges(changes: SimpleChanges): void {// remove, create, run
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes['oneDot'] && !changes['oneDot'].isFirstChange()) {
-      this.removeGridContainer();
-      this.createGridContainer();
-      this.drawGrid();
+      const prev = changes['oneDot'].previousValue?.grid;
+      const curr = changes['oneDot'].currentValue?.grid;
+
+      if (prev && curr && prev.length === curr.length && this.bounds) {
+        this.updateChangedCells(prev, curr);
+      } else {
+        this.removeGridContainer();
+        this.createGridContainer();
+        this.drawGrid();
+      }
     }
   }
 
   ngAfterViewInit(): void {
-    this.updateDimensions(); // called here to have the % dimensions calculated
+    this.updateDimensions();
     this.createGridContainer();
     this.drawGrid();
   }
@@ -70,7 +79,7 @@ export class OnedotGridComponent implements OnInit, AfterViewInit, OnChanges {
       .append("svg")
         .attr("width", this.dimensions.width)
         .attr("height", this.dimensions.height);
-        
+
     this.bounds = this.wrapper.append("g")
         .attr("transform", `translate(${this.dimensions.marginLeft} ${this.dimensions.marginTop})`);
   }
@@ -110,6 +119,7 @@ export class OnedotGridComponent implements OnInit, AfterViewInit, OnChanges {
       .data(d => d)
       .enter().append("rect")
         .attr("class","square")
+        .attr("id", d => `cell-${d.i}-${d.j}`)
         .attr("x", d => d.x)
         .attr("y", d => d.y)
         .attr("width", d => d.width)
@@ -124,12 +134,29 @@ export class OnedotGridComponent implements OnInit, AfterViewInit, OnChanges {
           if (this.colorSelected <= -1 && this.colorSelected >= this.paletteColors.length) {
             return;
           }
-          
+
           d3.select(d3.event.currentTarget)
             .style("fill", this.paletteColors[this.colorSelected]);
-          // emit event to parent component
           this.gridUpdated.emit([d.i, d.j, this.colorSelected]);
         });
+
+    this.previousGrid = this.cloneGrid(this.oneDot.grid);
+  }
+
+  updateChangedCells(prev: number[][], curr: number[][]): void {
+    for (let i = 0; i < curr.length; i++) {
+      for (let j = 0; j < curr[i].length; j++) {
+        if (prev[i][j] !== curr[i][j]) {
+          d3.select(`#cell-${i}-${j}`)
+            .attr("fill", curr[i][j] === -1 ? '#FFFFFF' : this.paletteColors[curr[i][j]]);
+        }
+      }
+    }
+    this.previousGrid = this.cloneGrid(curr);
+  }
+
+  private cloneGrid(grid: number[][]): number[][] {
+    return grid.map(row => [...row]);
   }
 
   removeGridContainer(): void {
@@ -138,9 +165,6 @@ export class OnedotGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   @HostListener('window:resize') windowResize() {
     this.updateDimensions();
-    this.wrapper
-        .attr("width", this.dimensions.width)
-        .attr("height", this.dimensions.height);
     this.removeGridContainer();
     this.createGridContainer();
     this.drawGrid();

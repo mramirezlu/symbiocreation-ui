@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { RSocketClient, JsonSerializer, IdentitySerializer } from 'rsocket-core';
 import RSocketWebSocketClient from 'rsocket-websocket-client';
 import { BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 import { Symbiocreation } from '../models/symbioTypes';
 import { OneDot } from '../models/oneDotTypes';
@@ -18,7 +19,9 @@ export class RSocketService {
     symbio$ = this.symbioSubject$.asObservable();
 
     private oneDotSubject$ = new BehaviorSubject<OneDot>(null);
-    oneDot$ = this.oneDotSubject$.asObservable();
+    oneDot$ = this.oneDotSubject$.asObservable().pipe(
+        distinctUntilChanged((prev, curr) => JSON.stringify(prev?.grid) === JSON.stringify(curr?.grid))
+    );
 
     constructor() {
         //console.log(environment.socketUrl);
