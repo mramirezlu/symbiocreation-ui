@@ -8,31 +8,61 @@
 }
 @if (isLoadingLlmResponse) {
   <p class="centered gray-700 font-15">
-    @if (!node?.children) {
-      <span>{{ 'AI.GETTING_SUGGESTIONS' | translate }}</span>
-    }
-    @if (node?.children) {
+    @if (lastSource === 'inspiration') {
+      <span>{{ 'AI.SEEKING_INSPIRATION' | translate }}</span>
+    } @else if (node?.children) {
       <span>{{ 'AI.GETTING_GROUP_SUGGESTIONS' | translate }}</span>
+    } @else {
+      <span>{{ 'AI.GETTING_SUGGESTIONS' | translate }}</span>
     }
   </p>
 }
 
-
-@if (ideasSuggested) {
-  <div>
-    <h3 class="gray-800 font-17 bold" style="margin-top: 50px;">{{ 'AI.IDEA_GENERATION' | translate }}:</h3>
-    <mat-list>
-      @for (idea of ideasSuggested; track idea; let last = $last) {
-        <mat-list-item lines="3" (click)="openEditIdeaDialog(idea)" style="cursor: pointer;">
-          <span matListItemTitle>{{idea.title}}</span>
-          <span>
-            {{idea.description}}
-          </span>
-        </mat-list-item>
-        @if (!last) {
-          <mat-divider></mat-divider>
-        }
-      }
-    </mat-list>
+<!-- B2: la IA falló (error de red/timeout/servidor) -->
+@if (!isLoadingLlmResponse && loadError) {
+  <div class="centered" style="margin-top: 50px;">
+    <p class="gray-700 font-15">{{ 'AI.ERROR_GETTING_SUGGESTIONS' | translate }}</p>
+    <button mat-stroked-button color="accent" (click)="regenerate()">{{ 'AI.RETRY' | translate }}</button>
   </div>
+}
+
+<!-- B1: aviso informativo (no accionable) cuando no hay ideas suficientes -->
+@if (!isLoadingLlmResponse && !loadError && noticeMessage) {
+  <div style="margin-top: 50px;">
+    <h3 class="gray-800 font-17 bold">{{ noticeMessage.title }}</h3>
+    <p class="gray-700 font-15">{{ noticeMessage.description }}</p>
+
+    <!-- "Busco inspiración": genera 3 ideas a partir del tema de la sesión -->
+    <button mat-raised-button color="accent" (click)="getInspiration()" style="margin-top: 10px;">
+      {{ 'AI.SEEK_INSPIRATION' | translate }}
+    </button>
+  </div>
+}
+
+<!-- Ideas reales generadas por la IA (accionables) o mensaje de "sin resultados" (B3) -->
+@if (!isLoadingLlmResponse && !loadError && !noticeMessage) {
+  @if (ideasSuggested && ideasSuggested.length > 0) {
+    <div>
+      <h3 class="gray-800 font-17 bold" style="margin-top: 50px;">{{ 'AI.IDEA_GENERATION' | translate }}:</h3>
+      <mat-list>
+        @for (idea of ideasSuggested; track idea; let last = $last) {
+          <mat-list-item class="idea-item" lines="3" (click)="openEditIdeaDialog(idea)">
+            <span matListItemTitle>{{idea.title}}</span>
+            <span>
+              {{idea.description}}
+            </span>
+          </mat-list-item>
+          @if (!last) {
+            <mat-divider></mat-divider>
+          }
+        }
+      </mat-list>
+    </div>
+  } @else {
+    <!-- B3: antes se mostraba el encabezado con una lista vacía y sin explicación -->
+    <div class="centered" style="margin-top: 50px;">
+      <p class="gray-700 font-15">{{ 'AI.NO_SUGGESTIONS' | translate }}</p>
+      <button mat-stroked-button color="accent" (click)="regenerate()">{{ 'AI.RETRY' | translate }}</button>
+    </div>
+  }
 }

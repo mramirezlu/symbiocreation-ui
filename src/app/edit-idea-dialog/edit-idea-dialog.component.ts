@@ -10,6 +10,7 @@ import { SymbiocreationService } from '../services/symbiocreation.service';
 
 import { v4 as uuidv4 } from 'uuid';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-edit-idea-dialog',
@@ -33,6 +34,7 @@ export class EditIdeaDialogComponent implements OnInit {
     private imageService: ImageService,
     private symbioService: SymbiocreationService,
     private _snackBar: MatSnackBar,
+    private translate: TranslateService,
   ) {
     if (this.data.idea) {
       this.idea = this.data.idea;
@@ -100,32 +102,45 @@ export class EditIdeaDialogComponent implements OnInit {
     });
   }
 
-  generateImageWithLlm(generateImageBtn: any) {
+  generateImageWithLlm() {
     if (!this.idea.title?.trim().length || !this.idea.description?.trim().length) {
-      this._snackBar.open('Por favor, inserte el título y descripción de la idea.', 'ok', {
+      this._snackBar.open(this.translate.instant('IDEA.AI_IMAGE_MISSING_FIELDS'), 'ok', {
         duration: 3000,
       });
       return;
     }
 
-    this.isLoadingImageGeneration = true;
-    generateImageBtn.disabled = true;
-    generateImageBtn._elementRef.nativeElement.innerText = 'Generando imagen con AI...';
+    this.isLoadingImageGeneration = true; // deshabilita el botón vía [disabled] y muestra el spinner
 
     this.symbioService.getImageForIdeaFromLlm(this.idea.title, this.idea.description)
-      .subscribe(imgBlob => {
-        const imgFileName = `img-generated-${uuidv4()}.png`;
+      .subscribe({
+        next: imgBlob => {
+          const imgFileName = `img-generated-${uuidv4()}.png`;
+          const imgUrl = URL.createObjectURL(imgBlob);
+          const file = new File([imgBlob], imgFileName, { type: imgBlob.type });
 
-        const imgUrl = URL.createObjectURL(imgBlob);
-        const file = new File([imgBlob], imgFileName, { type: imgBlob.type });
-
-        const imgSnippet = new ImageSnippet(imgUrl, file);
-        this.selectedImgs.push(imgSnippet);
-
-        this.isLoadingImageGeneration = false;
-        generateImageBtn.disabled = false;
-        generateImageBtn._elementRef.nativeElement.innerText = 'Generar imagen con AI';
+          this.selectedImgs.push(new ImageSnippet(imgUrl, file));
+          this.isLoadingImageGeneration = false;
+        },
+        error: err => {
+          // I1: sin esto el botón quedaba deshabilitado y el spinner giraba para siempre.
+          this.isLoadingImageGeneration = false;
+          this._snackBar.open(this.imageErrorMessage(err), 'ok', {
+            duration: 5000,
+          });
+        },
       });
+  }
+
+  // I2: mensaje según el estado HTTP que devuelve el backend.
+  private imageErrorMessage(err: any): string {
+    let key = 'IDEA.AI_IMAGE_ERROR'; // genérico (502 u otros)
+    if (err?.status === 503) {
+      key = 'IDEA.AI_IMAGE_ERROR_QUOTA';
+    } else if (err?.status === 422) {
+      key = 'IDEA.AI_IMAGE_ERROR_POLICY';
+    }
+    return this.translate.instant(key);
   }
   
   processFile(imageInput: any) {

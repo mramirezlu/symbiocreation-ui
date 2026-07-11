@@ -1,3 +1,5 @@
+> Cambios del **frontend** (`symbiocreation-ui`). Los cambios del **backend** están en `symbiocreation-res/CHANGELOG.md`.
+
 # 31/07/24 mramirez
 ✔ Se ha cambiado la extensión de varios archivos css por scss para hacer uso de sass en distintas secciones de la web
 ✔ Se han agregado los módulos MatSidenavModule, MatGridListModule y CdkAccordionModule
@@ -59,3 +61,12 @@
 ✔ Migración Angular 17 → 22 (Material, RxJS 7, TypeScript 6, zone.js 0.15)
 ✔ Migración ngx-translate v15 → v18 (nueva API con provideTranslateService)
 ✔ Optimización de rendimiento D3
+
+# 11/07/26 mramirez
+✔ [Ideas IA] Los mensajes informativos ("se necesitan más ideas") se muestran como aviso no accionable; ya no se pueden guardar como idea real del nodo 
+✔ [Ideas IA] Manejo de error: ante un fallo ya no gira el spinner indefinidamente; se muestra mensaje de error. Sin resultados muestra un aviso claro en vez de un encabezado vacío
+✔ [Busco inspiración] Nuevo botón bajo el aviso de "sin ideas" que genera 3 ideas basadas en el tema de la sesión (consume el nuevo endpoint del backend)
+✔ [Ideas IA] El botón "Generar ideas con IA" ahora regenera al re-presionarlo (respetando si eran sugerencias o inspiración); botón "Reintentar" en error/sin-resultados; feedback de hover sobre cada idea
+✔ [Generar imagen IA] Corregido: ante un fallo el botón ya no queda deshabilitado ni con spinner infinito; se re-habilita y sirve de reintento
+✔ [Generar imagen IA] Mensaje de error específico según la causa que informa el backend (sin cuota / políticas de contenido / genérico)
+✔ i18n: nuevas claves para los mensajes de sugerencias, inspiración e imagen (es/en)

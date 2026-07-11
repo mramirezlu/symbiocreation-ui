@@ -65,6 +65,8 @@ export interface Comment {
 export interface IdeaAI {
     title: string;
     description: string;
+    // true = mensaje informativo (p. ej. "se necesitan más ideas"), NO una idea real. No debe ser accionable.
+    placeholder?: boolean;
 }
 
 export interface TrendAI {

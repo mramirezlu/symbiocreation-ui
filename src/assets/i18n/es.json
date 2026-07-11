@@ -124,7 +124,11 @@
     "DESCRIPTION_PLACEHOLDER": "Descripción larga de mi idea.",
     "TAKE_PHOTO": "Tomar foto",
     "ADD_IMAGE": "Agregar imagen",
-    "GENERATE_AI_IMAGE": "Generar imagen con AI"
+    "GENERATE_AI_IMAGE": "Generar imagen con AI",
+    "AI_IMAGE_MISSING_FIELDS": "Por favor, inserte el título y la descripción de la idea.",
+    "AI_IMAGE_ERROR": "No se pudo generar la imagen. Intenta de nuevo más tarde.",
+    "AI_IMAGE_ERROR_QUOTA": "El servicio de IA no tiene cuota disponible en este momento.",
+    "AI_IMAGE_ERROR_POLICY": "La descripción infringe las políticas de contenido y no se pudo generar la imagen."
   },
   "DIALOG": {
     "NEW_GROUP": "Nuevo grupo",
@@ -213,6 +217,11 @@
   "AI": {
     "GETTING_SUGGESTIONS": "Obteniendo sugerencias basadas en tu idea...",
     "GETTING_GROUP_SUGGESTIONS": "Obteniendo sugerencias para las ideas del grupo...",
-    "IDEA_GENERATION": "Generación de ideas"
+    "IDEA_GENERATION": "Generación de ideas",
+    "ERROR_GETTING_SUGGESTIONS": "No se pudieron obtener las sugerencias de IA. Intenta de nuevo más tarde.",
+    "NO_SUGGESTIONS": "La IA no generó sugerencias en esta ocasión. Intenta de nuevo más tarde.",
+    "SEEK_INSPIRATION": "Busco inspiración",
+    "SEEKING_INSPIRATION": "Buscando inspiración...",
+    "RETRY": "Reintentar"
   }
 }

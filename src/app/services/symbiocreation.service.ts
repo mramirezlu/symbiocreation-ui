@@ -274,13 +274,17 @@ export class SymbiocreationService {
         return this.http.get<IdeaAI[]>(API_URL);
     }
 
+    // "Busco inspiración": genera 3 ideas basadas solo en el tema de la sesión (sin requerir ideas existentes)
+    getInspirationForSymbioFromLlm(symbioId: string): Observable<IdeaAI[]> {
+        let API_URL = `${this.apiUrl}/symbiocreations/${symbioId}/getInspirationFromAI`;
+        return this.http.get<IdeaAI[]>(API_URL);
+    }
+
     getImageForIdeaFromLlm(title: string, description: string): Observable<Blob> {
         let API_URL = `${this.apiUrl}/symbiocreations/getImageFromAI`;
 
-        return this.http.post(API_URL, { title: title, description: description }, { responseType: "blob", headers: {'Accept': 'image/png'} })
-            .pipe(
-                catchError(this.error)
-            );
+        // Sin catchError: se propaga el HttpErrorResponse para que el componente distinga la causa por status (I2).
+        return this.http.post(API_URL, { title: title, description: description }, { responseType: "blob", headers: {'Accept': 'image/png'} });
     }
 
     downloadParticipantsData(symbioId: string): Observable<Blob> {

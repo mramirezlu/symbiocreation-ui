@@ -12,6 +12,7 @@ import { from } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { EditIdeaDialogComponent } from '../edit-idea-dialog/edit-idea-dialog.component';
+import { ChatgptIdeaSuggestionsComponent } from '../chatgpt-idea-suggestions/chatgpt-idea-suggestions.component';
 import { ImageService } from '../services/image.service';
 import { CloudinaryImage } from '@cloudinary/url-gen';
 
@@ -38,6 +39,7 @@ export class IdeaDetailComponent implements OnInit, AfterViewInit {
   comment: string = '';
   hiddenCommentButtons: boolean = true;
   showAiSuggestedIdeas = false;
+  @ViewChild(ChatgptIdeaSuggestionsComponent) aiSuggestions?: ChatgptIdeaSuggestionsComponent;
 
   // Carrousel
   @ViewChild('carouselTrack', { static: false }) carouselTrack: ElementRef;
@@ -96,6 +98,15 @@ export class IdeaDetailComponent implements OnInit, AfterViewInit {
         });
       }
     });
+  }
+
+  // Genera ideas con IA. Si el panel ya está abierto, el mismo botón regenera (respeta el origen: sugerencias o inspiración).
+  generateAiIdeas(): void {
+    if (this.showAiSuggestedIdeas && this.aiSuggestions) {
+      this.aiSuggestions.regenerate();
+    } else {
+      this.showAiSuggestedIdeas = true; // primera vez: el panel carga en su ngOnInit
+    }
   }
 
   toggleFullscreen() {

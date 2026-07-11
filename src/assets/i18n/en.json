@@ -124,7 +124,11 @@
     "DESCRIPTION_PLACEHOLDER": "Long description of my idea.",
     "TAKE_PHOTO": "Take photo",
     "ADD_IMAGE": "Add image",
-    "GENERATE_AI_IMAGE": "Generate image with AI"
+    "GENERATE_AI_IMAGE": "Generate image with AI",
+    "AI_IMAGE_MISSING_FIELDS": "Please enter the idea's title and description.",
+    "AI_IMAGE_ERROR": "Couldn't generate the image. Please try again later.",
+    "AI_IMAGE_ERROR_QUOTA": "The AI service has no quota available right now.",
+    "AI_IMAGE_ERROR_POLICY": "The description violates content policies, so the image couldn't be generated."
   },
   "DIALOG": {
     "NEW_GROUP": "New group",
@@ -213,6 +217,11 @@
   "AI": {
     "GETTING_SUGGESTIONS": "Getting suggestions based on your idea...",
     "GETTING_GROUP_SUGGESTIONS": "Getting suggestions for group ideas...",
-    "IDEA_GENERATION": "Idea generation"
+    "IDEA_GENERATION": "Idea generation",
+    "ERROR_GETTING_SUGGESTIONS": "Couldn't get AI suggestions. Please try again later.",
+    "NO_SUGGESTIONS": "The AI didn't generate any suggestions this time. Please try again later.",
+    "SEEK_INSPIRATION": "Looking for inspiration",
+    "SEEKING_INSPIRATION": "Looking for inspiration...",
+    "RETRY": "Retry"
   }
 }
