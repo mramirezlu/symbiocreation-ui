@@ -41,13 +41,19 @@ export class SymbiocreationService {
         return this.http.get<Symbiocreation[]>(API_URL);
     }
 
-    // find all public symbiocreations
-    getAllPublicSymbiocreations(page: number, name?: string): Observable<Symbiocreation[]> {
-        let API_URL = `${this.apiUrl}/symbiocreations/getAllPublic/${page}`;
-        if (name) {
-            API_URL += `?name=${encodeURIComponent(name)}`;
-        }
+    // find all public symbiocreations (nombre + rango de fecha de creación opcionales; from/to en epoch millis)
+    getAllPublicSymbiocreations(page: number, name?: string, from?: number, to?: number): Observable<Symbiocreation[]> {
+        let API_URL = `${this.apiUrl}/symbiocreations/getAllPublic/${page}${this.buildPublicFilterParams(name, from, to)}`;
         return this.http.get<Symbiocreation[]>(API_URL);
+    }
+
+    // Arma los query params opcionales del listado público (nombre + rango de fecha de creación en epoch millis).
+    private buildPublicFilterParams(name?: string, from?: number, to?: number): string {
+        const params: string[] = [];
+        if (name) params.push(`name=${encodeURIComponent(name)}`);
+        if (from != null) params.push(`from=${from}`);
+        if (to != null) params.push(`to=${to}`);
+        return params.length ? `?${params.join('&')}` : '';
     }
 
     // find all upcoming symbiocreations
@@ -73,11 +79,8 @@ export class SymbiocreationService {
         return this.http.get<number>(API_URL);
     }
 
-    countPublicSymbiocreations(name?: string): Observable<number> {
-        let API_URL = `${this.apiUrl}/symbiocreations/countPublic`;
-        if (name) {
-            API_URL += `?name=${encodeURIComponent(name)}`;
-        }
+    countPublicSymbiocreations(name?: string, from?: number, to?: number): Observable<number> {
+        let API_URL = `${this.apiUrl}/symbiocreations/countPublic${this.buildPublicFilterParams(name, from, to)}`;
         return this.http.get<number>(API_URL);
     }
 

@@ -20,7 +20,6 @@ import { EditGroupNameDialogComponent } from '../edit-group-name-dialog/edit-gro
 
 import { SymbiocreationDetailComponent } from '../symbiocreation-detail/symbiocreation-detail.component';
 import { MatButton } from '@angular/material/button';
-import { IdeaSelectorDialogComponent } from '../idea-selector-dialog/idea-selector-dialog.component';
 import { NewIdeaConfirmationDialogComponent } from '../new-idea-confirmation-dialog/new-idea-confirmation-dialog.component';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
@@ -45,7 +44,10 @@ export class SymbiocreationComponent implements OnInit, OnDestroy {
   //private graphComponent: GraphComponent;
 
   idGroupSelected: string = null;
-  
+
+  // Índice cíclico por participante: cada click en su nombre centra/abre la siguiente de sus ideas.
+  private participantCycleIndex: { [u_id: string]: number } = {};
+
   participant: Participant;
   groups: Node[];
   myAncestries: Node[][];
@@ -379,8 +381,9 @@ export class SymbiocreationComponent implements OnInit, OnDestroy {
   updateReferences() {
     this.symbiocreation.graph = this.symbiocreation.graph.slice();
     this.groups = this.getGroups();
-    this.filteredParticipants = this.symbiocreation.participants;
-    this.filteredGroups = this.groups;
+    // Se re-aplica el filtro activo para que el buscador siga funcionando tras una actualización en vivo.
+    this.filteredParticipants = this.listFilter1 ? this.performFilter1(this.listFilter1) : this.symbiocreation.participants;
+    this.filteredGroups = this.listFilter2 ? this.performFilter2(this.listFilter2) : this.groups;
 
     // update logged-in user
     if (this.participant) {
@@ -599,30 +602,22 @@ export class SymbiocreationComponent implements OnInit, OnDestroy {
     }
     
     //this.sharedService.nextSelectedNodes([node]);
+    this.sharedService.nextCenterNode(node); // centra el nodo en el grafo al abrir su detalle (grupos, participantes, mis ideas, menú)
     this.router.navigate(['idea', node.id], {relativeTo: this.route});
     this.sidenav.open();
   }
 
+  // Al presionar un participante: centra su idea en el grafo y abre el detalle.
+  // Si tiene varias ideas, cada click cicla a la siguiente (reemplaza el diálogo selector).
   preOpenIdeaDetailSidenav(u_id: string) {
-    this.symbioService.getNodesByUserId(this.symbiocreation.id, u_id)
-      .subscribe(nodes => {
-        if (nodes.length === 1) {
-          this.openIdeaDetailSidenav(nodes[0]);
-        } else {
-          const dialogRef = this.dialog.open(IdeaSelectorDialogComponent, {
-            width: '400px',
-            data: {
-              nodes: nodes
-            }
-          });
-      
-          dialogRef.afterClosed().subscribe(node => {
-            if (node) {
-              this.openIdeaDetailSidenav(node);
-            }
-          });
-        }
-      });
+    const nodes = this.getNodesByUserId(u_id); // nodos locales del participante
+    if (!nodes.length) return;
+
+    const nextIndex = ((this.participantCycleIndex[u_id] ?? -1) + 1) % nodes.length;
+    this.participantCycleIndex[u_id] = nextIndex;
+
+    const node = nodes[nextIndex];
+    this.openIdeaDetailSidenav(node); // centra y abre el detalle (el centrado lo hace openIdeaDetailSidenav)
   }
 
   setRoleOfUserNode(nodeId: string, role: string) {

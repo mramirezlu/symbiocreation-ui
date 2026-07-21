@@ -25,9 +25,10 @@ export class ExploreComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   symbiocreations: Symbiocreation[] = [];
-  filter: string = 'all';
   totalCount: number;
   searchName: string = '';
+  startDate: moment.Moment | null = null; // filtro: fecha de creación desde
+  endDate: moment.Moment | null = null;   // filtro: fecha de creación hasta
 
   constructor(
     private symbioService: SymbiocreationService,
@@ -37,10 +38,24 @@ export class ExploreComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.sharedService.nextIsLoading(true);
-    this.symbioService.countPublicSymbiocreations()
+    this.refresh();
+  }
+
+  // Nueva búsqueda / carga inicial: conteo + primera página de simbiocreaciones públicas.
+  private refresh(): void {
+    const name = this.sanitizeSearchName() || undefined;
+    this.symbioService.countPublicSymbiocreations(name, this.fromMillis(), this.toMillis())
       .subscribe(count => this.totalCount = count);
-    this.symbioService.getAllPublicSymbiocreations(0)
+    this.loadPage(0);
+  }
+
+  // Carga una página concreta de la lista de simbiocreaciones públicas (orden por fecha de creación desc en el backend).
+  private loadPage(pageIndex: number): void {
+    const name = this.sanitizeSearchName() || undefined;
+    this.sharedService.nextIsLoading(true);
+    this.symbiocreations = [];
+
+    this.symbioService.getAllPublicSymbiocreations(pageIndex, name, this.fromMillis(), this.toMillis())
       .subscribe(
         symbios => {
           this.sharedService.nextIsLoading(false);
@@ -50,59 +65,13 @@ export class ExploreComponent implements OnInit {
       );
   }
 
-  filterChanged() {
-    this.symbiocreations = [];
-    this.paginator.firstPage();
-    const name = this.sanitizeSearchName() || undefined;
+  // Filtro de fecha de creación como epoch millis (inicio/fin del día), o undefined si no está seteado.
+  private fromMillis(): number | undefined {
+    return this.startDate ? this.startDate.clone().startOf('day').valueOf() : undefined;
+  }
 
-    switch(this.filter) {
-      case "upcoming": {
-        this.sharedService.nextIsLoading(true);
-        this.symbioService.countUpcomingPublicSymbiocreations(name)
-          .subscribe(count => this.totalCount = count);
-        this.symbioService.getUpcomingPublicSymbiocreations(0, name)
-          .subscribe(
-            symbios => {
-              this.sharedService.nextIsLoading(false);
-              this.symbiocreations = symbios;
-              this.symbiocreations.forEach(symbio => symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants));
-            }
-          );
-        break;
-      }
-      case "past": {
-        this.sharedService.nextIsLoading(true);
-        this.symbioService.countPastPublicSymbiocreations(name)
-          .subscribe(count => this.totalCount = count);
-        this.symbioService.getPastPublicSymbiocreations(0, name)
-          .subscribe(
-            symbios => {
-              this.sharedService.nextIsLoading(false);
-              this.symbiocreations = symbios;
-              this.symbiocreations.forEach(symbio => symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants));
-            }
-          );
-        break;
-      }
-      case "all": {
-        this.sharedService.nextIsLoading(true);
-        this.symbioService.countPublicSymbiocreations(name)
-          .subscribe(count => this.totalCount = count);
-        this.symbioService.getAllPublicSymbiocreations(0, name)
-          .subscribe(
-            symbios => {
-              this.sharedService.nextIsLoading(false);
-              this.symbiocreations = symbios;
-              this.symbiocreations.forEach(symbio => symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants));
-            }
-          );
-        break;
-      }
-      default: {
-        console.log("Invalid choice");
-        break;
-     }
-    }
+  private toMillis(): number | undefined {
+    return this.endDate ? this.endDate.clone().endOf('day').valueOf() : undefined;
   }
 
   openSymbioDetailDialog(s: Symbiocreation) {
@@ -166,57 +135,11 @@ export class ExploreComponent implements OnInit {
 
   search(): void {
     this.paginator.firstPage();
-    this.filterChanged();
+    this.refresh();
   }
 
   onPageFired(event) {
-    const name = this.sanitizeSearchName() || undefined;
-
-    switch(this.filter) {
-      case "upcoming": {
-        this.sharedService.nextIsLoading(true);
-        this.symbiocreations = [];
-        this.symbioService.getUpcomingPublicSymbiocreations(event.pageIndex, name)
-          .subscribe(
-            symbios => {
-              this.sharedService.nextIsLoading(false);
-              this.symbiocreations = symbios;
-              this.symbiocreations.forEach(symbio => symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants));
-            }
-          );
-        break;
-      }
-      case "past": {
-        this.sharedService.nextIsLoading(true);
-        this.symbiocreations = [];
-        this.symbioService.getPastPublicSymbiocreations(event.pageIndex, name)
-          .subscribe(
-            symbios => {
-              this.sharedService.nextIsLoading(false);
-              this.symbiocreations = symbios;
-              this.symbiocreations.forEach(symbio => symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants));
-            }
-          );
-        break;
-      }
-      case "all": {
-        this.sharedService.nextIsLoading(true);
-        this.symbiocreations = [];
-        this.symbioService.getAllPublicSymbiocreations(event.pageIndex, name)
-          .subscribe(
-            symbios => {
-              this.sharedService.nextIsLoading(false);
-              this.symbiocreations = symbios;
-              this.symbiocreations.forEach(symbio => symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants));
-            }
-          );
-        break;
-      }
-      default: {
-        console.log("Invalid choice");
-        break;
-     }
-    }
+    this.loadPage(event.pageIndex);
   }
 
 }

@@ -1,19 +1,11 @@
 <div style="padding: 15px;">
-  <div class="container-80 title-container" style="margin-top: 40px; margin-bottom: 15px;">
+  <div class="container-80 title-container">
     <h2 class="font-26 bolder gray-900" style="display: inline-block;">{{ 'EXPLORE.TITLE' | translate }}</h2>
     <mat-paginator [length]="totalCount"
       [pageSize]="20"
       [hidePageSize]="true"
       (page)="onPageFired($event)">
     </mat-paginator>
-  </div>
-
-  <div class="container-80">
-    <mat-button-toggle-group [(ngModel)]="filter" (change)="filterChanged()" class="btn-group-explore">
-      <mat-button-toggle class="btn-explore" value="all">{{ 'EXPLORE.FILTER_ALL' | translate }}</mat-button-toggle>
-      <mat-button-toggle class="btn-explore" value="upcoming">{{ 'EXPLORE.FILTER_UPCOMING' | translate }}</mat-button-toggle>
-      <mat-button-toggle class="btn-explore" value="past">{{ 'EXPLORE.FILTER_PAST' | translate }}</mat-button-toggle>
-    </mat-button-toggle-group>
   </div>
 
   <div class="container-80 search-container">
@@ -25,6 +17,31 @@
         [placeholder]="'EXPLORE.SEARCH_PLACEHOLDER' | translate"
         maxlength="50">
       </mat-form-field>
+
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>{{ 'EXPLORE.DATE_FROM' | translate }}</mat-label>
+        <input matInput [matDatepicker]="fromPicker" [(ngModel)]="startDate" (dateChange)="search()" readonly>
+        @if (startDate) {
+          <button matSuffix mat-icon-button (click)="startDate = null; search()">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>{{ 'EXPLORE.DATE_TO' | translate }}</mat-label>
+        <input matInput [matDatepicker]="toPicker" [(ngModel)]="endDate" (dateChange)="search()" readonly>
+        @if (endDate) {
+          <button matSuffix mat-icon-button (click)="endDate = null; search()">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
+      </mat-form-field>
+
       <button mat-raised-button color="primary" class="search-button" (click)="search()">{{ 'EXPLORE.SEARCH_BUTTON' | translate }}</button>
     </div>
 

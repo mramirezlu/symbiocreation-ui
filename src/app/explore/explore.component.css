@@ -11,9 +11,12 @@ mat-paginator {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 15px;
 
     h2{
-        margin-bottom: 0px;
+        margin: 0; /* quita el margin-top por defecto del navegador que descentraba el título vs el paginador */
     }
 }
 
@@ -34,16 +37,23 @@ mat-paginator {
 .search-container {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
     margin-top: 15px;
 }
 
 .search-field {
-    flex: 1;
+    flex: 1 1 240px;
     max-width: 400px;
 }
 
-.search-field ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+.date-field {
+    width: 160px;
+}
+
+/* Oculta el subscript de Material (espacio reservado bajo el campo) para que todos midan lo mismo y alineen */
+.search-field ::ng-deep .mat-mdc-form-field-subscript-wrapper,
+.date-field ::ng-deep .mat-mdc-form-field-subscript-wrapper {
     display: none;
 }
 
@@ -84,6 +94,27 @@ mat-paginator {
 
     mat-card{
         width: 100%;
+    }
+
+    /* En mobile: buscador full-width, las dos fechas lado a lado (50/50) y el botón full-width */
+    .search-field {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .date-field {
+        flex: 1 1 calc(50% - 5px);
+        width: auto;
+    }
+
+    .search-button {
+        flex: 1 1 100%;
+    }
+
+    /* Título + paginador apilados en mobile (evita el hueco enorme del space-between al ir a 100%) */
+    .title-container {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
 }

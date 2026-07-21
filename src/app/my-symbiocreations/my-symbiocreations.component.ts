@@ -8,6 +8,7 @@ import { UserService } from '../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SharedService } from '../services/shared.service';
 import { AnalyticsService } from '../services/analytics.service';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
     selector: 'app-my-symbiocreations',
@@ -36,7 +37,8 @@ export class MySymbiocreationsComponent implements OnInit {
     private analyticsService: AnalyticsService,
     private auth: AuthService,
     public sharedService: SharedService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private notification: NotificationService
     ) {
     // this.symbiocreations = [];
     this.isModeratorList = [];
@@ -64,15 +66,21 @@ export class MySymbiocreationsComponent implements OnInit {
 
         return this.symbioService.getMySymbiocreations(fetchedUser.id, 0); // first page
       }),
-    ).subscribe(
-      symbios => {
+    ).subscribe({
+      next: symbios => {
         this.symbiocreations = symbios;
         // order has to be done in frontend bc of rx backend ?????
         this.symbiocreations.sort((a, b) => a.lastModified > b.lastModified ? -1 : (a.lastModified < b.lastModified ? 1 : 0));
         this.isModeratorList = this.createIsModeratorList(fetchedUser);
         this.sharedService.nextIsLoading(false);
-      }
-    );
+      },
+      error: err => {
+        // Corta el spinner global y avisa; el error crudo queda en Network/consola para depurar.
+        console.error('MySymbiocreations load error', err);
+        this.sharedService.nextIsLoading(false);
+        this.notification.showError('COMMON.ERROR_GENERIC');
+      },
+    });
   }
 
   createIsModeratorList(user: User): boolean[] {

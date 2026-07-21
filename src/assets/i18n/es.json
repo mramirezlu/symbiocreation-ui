@@ -16,10 +16,9 @@
   },
   "EXPLORE": {
     "TITLE": "Explora",
-    "FILTER_ALL": "Todas",
-    "FILTER_UPCOMING": "Próximas",
-    "FILTER_PAST": "Pasadas",
     "SEARCH_LABEL": "Buscar por nombre",
+    "DATE_FROM": "Desde",
+    "DATE_TO": "Hasta",
     "SEARCH_PLACEHOLDER": "Ej: clima",
     "SEARCH_BUTTON": "Buscar",
     "NO_RESULTS": "No se encontraron simbiocreaciones.",
@@ -148,7 +147,9 @@
     "YES": "Sí",
     "NO": "No",
     "OK": "OK",
-    "CONFIRM": "Confirmar"
+    "CONFIRM": "Confirmar",
+    "ERROR_GENERIC": "Ocurrió un error al cargar los datos. Intenta de nuevo más tarde.",
+    "ERROR_AUTH": "Ocurrió un error de autenticación. Intenta de nuevo más tarde."
   },
   "SYMBIO": {
     "EDIT_SYMBIOCREATION": "Editar simbiocreación",
@@ -162,6 +163,8 @@
     "INFO_URL": "Link con información del evento",
     "GROUPS": "Grupos",
     "PARTICIPANTS": "Participantes",
+    "SEARCH_PARTICIPANTS": "Buscar participante",
+    "SEARCH_GROUPS": "Buscar grupo",
     "USER_RANKING": "Ranking de usuarios",
     "TRENDS": "Tendencias",
     "MY_IDEAS": "Mis Ideas",

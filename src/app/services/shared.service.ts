@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Node } from '../models/forceGraphTypes';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +24,10 @@ export class SharedService {
 
     private deselectedNodesSubject$ = new BehaviorSubject<Node[]>(null);
     deselectedNodes$ = this.deselectedNodesSubject$.asObservable();
+
+    // Pide al grafo centrar (pan/zoom) un nodo concreto. Subject (no replay) para que cada click re-centre.
+    private centerNodeSubject$ = new Subject<Node>();
+    centerNode$ = this.centerNodeSubject$.asObservable();
 
     constructor() {}
 
@@ -49,5 +53,9 @@ export class SharedService {
     
     nextDeselectedNodes(nodes: Node[]) {
         this.deselectedNodesSubject$.next(nodes);
+    }
+
+    nextCenterNode(node: Node) {
+        this.centerNodeSubject$.next(node);
     }
 }

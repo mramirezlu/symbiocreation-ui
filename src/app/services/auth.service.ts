@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { UserService } from './user.service';
 import { User } from '../models/symbioTypes';
 import { SharedService } from './shared.service';
+import { NotificationService } from './notification.service';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -51,7 +52,8 @@ export class AuthService {
     private router: Router,
     private location: Location,
     private userService: UserService,
-    private sharedService: SharedService) {
+    private sharedService: SharedService,
+    private notification: NotificationService) {
     // On initial load, check authentication state with authorization server
     // Set up local auth streams if user is already authenticated
     this.localAuthSetup();
@@ -83,15 +85,21 @@ export class AuthService {
         return of(loggedIn);
       })
     );
-    checkAuth$.subscribe(() => {
-      // Navigate to current path or default route after auth check
-      // This handles the case when initialNavigation is disabled
-      const path = this.location.path();
-      if (path && !path.includes('code=')) {
-        this.router.navigateByUrl(path);
-      } else if (!path) {
-        this.router.navigateByUrl('/');
-      }
+    checkAuth$.subscribe({
+      next: () => {
+        // Navigate to current path or default route after auth check
+        // This handles the case when initialNavigation is disabled
+        const path = this.location.path();
+        if (path && !path.includes('code=')) {
+          this.router.navigateByUrl(path);
+        } else if (!path) {
+          this.router.navigateByUrl('/');
+        }
+      },
+      error: err => {
+        console.error('Auth setup error', err);
+        this.notification.showError('COMMON.ERROR_AUTH');
+      },
     });
   }
 
@@ -137,33 +145,51 @@ export class AuthService {
         })
       );
 
-      authComplete$.subscribe(u => { // is null if user is new
-        // update/create user
-        if (!u) { // if no object returned
-          console.log('new user!');
+      authComplete$.subscribe({
+        next: u => { // is null if user is new
+          // update/create user
+          if (!u) { // if no object returned
+            console.log('new user!');
 
-          // create new user
-          let newUser: User = {name: usr.name, firstName: usr.given_name, lastName: usr.family_name,
-                                email: usr.email, pictureUrl: usr.picture, role: 'USER'};
+            // create new user
+            let newUser: User = {name: usr.name, firstName: usr.given_name, lastName: usr.family_name,
+                                  email: usr.email, pictureUrl: usr.picture, role: 'USER'};
 
-          this.userService.createUser(newUser).subscribe(createdUser => {
-            this.sharedService.nextAppUser(createdUser);
-            this.router.navigate([targetRoute]);
-          });
-        } else {
-          console.log('returning user!');
+            this.userService.createUser(newUser).subscribe({
+              next: createdUser => {
+                this.sharedService.nextAppUser(createdUser);
+                this.router.navigate([targetRoute]);
+              },
+              error: err => {
+                console.error('createUser (auth callback) error', err);
+                this.notification.showError('COMMON.ERROR_AUTH');
+              },
+            });
+          } else {
+            console.log('returning user!');
 
-          if (usr.name) u.name = usr.name;
-          if (usr.given_name) u.firstName = usr.given_name;
-          if (usr.family_name) u.lastName = usr.family_name;
-          if (usr.picture) u.pictureUrl = usr.picture;
+            if (usr.name) u.name = usr.name;
+            if (usr.given_name) u.firstName = usr.given_name;
+            if (usr.family_name) u.lastName = usr.family_name;
+            if (usr.picture) u.pictureUrl = usr.picture;
 
-          this.userService.updateUser(u).subscribe(updatedUser => {
-            // console.log(updatedUser);
-            this.sharedService.nextAppUser(updatedUser);
-            this.router.navigate([targetRoute]);
-          });
-        }
+            this.userService.updateUser(u).subscribe({
+              next: updatedUser => {
+                // console.log(updatedUser);
+                this.sharedService.nextAppUser(updatedUser);
+                this.router.navigate([targetRoute]);
+              },
+              error: err => {
+                console.error('updateUser (auth callback) error', err);
+                this.notification.showError('COMMON.ERROR_AUTH');
+              },
+            });
+          }
+        },
+        error: err => {
+          console.error('Auth callback error', err);
+          this.notification.showError('COMMON.ERROR_AUTH');
+        },
       });
 
       // Subscribe to authentication completion observable

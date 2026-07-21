@@ -56,6 +56,17 @@ MARK: Side Listas
     <!-- Left panel: Groups -->
     @if (GroupParticipantStat == 1) {
       <div class="container-lista group">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" style="width: 100%;">
+          <mat-label>{{ 'SYMBIO.SEARCH_GROUPS' | translate }}</mat-label>
+          <input matInput [(ngModel)]="listFilter2" [ngModelOptions]="{standalone: true}">
+          @if (listFilter2) {
+            <button matSuffix mat-icon-button (click)="listFilter2 = ''">
+              <mat-icon>close</mat-icon>
+            </button>
+          } @else {
+            <mat-icon matSuffix>search</mat-icon>
+          }
+        </mat-form-field>
         <mat-list style="max-width: 100%;">
           @for (g of filteredGroups; track g; let i = $index; let last = $last) {
             <mat-list-item (mouseenter)="onMouseEnterListItem([g])" (mouseleave)="onMouseLeaveListItem([g])" style="height: 65px;">
@@ -93,6 +104,17 @@ MARK: Side Listas
     <!-- Left panel: Participants -->
     @if (GroupParticipantStat == 2) {
       <div class="container-lista participant">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" style="width: 100%;">
+          <mat-label>{{ 'SYMBIO.SEARCH_PARTICIPANTS' | translate }}</mat-label>
+          <input matInput [(ngModel)]="listFilter1" [ngModelOptions]="{standalone: true}">
+          @if (listFilter1) {
+            <button matSuffix mat-icon-button (click)="listFilter1 = ''">
+              <mat-icon>close</mat-icon>
+            </button>
+          } @else {
+            <mat-icon matSuffix>search</mat-icon>
+          }
+        </mat-form-field>
         <mat-list style="max-width: 100%;">
           @for (p of filteredParticipants; track p; let i = $index; let last = $last) {
             <mat-list-item (mouseenter)="onMouseEnterListItem(getNodesByUserId(p.u_id))" (mouseleave)="onMouseLeaveListItem(getNodesByUserId(p.u_id))" style="height: 55px;">

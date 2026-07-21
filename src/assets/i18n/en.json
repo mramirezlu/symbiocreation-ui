@@ -16,10 +16,9 @@
   },
   "EXPLORE": {
     "TITLE": "Explore",
-    "FILTER_ALL": "All",
-    "FILTER_UPCOMING": "Upcoming",
-    "FILTER_PAST": "Past",
     "SEARCH_LABEL": "Search by name",
+    "DATE_FROM": "From",
+    "DATE_TO": "To",
     "SEARCH_PLACEHOLDER": "E.g.: climate",
     "SEARCH_BUTTON": "Search",
     "NO_RESULTS": "No symbiocreations found.",
@@ -148,7 +147,9 @@
     "YES": "Yes",
     "NO": "No",
     "OK": "OK",
-    "CONFIRM": "Confirm"
+    "CONFIRM": "Confirm",
+    "ERROR_GENERIC": "An error occurred while loading data. Please try again later.",
+    "ERROR_AUTH": "An authentication error occurred. Please try again later."
   },
   "SYMBIO": {
     "EDIT_SYMBIOCREATION": "Edit symbiocreation",
@@ -162,6 +163,8 @@
     "INFO_URL": "Event information link",
     "GROUPS": "Groups",
     "PARTICIPANTS": "Participants",
+    "SEARCH_PARTICIPANTS": "Search participant",
+    "SEARCH_GROUPS": "Search group",
     "USER_RANKING": "User Ranking",
     "TRENDS": "Trends",
     "MY_IDEAS": "My Ideas",

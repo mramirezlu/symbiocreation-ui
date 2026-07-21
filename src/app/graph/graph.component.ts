@@ -51,6 +51,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnChanges {
   wrapper: any;
   bounds: any;
   g_zoomable: any;
+  zoom: any; // comportamiento d3.zoom, guardado para poder centrar nodos programáticamente
 
   nodeElements: any;
   linkElements: any;
@@ -144,6 +145,12 @@ export class GraphComponent implements OnInit, AfterViewInit, OnChanges {
         }
       });
 
+    // Centra (pan/zoom) un nodo cuando lo pide el listado de participantes
+    this.sharedService.centerNode$
+      .subscribe(node => {
+        if (node) this.centerNode(node);
+      });
+
     // Escucha el evento de redimensionamiento
     this.resizeSubscription = fromEvent(window, 'resize').subscribe(() => {
       this.innerWidth = window.innerWidth;
@@ -180,12 +187,13 @@ export class GraphComponent implements OnInit, AfterViewInit, OnChanges {
     // console.log("width: ",this.dimensions.width)
     // console.log("height: ",this.dimensions.height)
 
+    this.zoom = d3.zoom().scaleExtent([0.3, 3]).on("zoom", this.zoomed);
+
     this.wrapper = d3.select(this.container.nativeElement)
       .append("svg")
         .attr("width", this.dimensions.width)
         .attr("height", this.dimensions.height)
-        .call(d3.zoom().scaleExtent([0.3, 3])
-        .on("zoom", this.zoomed))
+        .call(this.zoom)
         .on("dblclick.zoom", null)
         .on("dblclick", () => this.newIdeaClick())
         .on("contextmenu", () => d3.event.preventDefault()); // Disables native context menu
@@ -482,6 +490,21 @@ export class GraphComponent implements OnInit, AfterViewInit, OnChanges {
 
   zoomed = () => {
     this.bounds.attr("transform", d3.event.transform);
+  }
+
+  // Centra en el viewport el nodo indicado, conservando el nivel de zoom actual, con animación.
+  centerNode = (node: Node) => {
+    if (!node || !this.wrapper || !this.zoom) return;
+
+    const target = this.nodesMap.get(node.id);
+    if (!target || target.x == null || target.y == null) return;
+
+    const k = d3.zoomTransform(this.wrapper.node()).k; // conserva el zoom actual
+    const tx = this.dimensions.width / 2 - k * target.x;
+    const ty = this.dimensions.height / 2 - k * target.y;
+
+    this.wrapper.transition().duration(500)
+      .call(this.zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(k));
   }
 
   @HostListener('window:resize') windowResize() {
