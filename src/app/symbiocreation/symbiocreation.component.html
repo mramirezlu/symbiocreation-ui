@@ -124,11 +124,9 @@ MARK: Side Listas
                 </div>
                 <div fxLayout="row" fxLayoutAlign="space-between" fxFlex>
                   <div>
-                    @if (p.user.firstName && p.user.lastName) {
-                      <span class="bold font-16 cyan-color-2" (click)="preOpenIdeaDetailSidenav(p.u_id)" style="cursor: pointer;">
-                        {{ p.user.firstName && p.user.lastName ? p.user.firstName + ' ' + p.user.lastName : p.user.name }}
-                      </span>
-                      }<br />
+                    <span class="bold font-16 cyan-color-2" (click)="preOpenIdeaDetailSidenav(p.u_id)" style="cursor: pointer;">
+                      {{ p.user?.firstName && p.user?.lastName ? p.user.firstName + ' ' + p.user.lastName : p.user?.name }}
+                    </span><br />
                       @if (p.u_id === participant?.u_id) {
                         <span class="gray-600 font-14">({{ 'SYMBIO.YOU' | translate }})</span>
                       }
