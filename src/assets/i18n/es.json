@@ -3,6 +3,7 @@
     "TITLE": "Simbiocreación"
   },
   "NAV": {
+    "MAIN_WEB": "Volver a la web",
     "DASHBOARD": "Dashboard",
     "EXPLORE": "Explora",
     "RANKING": "Ranking",
@@ -226,5 +227,49 @@
     "SEEK_INSPIRATION": "Busco inspiración",
     "SEEKING_INSPIRATION": "Buscando inspiración...",
     "RETRY": "Reintentar"
+  },
+  "FRONTPAGE": {
+    "NAV_EXPLORE": "Explorar",
+    "NAV_METHODOLOGY": "Metodología",
+    "NAV_WORKSHOPS": "Workshops",
+    "NAV_TEAM": "Equipo",
+    "NAV_BLOG": "Blog",
+    "NAV_CONTACT": "Contacto",
+    "LOGIN": "Iniciar sesión",
+    "HERO_LINE1": "Es una",
+    "HERO_LINE2": "convergencia",
+    "HERO_LINE3": "de ideas",
+    "HERO_SUBTITLE": "Experimenta el poder de la colaboración para crear propuestas de alto impacto social.",
+    "CREATE_IDEA": "Crear nueva idea",
+    "KNOW_METHODOLOGY": "Conoce la metodología",
+    "SEARCH_TITLE": "Buscar Simbios",
+    "SEARCH_SUBTITLE": "Descubre ideas, colaboraciones e inspiraciones para crear impacto.",
+    "SEARCH_PLACEHOLDER": "Buscar Simbios por palabra clave...",
+    "CARDS_TITLE": "Simbios destacados",
+    "SEE_ALL": "Ver todos",
+    "TAB_FEATURED": "Destacados",
+    "TAB_NEW": "Nuevos",
+    "TAB_MOST_COLLABORATED": "Más colaborados",
+    "NO_RESULTS": "No se encontraron simbiocreaciones.",
+    "FEATURE1_TITLE": "Colabora sin fronteras",
+    "FEATURE1_DESC": "Conéctate con personas y organizaciones de diferentes territorios.",
+    "FEATURE2_TITLE": "Ideas con propósito",
+    "FEATURE2_DESC": "Cada propuesta busca generar impacto social y ambiental.",
+    "FEATURE3_TITLE": "Metodología Simbio",
+    "FEATURE3_DESC": "De la inspiración a la acción, en comunidad.",
+    "FEATURE4_TITLE": "Tecnología que potencia",
+    "FEATURE4_DESC": "Herramientas simples para soluciones transformadoras."
+  },
+  "MYPROFILE": {
+    "GREETING": "Hola",
+    "TITLE_1": "¿Qué quieres",
+    "TITLE_HIGHLIGHT": "crear",
+    "TITLE_2": "hoy?",
+    "ACTION_CREATE_IDEA": "Crear una idea",
+    "ACTION_JOIN": "Unirme a un Simbio",
+    "KPI_IDEAS": "Ideas creadas",
+    "KPI_COLLABORATIONS": "Colaboraciones",
+    "MY_SIMBIOS": "Mis Simbios",
+    "NO_SIMBIOS": "Aún no tienes Simbios."
   }
 }

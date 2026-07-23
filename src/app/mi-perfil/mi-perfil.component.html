@@ -1,0 +1,122 @@
+<div class="mp">
+
+  <!-- ===================== Saludo + imagen ===================== -->
+  <section class="mp-top">
+    <div class="mp-greeting">
+      <div class="mp-hello">{{ 'MYPROFILE.GREETING' | translate }} {{ displayName }} <span class="mp-wave">👋</span></div>
+      <h1 class="mp-title">
+        {{ 'MYPROFILE.TITLE_1' | translate }}
+        <span class="mp-title-highlight">{{ 'MYPROFILE.TITLE_HIGHLIGHT' | translate }}</span>
+        {{ 'MYPROFILE.TITLE_2' | translate }}
+      </h1>
+    </div>
+
+    <!-- Placeholder de imagen (se reemplazará por la imagen real cuando esté disponible) -->
+    <div class="mp-image-placeholder" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===================== Acciones rápidas ===================== -->
+  <section class="mp-actions">
+    <a class="mp-action" routerLink="/create">
+      <div class="mp-action-icon pink"><mat-icon>add</mat-icon></div>
+      <span class="mp-action-label">{{ 'MYPROFILE.ACTION_CREATE_IDEA' | translate }}</span>
+    </a>
+
+    <a class="mp-action" routerLink="/explore">
+      <div class="mp-action-icon green"><mat-icon>group_add</mat-icon></div>
+      <span class="mp-action-label">{{ 'MYPROFILE.ACTION_JOIN' | translate }}</span>
+    </a>
+  </section>
+
+  <!-- ===================== KPIs (solo los 2 primeros) ===================== -->
+  <section class="mp-kpis">
+    <div class="mp-kpi">
+      <div class="mp-kpi-icon pink"><mat-icon>lightbulb</mat-icon></div>
+      <div class="mp-kpi-text">
+        <div class="mp-kpi-value">{{ ideasCount }}</div>
+        <div class="mp-kpi-label">{{ 'MYPROFILE.KPI_IDEAS' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="mp-kpi">
+      <div class="mp-kpi-icon green"><mat-icon>groups</mat-icon></div>
+      <div class="mp-kpi-text">
+        <div class="mp-kpi-value">{{ collaborationsCount }}</div>
+        <div class="mp-kpi-label">{{ 'MYPROFILE.KPI_COLLABORATIONS' | translate }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Mis Simbios (sin filtros) ===================== -->
+  <section class="mp-cards-section">
+    <div class="mp-cards-header">
+      <h2>{{ 'MYPROFILE.MY_SIMBIOS' | translate }}</h2>
+      <a routerLink="/dashboard/my-symbios" class="mp-see-all">{{ 'FRONTPAGE.SEE_ALL' | translate }} &rarr;</a>
+    </div>
+
+    @if (symbiocreations.length === 0) {
+      <p class="mp-no-results">{{ 'MYPROFILE.NO_SIMBIOS' | translate }}</p>
+    } @else {
+      <div class="mp-slider">
+        <button mat-mini-fab class="mp-slider-arrow" (click)="scrollCards(-1)" aria-label="prev">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="mp-cards-track" #cardsTrack>
+          @for (s of symbiocreations; track s) {
+            <mat-card class="mp-card">
+              <div class="centered font-13 gray-300 uppercase mp-card-date">
+                @if (s.dateTime) {
+                  <span>{{s.dateTime | date : 'E d MMM' : 'UTC' : dateLocale}}</span>
+                }
+                @if (s.hasStartTime) {
+                  <span>, {{s.dateTime | date : 'shortTime' : 'UTC' : dateLocale}}</span>
+                }
+              </div>
+
+              <div class="centered mp-card-title">
+                <a [routerLink]="['/symbiocreation/', s.id]" class="ellipsed-2">{{s.name}}</a>
+              </div>
+
+              <div class="mp-card-avatars"
+                [style.width]="(s.participantsToDisplay.length - 1) * 24 + 45 + computeNMoreSpanWidth(s.participants.length, s.participantsToDisplay.length) + 'px'">
+                @for (p of s.participantsToDisplay; track p; let i = $index) {
+                  <advanced-image
+                    [cldImg]="p.user.cloudinaryImage"
+                    width="40px" height="auto"
+                    style="position: absolute;"
+                    [style.z-index]="5-i" [style.left]="i*24 + 'px'"
+                    [matTooltip]="p.user.name" matTooltipPosition="above">
+                  </advanced-image>
+                }
+                @if (s.participantsToDisplay.length > 0 && s.participants.length - s.participantsToDisplay.length > 0) {
+                  <span class="mp-card-more"
+                    [style.left]="(s.participantsToDisplay.length - 1) * 24 + 45 + 'px'">
+                    {{s.participants.length - s.participantsToDisplay.length}} {{ 'EXPLORE.MORE_PARTICIPANTS' | translate }}
+                  </span>
+                }
+              </div>
+
+              <div class="mp-card-footer">
+                <div [matTooltip]="('EXPLORE.UPDATED' | translate) + ' ' + getTimeAgo(s.lastModified)" matTooltipPosition="above" class="mp-card-updated">
+                  <mat-icon>update</mat-icon>
+                  <span>{{getTimeAgo(s.lastModified)}}</span>
+                </div>
+                <button mat-icon-button class="mp-card-info"
+                  [matTooltip]="'EXPLORE.VIEW_MORE_INFO' | translate" matTooltipPosition="above"
+                  (click)="openSymbioDetailDialog(s)">
+                  <mat-icon>info</mat-icon>
+                </button>
+              </div>
+            </mat-card>
+          }
+        </div>
+
+        <button mat-mini-fab class="mp-slider-arrow" (click)="scrollCards(1)" aria-label="next">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    }
+  </section>
+
+</div>

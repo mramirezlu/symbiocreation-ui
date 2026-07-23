@@ -56,6 +56,13 @@ export class SymbiocreationService {
         return params.length ? `?${params.join('&')}` : '';
     }
 
+    // Ranking de públicas para el frontpage. sort: 'ideas' (Destacados) | 'new' (Nuevos) | 'collaborators' (Más colaborados).
+    getPublicRankedSymbiocreations(sort: string, name?: string, limit: number = 20): Observable<Symbiocreation[]> {
+        const params: string[] = [`sort=${sort}`, `limit=${limit}`];
+        if (name) params.push(`name=${encodeURIComponent(name)}`);
+        return this.http.get<Symbiocreation[]>(`${this.apiUrl}/symbiocreations/getPublicRanked?${params.join('&')}`);
+    }
+
     // find all upcoming symbiocreations
     getUpcomingPublicSymbiocreations(page: number, name?: string): Observable<Symbiocreation[]> {
         let API_URL = `${this.apiUrl}/symbiocreations/getUpcomingPublic/${page}`;

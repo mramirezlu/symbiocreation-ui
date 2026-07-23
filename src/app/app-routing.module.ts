@@ -14,9 +14,11 @@ import { RankingUsersPublicComponent } from './ranking-users-public/ranking-user
 import { MyOnedotsComponent } from './my-onedots/my-onedots.component';
 import { CreateOnedotComponent } from './create-onedot/create-onedot.component';
 import { OnedotComponent } from './onedot/onedot.component';
+import { FrontpageComponent } from './frontpage/frontpage.component';
+import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard/my-symbios', pathMatch: 'full' },
+  { path: '', component: FrontpageComponent, pathMatch: 'full' }, // frontpage pública (FrontPage → Login → Intranet)
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], 
     children: [
       { path: '', redirectTo: 'my-symbios', pathMatch: 'full' },
@@ -26,6 +28,7 @@ const routes: Routes = [
     ]
   },
   { path: 'explore', component: ExploreComponent },
+  { path: 'mi-perfil', component: MiPerfilComponent, canActivate: [AuthGuard] }, // vista personalizada (requiere sesión)
   { path: 'ranking', component: RankingUsersPublicComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'symbiocreation/:id', component: SymbiocreationComponent, 
@@ -37,7 +40,7 @@ const routes: Routes = [
   { path: 'create', component: CreateSymbioComponent, canActivate: [AuthGuard] },
   { path: 'edit/:id', component: EditSymbiocreationDetailComponent },
   { path: 'create-onedot', component: CreateOnedotComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: 'dashboard/my-symbios' }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

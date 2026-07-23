@@ -3,11 +3,12 @@ import { User } from './models/symbioTypes';
 import { AuthService } from './services/auth.service';
 import { SharedService } from './services/shared.service';
 
-import { concatMap } from 'rxjs/operators';
+import { concatMap, filter } from 'rxjs/operators';
 import { UserService } from './services/user.service';
 import { NotificationService } from './services/notification.service';
 import { EMPTY } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent implements AfterViewChecked, OnInit {
   toggleVisible: boolean = false;
   isMenuMobileOpen: boolean = false;
   currentLang: string = 'es';
+  isHome = false; // en el frontpage ('/') se oculta la toolbar global; el frontpage tiene su propio header
 
   constructor(
     public auth: AuthService,
@@ -29,7 +31,8 @@ export class AppComponent implements AfterViewChecked, OnInit {
     private userService: UserService,
     private cdr: ChangeDetectorRef,
     public translate: TranslateService,
-    private notification: NotificationService
+    private notification: NotificationService,
+    private router: Router
   ) {
     this.translate.addLangs(['es', 'en']);
     this.translate.setFallbackLang('es');
@@ -50,6 +53,11 @@ export class AppComponent implements AfterViewChecked, OnInit {
   }
 
   ngOnInit(): void {
+    // Oculta la toolbar global en el frontpage ('/')
+    this.updateIsHome(this.router.url);
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: NavigationEnd) => this.updateIsHome(e.urlAfterRedirects));
+
     this.auth.isAuthenticated$
       .pipe(
         concatMap((isAuthenticated: boolean) => {
@@ -72,6 +80,11 @@ export class AppComponent implements AfterViewChecked, OnInit {
           this.notification.showError('COMMON.ERROR_GENERIC');
         },
       });
+  }
+
+  private updateIsHome(url: string): void {
+    const path = (url || '').split('?')[0].split('#')[0];
+    this.isHome = path === '/' || path === '';
   }
 
   ngAfterViewChecked(): void {

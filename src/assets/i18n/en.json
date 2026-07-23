@@ -3,6 +3,7 @@
     "TITLE": "Symbiocreation"
   },
   "NAV": {
+    "MAIN_WEB": "Back to site",
     "DASHBOARD": "Dashboard",
     "EXPLORE": "Explore",
     "RANKING": "Ranking",
@@ -226,5 +227,49 @@
     "SEEK_INSPIRATION": "Looking for inspiration",
     "SEEKING_INSPIRATION": "Looking for inspiration...",
     "RETRY": "Retry"
+  },
+  "FRONTPAGE": {
+    "NAV_EXPLORE": "Explore",
+    "NAV_METHODOLOGY": "Methodology",
+    "NAV_WORKSHOPS": "Workshops",
+    "NAV_TEAM": "Team",
+    "NAV_BLOG": "Blog",
+    "NAV_CONTACT": "Contact",
+    "LOGIN": "Sign in",
+    "HERO_LINE1": "It's a",
+    "HERO_LINE2": "convergence",
+    "HERO_LINE3": "of ideas",
+    "HERO_SUBTITLE": "Experience the power of collaboration to create high social impact proposals.",
+    "CREATE_IDEA": "Create new idea",
+    "KNOW_METHODOLOGY": "Learn the methodology",
+    "SEARCH_TITLE": "Search Simbios",
+    "SEARCH_SUBTITLE": "Discover ideas, collaborations and inspirations to create impact.",
+    "SEARCH_PLACEHOLDER": "Search Simbios by keyword...",
+    "CARDS_TITLE": "Featured Simbios",
+    "SEE_ALL": "See all",
+    "TAB_FEATURED": "Featured",
+    "TAB_NEW": "New",
+    "TAB_MOST_COLLABORATED": "Most collaborated",
+    "NO_RESULTS": "No symbiocreations found.",
+    "FEATURE1_TITLE": "Collaborate without borders",
+    "FEATURE1_DESC": "Connect with people and organizations from different territories.",
+    "FEATURE2_TITLE": "Ideas with purpose",
+    "FEATURE2_DESC": "Each proposal seeks to generate social and environmental impact.",
+    "FEATURE3_TITLE": "Simbio Methodology",
+    "FEATURE3_DESC": "From inspiration to action, as a community.",
+    "FEATURE4_TITLE": "Technology that empowers",
+    "FEATURE4_DESC": "Simple tools for transformative solutions."
+  },
+  "MYPROFILE": {
+    "GREETING": "Hi",
+    "TITLE_1": "What do you want to",
+    "TITLE_HIGHLIGHT": "create",
+    "TITLE_2": "today?",
+    "ACTION_CREATE_IDEA": "Create an idea",
+    "ACTION_JOIN": "Join a Simbio",
+    "KPI_IDEAS": "Ideas created",
+    "KPI_COLLABORATIONS": "Collaborations",
+    "MY_SIMBIOS": "My Simbios",
+    "NO_SIMBIOS": "You don't have any Simbios yet."
   }
 }

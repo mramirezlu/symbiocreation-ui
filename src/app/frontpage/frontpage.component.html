@@ -1,0 +1,198 @@
+<div class="fp">
+
+  <!-- ===================== Header ===================== -->
+  <header class="fp-header">
+    <a class="fp-logo" routerLink="/">
+      <img src="assets/images/simbiocreacion_logo.png" alt="Simbiocreación">
+    </a>
+
+    <nav class="fp-nav">
+      <a class="fp-nav-link active" routerLink="/">{{ 'FRONTPAGE.NAV_EXPLORE' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/#proceso">{{ 'FRONTPAGE.NAV_METHODOLOGY' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/#workshops">{{ 'FRONTPAGE.NAV_WORKSHOPS' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/#equipo">{{ 'FRONTPAGE.NAV_TEAM' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/blog/">{{ 'FRONTPAGE.NAV_BLOG' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/#contacto">{{ 'FRONTPAGE.NAV_CONTACT' | translate }}</a>
+    </nav>
+
+    <div class="fp-actions">
+      @if (auth.userProfile$ | async; as profile) {
+        <button class="fp-avatar" [matMenuTriggerFor]="userMenu" [attr.aria-label]="profile.name">
+          {{ getInitials(profile) }}
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <div class="fp-user-name">{{ profile.name }}</div>
+          <button mat-menu-item routerLink="/mi-perfil">
+            <mat-icon>person</mat-icon>
+            <span>{{ 'NAV.MY_PROFILE' | translate }}</span>
+          </button>
+          <button mat-menu-item routerLink="/dashboard/my-symbios">
+            <mat-icon>dashboard</mat-icon>
+            <span>{{ 'NAV.DASHBOARD' | translate }}</span>
+          </button>
+          <button mat-menu-item (click)="auth.logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>{{ 'NAV.LOGOUT' | translate }}</span>
+          </button>
+        </mat-menu>
+      } @else {
+        <button mat-flat-button color="primary" class="fp-login-btn" (click)="login()">
+          {{ 'FRONTPAGE.LOGIN' | translate }}
+        </button>
+      }
+    </div>
+  </header>
+
+  <!-- ===================== Hero ===================== -->
+  <section class="fp-hero">
+    <div class="fp-hero-content">
+      <h1 class="fp-hero-title">
+        <span class="fp-hero-line">{{ 'FRONTPAGE.HERO_LINE1' | translate }}</span>
+        <span class="fp-hero-line fp-hero-highlight">{{ 'FRONTPAGE.HERO_LINE2' | translate }}</span>
+        <span class="fp-hero-line">{{ 'FRONTPAGE.HERO_LINE3' | translate }}</span>
+      </h1>
+      <p class="fp-hero-subtitle">{{ 'FRONTPAGE.HERO_SUBTITLE' | translate }}</p>
+
+      <div class="fp-hero-actions">
+        <button mat-flat-button color="primary" class="fp-cta" routerLink="/create">
+          <span>{{ 'FRONTPAGE.CREATE_IDEA' | translate }}</span>
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-button class="fp-cta-secondary" (click)="scrollToFeatures()">
+          <span>{{ 'FRONTPAGE.KNOW_METHODOLOGY' | translate }}</span>
+          <span class="fp-arrow-circle"><mat-icon>arrow_forward</mat-icon></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Buscador (banner) ===================== -->
+  <section class="fp-search-banner">
+    <div class="fp-search-text">
+      <h2>{{ 'FRONTPAGE.SEARCH_TITLE' | translate }}</h2>
+      <p>{{ 'FRONTPAGE.SEARCH_SUBTITLE' | translate }}</p>
+    </div>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-search-field">
+      <input matInput [(ngModel)]="searchName" (keyup.enter)="search()"
+        [placeholder]="'FRONTPAGE.SEARCH_PLACEHOLDER' | translate" maxlength="50">
+      <button matSuffix mat-icon-button (click)="search()" [attr.aria-label]="'FRONTPAGE.SEARCH_PLACEHOLDER' | translate">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </section>
+
+  <!-- ===================== Slider de simbios ===================== -->
+  <section class="fp-cards-section">
+    <div class="fp-cards-header">
+      <div class="fp-cards-header-left">
+        <h2>{{ 'FRONTPAGE.CARDS_TITLE' | translate }}</h2>
+        <div class="fp-tabs">
+          <button class="fp-tab" [class.active]="activeSort === 'ideas'" (click)="setSort('ideas')">{{ 'FRONTPAGE.TAB_FEATURED' | translate }}</button>
+          <button class="fp-tab" [class.active]="activeSort === 'new'" (click)="setSort('new')">{{ 'FRONTPAGE.TAB_NEW' | translate }}</button>
+          <button class="fp-tab" [class.active]="activeSort === 'collaborators'" (click)="setSort('collaborators')">{{ 'FRONTPAGE.TAB_MOST_COLLABORATED' | translate }}</button>
+        </div>
+      </div>
+      <a routerLink="/explore" class="fp-see-all">{{ 'FRONTPAGE.SEE_ALL' | translate }} &rarr;</a>
+    </div>
+
+    @if (symbiocreations.length === 0) {
+      <p class="fp-no-results">{{ 'FRONTPAGE.NO_RESULTS' | translate }}</p>
+    } @else {
+      <div class="fp-slider">
+        <button mat-mini-fab class="fp-slider-arrow" (click)="scrollCards(-1)" aria-label="prev">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="fp-cards-track" #cardsTrack>
+          @for (s of symbiocreations; track s) {
+            <mat-card class="fp-card">
+              <div class="centered font-13 gray-300 uppercase fp-card-date">
+                @if (s.dateTime) {
+                  <span>{{s.dateTime | date : 'E d MMM' : 'UTC' : dateLocale}}</span>
+                }
+                @if (s.hasStartTime) {
+                  <span>, {{s.dateTime | date : 'shortTime' : 'UTC' : dateLocale}}</span>
+                }
+              </div>
+
+              <div class="centered fp-card-title">
+                <a [routerLink]="['/symbiocreation/', s.id]" class="ellipsed-2">{{s.name}}</a>
+              </div>
+
+              <div class="fp-card-avatars"
+                [style.width]="(s.participantsToDisplay.length - 1) * 24 + 45 + computeNMoreSpanWidth(s.participants.length, s.participantsToDisplay.length) + 'px'">
+                @for (p of s.participantsToDisplay; track p; let i = $index) {
+                  <advanced-image
+                    [cldImg]="p.user.cloudinaryImage"
+                    width="40px" height="auto"
+                    style="position: absolute;"
+                    [style.z-index]="5-i" [style.left]="i*24 + 'px'"
+                    [matTooltip]="p.user.name" matTooltipPosition="above">
+                  </advanced-image>
+                }
+                @if (s.participantsToDisplay.length > 0 && s.participants.length - s.participantsToDisplay.length > 0) {
+                  <span class="fp-card-more"
+                    [style.left]="(s.participantsToDisplay.length - 1) * 24 + 45 + 'px'">
+                    {{s.participants.length - s.participantsToDisplay.length}} {{ 'EXPLORE.MORE_PARTICIPANTS' | translate }}
+                  </span>
+                }
+              </div>
+
+              <div class="fp-card-footer">
+                <div [matTooltip]="('EXPLORE.UPDATED' | translate) + ' ' + getTimeAgo(s.lastModified)" matTooltipPosition="above" class="fp-card-updated">
+                  <mat-icon>update</mat-icon>
+                  <span>{{getTimeAgo(s.lastModified)}}</span>
+                </div>
+                <button mat-icon-button class="fp-card-info"
+                  [matTooltip]="'EXPLORE.VIEW_MORE_INFO' | translate" matTooltipPosition="above"
+                  (click)="openSymbioDetailDialog(s)">
+                  <mat-icon>info</mat-icon>
+                </button>
+              </div>
+            </mat-card>
+          }
+        </div>
+
+        <button mat-mini-fab class="fp-slider-arrow" (click)="scrollCards(1)" aria-label="next">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    }
+  </section>
+
+  <!-- ===================== Features ===================== -->
+  <section class="fp-features" id="fp-features">
+    <div class="fp-feature">
+      <div class="fp-feature-icon pink"><mat-icon>map</mat-icon></div>
+      <div class="fp-feature-text">
+        <h3>{{ 'FRONTPAGE.FEATURE1_TITLE' | translate }}</h3>
+        <p>{{ 'FRONTPAGE.FEATURE1_DESC' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="fp-feature">
+      <div class="fp-feature-icon green"><mat-icon>eco</mat-icon></div>
+      <div class="fp-feature-text">
+        <h3>{{ 'FRONTPAGE.FEATURE2_TITLE' | translate }}</h3>
+        <p>{{ 'FRONTPAGE.FEATURE2_DESC' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="fp-feature">
+      <div class="fp-feature-icon purple"><mat-icon>groups</mat-icon></div>
+      <div class="fp-feature-text">
+        <h3>{{ 'FRONTPAGE.FEATURE3_TITLE' | translate }}</h3>
+        <p>{{ 'FRONTPAGE.FEATURE3_DESC' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="fp-feature">
+      <div class="fp-feature-icon orange"><mat-icon>local_florist</mat-icon></div>
+      <div class="fp-feature-text">
+        <h3>{{ 'FRONTPAGE.FEATURE4_TITLE' | translate }}</h3>
+        <p>{{ 'FRONTPAGE.FEATURE4_DESC' | translate }}</p>
+      </div>
+    </div>
+  </section>
+
+</div>

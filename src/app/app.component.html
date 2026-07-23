@@ -2,6 +2,7 @@
   <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
 }
 
+@if (!isHome) {
 <mat-toolbar color="primary" class="menu-desktop">
 
   <!-- Boton Menu Mobile -->
@@ -44,6 +45,14 @@
   }
 
   <mat-menu #userMenu="matMenu">
+    <button mat-menu-item routerLink="/mi-perfil">
+      <mat-icon>person</mat-icon>
+      <span>{{ 'NAV.MY_PROFILE' | translate }}</span>
+    </button>
+    <button mat-menu-item routerLink="/">
+      <mat-icon>home</mat-icon>
+      <span>{{ 'NAV.MAIN_WEB' | translate }}</span>
+    </button>
     <button mat-menu-item routerLink="/profile">
       <mat-icon>settings</mat-icon>
       <span>{{ 'NAV.SETTINGS' | translate }}</span>
@@ -108,5 +117,6 @@
   </div>
 
 </mat-sidenav>
+}
 
 <router-outlet></router-outlet>

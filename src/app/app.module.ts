@@ -48,6 +48,8 @@ import { MyOnedotsComponent } from './my-onedots/my-onedots.component';
 import { OnedotComponent } from './onedot/onedot.component';
 import { OnedotGridComponent } from './onedot-grid/onedot-grid.component';
 import { ChatgptIdeaSuggestionsComponent } from './chatgpt-idea-suggestions/chatgpt-idea-suggestions.component';
+import { FrontpageComponent } from './frontpage/frontpage.component';
+import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
 // import { MatSidenavModule } from '@angular/material/sidenav';
 // import {MatGridListModule} from '@angular/material/grid-list';
 // import {CdkAccordionModule} from '@angular/cdk/accordion';
@@ -87,6 +89,8 @@ import { ChatgptIdeaSuggestionsComponent } from './chatgpt-idea-suggestions/chat
         OnedotComponent,
         OnedotGridComponent,
         ChatgptIdeaSuggestionsComponent,
+        FrontpageComponent,
+        MiPerfilComponent,
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
