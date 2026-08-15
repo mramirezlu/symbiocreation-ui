@@ -7,12 +7,13 @@
     </a>
 
     <nav class="fp-nav">
-      <a class="fp-nav-link active" routerLink="/">{{ 'FRONTPAGE.NAV_EXPLORE' | translate }}</a>
-      <a class="fp-nav-link" href="https://simbiocreacion.com/#proceso">{{ 'FRONTPAGE.NAV_METHODOLOGY' | translate }}</a>
-      <a class="fp-nav-link" href="https://simbiocreacion.com/#workshops">{{ 'FRONTPAGE.NAV_WORKSHOPS' | translate }}</a>
-      <a class="fp-nav-link" href="https://simbiocreacion.com/#equipo">{{ 'FRONTPAGE.NAV_TEAM' | translate }}</a>
-      <a class="fp-nav-link" href="https://simbiocreacion.com/blog/">{{ 'FRONTPAGE.NAV_BLOG' | translate }}</a>
-      <a class="fp-nav-link" href="https://simbiocreacion.com/#contacto">{{ 'FRONTPAGE.NAV_CONTACT' | translate }}</a>
+      <a class="fp-nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'FRONTPAGE.NAV_HOME' | translate }}</a>
+      <a class="fp-nav-link" routerLink="/explore" routerLinkActive="active">{{ 'FRONTPAGE.NAV_EXPLORE' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/#proceso" target="_blank" rel="noopener">{{ 'FRONTPAGE.NAV_METHODOLOGY' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/#workshops" target="_blank" rel="noopener">{{ 'FRONTPAGE.NAV_WORKSHOPS' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/#equipo" target="_blank" rel="noopener">{{ 'FRONTPAGE.NAV_TEAM' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/blog/" target="_blank" rel="noopener">{{ 'FRONTPAGE.NAV_BLOG' | translate }}</a>
+      <a class="fp-nav-link" href="https://simbiocreacion.com/#contacto" target="_blank" rel="noopener">{{ 'FRONTPAGE.NAV_CONTACT' | translate }}</a>
     </nav>
 
     <div class="fp-actions">
@@ -22,13 +23,9 @@
         </button>
         <mat-menu #userMenu="matMenu">
           <div class="fp-user-name">{{ profile.name }}</div>
-          <button mat-menu-item routerLink="/mi-perfil">
+          <button mat-menu-item routerLink="/dashboard/my-symbios">
             <mat-icon>person</mat-icon>
             <span>{{ 'NAV.MY_PROFILE' | translate }}</span>
-          </button>
-          <button mat-menu-item routerLink="/dashboard/my-symbios">
-            <mat-icon>dashboard</mat-icon>
-            <span>{{ 'NAV.DASHBOARD' | translate }}</span>
           </button>
           <button mat-menu-item (click)="auth.logout()">
             <mat-icon>exit_to_app</mat-icon>
@@ -95,7 +92,12 @@
       <a routerLink="/explore" class="fp-see-all">{{ 'FRONTPAGE.SEE_ALL' | translate }} &rarr;</a>
     </div>
 
-    @if (symbiocreations.length === 0) {
+    @if (loading) {
+      <div class="fp-loading">
+        <mat-progress-spinner mode="indeterminate" diameter="44" color="accent"></mat-progress-spinner>
+        <span>{{ 'FRONTPAGE.LOADING' | translate }}</span>
+      </div>
+    } @else if (symbiocreations.length === 0) {
       <p class="fp-no-results">{{ 'FRONTPAGE.NO_RESULTS' | translate }}</p>
     } @else {
       <div class="fp-slider">
@@ -105,51 +107,32 @@
 
         <div class="fp-cards-track" #cardsTrack>
           @for (s of symbiocreations; track s) {
-            <mat-card class="fp-card">
-              <div class="centered font-13 gray-300 uppercase fp-card-date">
-                @if (s.dateTime) {
-                  <span>{{s.dateTime | date : 'E d MMM' : 'UTC' : dateLocale}}</span>
-                }
-                @if (s.hasStartTime) {
-                  <span>, {{s.dateTime | date : 'shortTime' : 'UTC' : dateLocale}}</span>
-                }
-              </div>
-
-              <div class="centered fp-card-title">
-                <a [routerLink]="['/symbiocreation/', s.id]" class="ellipsed-2">{{s.name}}</a>
-              </div>
-
-              <div class="fp-card-avatars"
-                [style.width]="(s.participantsToDisplay.length - 1) * 24 + 45 + computeNMoreSpanWidth(s.participants.length, s.participantsToDisplay.length) + 'px'">
-                @for (p of s.participantsToDisplay; track p; let i = $index) {
-                  <advanced-image
-                    [cldImg]="p.user.cloudinaryImage"
-                    width="40px" height="auto"
-                    style="position: absolute;"
-                    [style.z-index]="5-i" [style.left]="i*24 + 'px'"
-                    [matTooltip]="p.user.name" matTooltipPosition="above">
-                  </advanced-image>
-                }
-                @if (s.participantsToDisplay.length > 0 && s.participants.length - s.participantsToDisplay.length > 0) {
-                  <span class="fp-card-more"
-                    [style.left]="(s.participantsToDisplay.length - 1) * 24 + 45 + 'px'">
-                    {{s.participants.length - s.participantsToDisplay.length}} {{ 'EXPLORE.MORE_PARTICIPANTS' | translate }}
-                  </span>
-                }
-              </div>
-
-              <div class="fp-card-footer">
-                <div [matTooltip]="('EXPLORE.UPDATED' | translate) + ' ' + getTimeAgo(s.lastModified)" matTooltipPosition="above" class="fp-card-updated">
-                  <mat-icon>update</mat-icon>
-                  <span>{{getTimeAgo(s.lastModified)}}</span>
+            <a class="fp-card" [routerLink]="['/symbiocreation/', s.id]">
+              <div class="fp-card-image">
+                <div class="fp-card-avatars">
+                  @for (p of s.participantsToDisplay | slice:0:5; track p) {
+                    <advanced-image
+                      [cldImg]="p.user.cloudinaryImage"
+                      width="24px" height="24px"
+                      class="fp-card-avatar"
+                      [matTooltip]="p.user.name" matTooltipPosition="above"
+                      (click)="goToProfile(p, $event)">
+                    </advanced-image>
+                  }
+                  @if (s.participants.length - s.participantsToDisplay.length > 0) {
+                    <span class="fp-card-more-badge"
+                      [matTooltip]="(s.participants.length - s.participantsToDisplay.length) + ' ' + ('EXPLORE.MORE_PARTICIPANTS' | translate)"
+                      matTooltipPosition="above">
+                      +
+                    </span>
+                  }
                 </div>
-                <button mat-icon-button class="fp-card-info"
-                  [matTooltip]="'EXPLORE.VIEW_MORE_INFO' | translate" matTooltipPosition="above"
-                  (click)="openSymbioDetailDialog(s)">
-                  <mat-icon>info</mat-icon>
-                </button>
               </div>
-            </mat-card>
+              <div class="fp-card-body">
+                <div class="fp-card-title">{{ truncate(s.name, 45) }}</div>
+                <p class="fp-card-desc">{{ truncate(s.description, 90) }}</p>
+              </div>
+            </a>
           }
         </div>
 

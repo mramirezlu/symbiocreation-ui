@@ -178,6 +178,7 @@
     "NO_GROUP": "Sin grupo",
     "CREATE_GROUP": "Crear grupo",
     "VIEW_IDEA": "Ver idea",
+    "VIEW_PROFILE": "Ver perfil",
     "ASSIGN_GROUP": "Asignar grupo",
     "CHANGE_NAME": "Cambiar nombre",
     "ASSIGN_MODERATOR": "Asignar moderador",
@@ -229,7 +230,8 @@
     "RETRY": "Reintentar"
   },
   "FRONTPAGE": {
-    "NAV_EXPLORE": "Explorar",
+    "NAV_HOME": "Inicio",
+    "NAV_EXPLORE": "Explora",
     "NAV_METHODOLOGY": "Metodología",
     "NAV_WORKSHOPS": "Workshops",
     "NAV_TEAM": "Equipo",
@@ -247,6 +249,7 @@
     "SEARCH_PLACEHOLDER": "Buscar Simbios por palabra clave...",
     "CARDS_TITLE": "Simbios destacados",
     "SEE_ALL": "Ver todos",
+    "LOADING": "Cargando",
     "TAB_FEATURED": "Destacados",
     "TAB_NEW": "Nuevos",
     "TAB_MOST_COLLABORATED": "Más colaborados",
@@ -270,6 +273,14 @@
     "KPI_IDEAS": "Ideas creadas",
     "KPI_COLLABORATIONS": "Colaboraciones",
     "MY_SIMBIOS": "Mis Simbios",
-    "NO_SIMBIOS": "Aún no tienes Simbios."
+    "NO_SIMBIOS": "Aún no tienes Simbios.",
+    "DISCOVER_TITLE": "Explora Simbios",
+    "SEE_LESS": "Ver menos"
+  },
+  "PUBLICPROFILE": {
+    "KPI_SCORE": "Puntaje",
+    "KPI_PUBLIC_SYMBIOS": "Simbios Públicas",
+    "PUBLIC_SYMBIOS_TITLE": "Simbios públicas",
+    "NO_PUBLIC_SYMBIOS": "Aún no tiene simbios públicas."
   }
 }

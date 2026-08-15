@@ -360,6 +360,10 @@ MARK: Side Listas
           {{ 'SYMBIO.VIEW_IDEA' | translate }}
         </button>
 
+        <a mat-menu-item [href]="'/perfil/' + p.u_id" target="_blank" rel="noopener">
+          {{ 'SYMBIO.VIEW_PROFILE' | translate }}
+        </a>
+
         @if (participant?.isModerator && p.u_id !== participant?.u_id && !p.isModerator) {
           <button
             mat-menu-item
@@ -400,7 +404,7 @@ MARK: Side Listas
     <!-- <div fxLayout="column" class="workspace-container" [style.max-width]="!isVisible ? '100%' : '77%'" [style.width]="!isVisible ? '100%' : '77%'"> -->
     <div fxLayout="column" class="workspace-container" [style.max-width]="'100%'" [style.width]="'100%'">
 
-      <div class="mat-elevation-z3 workspace-header" style="padding: 9px; background-color: white; display: flex;justify-content: space-evenly;">
+      <div class="mat-elevation-z3 workspace-header" style="padding: 9px; background-color: white; display: flex; justify-content: center; align-items: center; position: relative;">
         <h2 class="font-26 gray-900 bolder centered" style="margin-bottom: 0;">
 
           <mat-icon class="teal-color-1 workspace-icon-left" style="color:#287987;"
@@ -452,7 +456,7 @@ MARK: Side Listas
 
 
         @if (!participant) {
-          <div style="display: flex;align-items: center;">
+          <div style="display: flex; align-items: center; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);">
             <!-- <p class="centered">Participa de esta simbiocreación!</p> -->
             <div style="text-align: center;">
               <button #btnParticipate mat-raised-button color="accent" (click)="joinSymbiocreation(btnParticipate)" class="bounce" style="background-color: #287987;color: #FFFFFF;">

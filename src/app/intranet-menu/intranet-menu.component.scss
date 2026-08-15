@@ -1,0 +1,46 @@
+$pink: #e91e8c;
+$dark: #1f2430;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.im-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  background: #fff;
+  border: 1px solid #eef0f3;
+  border-radius: 14px;
+  padding: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.im-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: $dark;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  mat-icon { color: #9aa0aa; }
+
+  &:hover { background: #f7f8fa; }
+
+  &.active {
+    background: rgba(233, 30, 140, 0.10);
+    color: $pink;
+
+    mat-icon { color: $pink; }
+  }
+}

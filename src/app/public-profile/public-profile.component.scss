@@ -1,0 +1,247 @@
+$pink: #e91e8c;
+$dark: #1f2430;
+$gray-600: #6b7280;
+
+.pp {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 30px 24px 60px;
+  color: $dark;
+}
+
+/* ===================== Header ===================== */
+.pp-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pp-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.pp-avatar ::ng-deep img {
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pp-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $pink;
+  color: #fff;
+  font-size: 44px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.pp-name {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+/* ===================== KPIs ===================== */
+.pp-kpis {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #eef0f3;
+  border-radius: 14px;
+}
+
+.pp-kpi {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1 1 200px;
+}
+
+.pp-kpi-value { font-size: 28px; font-weight: 800; line-height: 1; }
+.pp-kpi-label { color: $gray-600; font-size: 13px; margin-top: 2px; }
+
+.pp-kpi-icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.pink { background: rgba(233, 30, 140, 0.12); mat-icon { color: #e91e8c; } }
+  &.green { background: rgba(52, 168, 83, 0.12); mat-icon { color: #34a853; } }
+}
+
+/* ===================== Simbios públicas (slider/grilla) ===================== */
+.pp-cards-section { margin-top: 34px; }
+
+.pp-cards-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+
+  h2 { margin: 0; font-size: 22px; font-weight: 800; }
+}
+
+.pp-see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: $pink;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+.pp-no-results {
+  color: $gray-600;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.pp-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.pp-slider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pp-slider-arrow { flex: 0 0 auto; }
+
+.pp-cards-track {
+  flex: 1 1 auto;
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 6px 2px 12px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Expandido ("Ver todos"): grilla vertical */
+.pp-cards-grid {
+  flex-wrap: wrap;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.pp-paginator {
+  background: transparent;
+  margin-top: 6px;
+}
+
+/* Card (mismo diseño que mi-perfil): 4 tarjetas completas */
+.pp-card {
+  scroll-snap-align: start;
+  flex: 0 0 calc((100% - 3 * 16px) / 4);
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #eef0f3;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: $dark;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s ease;
+
+  &:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); }
+}
+
+.pp-card-image {
+  position: relative;
+  height: 150px;
+  background: url('/assets/images/Symbio_background4.jpg') center / cover no-repeat;
+}
+
+.pp-card-avatars {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 4px;
+}
+
+.pp-card-avatars ::ng-deep img {
+  display: block;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* Avatar clickeable → perfil del participante */
+.pp-card-avatar { cursor: pointer; }
+
+.pp-card-more-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #5f656d;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: default;
+}
+
+.pp-card-body { padding: 12px 14px 16px; }
+
+.pp-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: $dark;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pp-card-desc {
+  margin: 0;
+  font-size: 13px;
+  color: $gray-600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===================== Responsive ===================== */
+@media only screen and (max-width: 768px) {
+  .pp { padding: 20px 16px 40px; }
+  .pp-name { font-size: 26px; }
+  .pp-card { flex-basis: calc((100% - 16px) / 2); }
+}

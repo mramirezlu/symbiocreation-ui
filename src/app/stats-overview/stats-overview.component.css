@@ -1,0 +1,92 @@
+/* Línea gráfica de Mi Perfil */
+.so {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 30px 24px 60px;
+    color: #1f2430;
+}
+
+.so app-intranet-menu {
+    display: block;
+    margin-bottom: 24px;
+}
+
+.so-title {
+    margin: 0 0 24px;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.so-top {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.so-kpis {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+}
+
+.so-kpi {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.so-kpi-value { font-size: 28px; font-weight: 800; line-height: 1; }
+.so-kpi-label { color: #6b7280; font-size: 13px; margin-top: 2px; }
+
+.so-kpi-icon {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Colores originales de los datos (número) + ícono a juego */
+.so-kpi.teal .so-kpi-icon { background: rgba(0, 191, 165, 0.12); }
+.so-kpi.teal .so-kpi-icon mat-icon { color: #00bfa5; }
+.so-kpi.teal .so-kpi-value { color: #00bfa5; }
+
+.so-kpi.cyan .so-kpi-icon { background: rgba(38, 198, 218, 0.14); }
+.so-kpi.cyan .so-kpi-icon mat-icon { color: #26c6da; }
+.so-kpi.cyan .so-kpi-value { color: #26c6da; }
+
+.so-kpi.purple .so-kpi-icon { background: rgba(124, 77, 255, 0.12); }
+.so-kpi.purple .so-kpi-icon mat-icon { color: #7c4dff; }
+.so-kpi.purple .so-kpi-value { color: #7c4dff; }
+
+.so-chart {
+    flex: 1 1 400px;
+    min-width: 0;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    overflow: auto;
+}
+
+.so-tabs-panel {
+    margin-top: 24px;
+    padding: 8px 18px 18px;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+}
+
+@media only screen and (max-width: 768px) {
+    .so { padding: 20px 16px 40px; }
+    .so-kpis { flex-basis: 100%; }
+}

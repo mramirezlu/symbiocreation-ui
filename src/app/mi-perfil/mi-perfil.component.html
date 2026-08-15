@@ -1,5 +1,10 @@
 <div class="mp">
 
+  <!-- ===================== Menú superior (compartido) ===================== -->
+  <app-intranet-menu></app-intranet-menu>
+
+  <div class="mp-content">
+
   <!-- ===================== Saludo + imagen ===================== -->
   <section class="mp-top">
     <div class="mp-greeting">
@@ -28,95 +33,182 @@
     </a>
   </section>
 
-  <!-- ===================== KPIs (solo los 2 primeros) ===================== -->
+  <!-- ===================== KPIs (Mis Stats) ===================== -->
   <section class="mp-kpis">
     <div class="mp-kpi">
-      <div class="mp-kpi-icon pink"><mat-icon>lightbulb</mat-icon></div>
+      <div class="mp-kpi-icon pink"><mat-icon>emoji_events</mat-icon></div>
       <div class="mp-kpi-text">
-        <div class="mp-kpi-value">{{ ideasCount }}</div>
-        <div class="mp-kpi-label">{{ 'MYPROFILE.KPI_IDEAS' | translate }}</div>
+        <div class="mp-kpi-value">{{ score }}</div>
+        <div class="mp-kpi-label">{{ 'MY_SYMBIOS.SCORE' | translate }}</div>
       </div>
     </div>
 
     <div class="mp-kpi">
-      <div class="mp-kpi-icon green"><mat-icon>groups</mat-icon></div>
+      <div class="mp-kpi-icon green"><mat-icon>hub</mat-icon></div>
       <div class="mp-kpi-text">
-        <div class="mp-kpi-value">{{ collaborationsCount }}</div>
-        <div class="mp-kpi-label">{{ 'MYPROFILE.KPI_COLLABORATIONS' | translate }}</div>
+        <div class="mp-kpi-value">{{ totalSymbiocreations }}</div>
+        <div class="mp-kpi-label">{{ 'MY_SYMBIOS.TOTAL_SYMBIOCREATIONS' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="mp-kpi">
+      <div class="mp-kpi-icon purple"><mat-icon>lightbulb</mat-icon></div>
+      <div class="mp-kpi-text">
+        <div class="mp-kpi-value">{{ totalIdeas }}</div>
+        <div class="mp-kpi-label">{{ 'MY_SYMBIOS.TOTAL_IDEAS' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="mp-kpi">
+      <div class="mp-kpi-icon orange"><mat-icon>military_tech</mat-icon></div>
+      <div class="mp-kpi-text">
+        <div class="mp-kpi-value">{{ totalGroupsAsAmbassador }}</div>
+        <div class="mp-kpi-label">{{ 'MY_SYMBIOS.AMBASSADOR_GROUPS' | translate }}</div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== Mis Simbios (sin filtros) ===================== -->
+  <!-- ===================== Explora Simbios (Mis Simbios + ranking público) ===================== -->
   <section class="mp-cards-section">
     <div class="mp-cards-header">
-      <h2>{{ 'MYPROFILE.MY_SIMBIOS' | translate }}</h2>
-      <a routerLink="/dashboard/my-symbios" class="mp-see-all">{{ 'FRONTPAGE.SEE_ALL' | translate }} &rarr;</a>
+      <div class="mp-cards-header-left">
+        <h2>{{ 'MYPROFILE.DISCOVER_TITLE' | translate }}</h2>
+        <div class="mp-tabs">
+          <button class="mp-tab" [class.active]="activeTab === 'mine'" (click)="setTab('mine')">{{ 'MYPROFILE.MY_SIMBIOS' | translate }}</button>
+          <button class="mp-tab" [class.active]="activeTab === 'ideas'" (click)="setTab('ideas')">{{ 'FRONTPAGE.TAB_FEATURED' | translate }}</button>
+          <button class="mp-tab" [class.active]="activeTab === 'new'" (click)="setTab('new')">{{ 'FRONTPAGE.TAB_NEW' | translate }}</button>
+          <button class="mp-tab" [class.active]="activeTab === 'collaborators'" (click)="setTab('collaborators')">{{ 'FRONTPAGE.TAB_MOST_COLLABORATED' | translate }}</button>
+        </div>
+      </div>
+      <div class="mp-header-actions">
+        @if (isMine) {
+          <button mat-icon-button class="mp-view-toggle" (click)="toggleViewMode()"
+            [matTooltip]="(gridView ? 'MY_SYMBIOS.LIST_VIEW' : 'MY_SYMBIOS.GRID_VIEW') | translate" matTooltipPosition="above">
+            <mat-icon>{{ gridView ? 'view_list' : 'grid_on' }}</mat-icon>
+          </button>
+        }
+        @if (displayed.length > 0 && !showList) {
+          <button class="mp-see-all" (click)="expanded = !expanded">
+            {{ (expanded ? 'MYPROFILE.SEE_LESS' : 'FRONTPAGE.SEE_ALL') | translate }}
+            <mat-icon>{{ expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+        }
+      </div>
     </div>
 
-    @if (symbiocreations.length === 0) {
-      <p class="mp-no-results">{{ 'MYPROFILE.NO_SIMBIOS' | translate }}</p>
+    <!-- Buscador + filtros de fecha: solo en las pestañas públicas -->
+    @if (!isMine) {
+      <div class="mp-filters">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mp-search-field">
+          <input matInput [(ngModel)]="searchName" (keyup.enter)="searchPublic()"
+            [placeholder]="'FRONTPAGE.SEARCH_PLACEHOLDER' | translate" maxlength="50">
+          <button matSuffix mat-icon-button (click)="searchPublic()" [attr.aria-label]="'FRONTPAGE.SEARCH_PLACEHOLDER' | translate">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mp-date-field">
+          <mat-label>{{ 'EXPLORE.DATE_FROM' | translate }}</mat-label>
+          <input matInput [matDatepicker]="fromPicker" [(ngModel)]="startDate" (dateChange)="searchPublic()" readonly>
+          @if (startDate) {
+            <button matSuffix mat-icon-button (click)="startDate = null; searchPublic()">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mp-date-field">
+          <mat-label>{{ 'EXPLORE.DATE_TO' | translate }}</mat-label>
+          <input matInput [matDatepicker]="toPicker" [(ngModel)]="endDate" (dateChange)="searchPublic()" readonly>
+          @if (endDate) {
+            <button matSuffix mat-icon-button (click)="endDate = null; searchPublic()">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    }
+
+    @if (loading) {
+      <div class="mp-loading">
+        <mat-progress-spinner mode="indeterminate" diameter="44" color="accent"></mat-progress-spinner>
+        <span>{{ 'FRONTPAGE.LOADING' | translate }}</span>
+      </div>
+    } @else if (displayed.length === 0) {
+      <p class="mp-no-results">{{ (isMine ? 'MYPROFILE.NO_SIMBIOS' : 'FRONTPAGE.NO_RESULTS') | translate }}</p>
+    } @else if (showList) {
+      <!-- Vista de lista (solo "Mis Simbios"), reutilizando el componente del Dashboard -->
+      <app-list-symbios-user [symbiocreations]="displayed" [isModeratorList]="isModeratorList"></app-list-symbios-user>
+      @if (total > pageSize) {
+        <mat-paginator class="mp-paginator"
+          [length]="total"
+          [pageSize]="pageSize"
+          [pageIndex]="page"
+          [hidePageSize]="true"
+          (page)="onPage($event)">
+        </mat-paginator>
+      }
     } @else {
       <div class="mp-slider">
-        <button mat-mini-fab class="mp-slider-arrow" (click)="scrollCards(-1)" aria-label="prev">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
+        @if (!expanded) {
+          <button mat-mini-fab class="mp-slider-arrow" (click)="scrollCards(-1)" aria-label="prev">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        }
 
-        <div class="mp-cards-track" #cardsTrack>
-          @for (s of symbiocreations; track s) {
-            <mat-card class="mp-card">
-              <div class="centered font-13 gray-300 uppercase mp-card-date">
-                @if (s.dateTime) {
-                  <span>{{s.dateTime | date : 'E d MMM' : 'UTC' : dateLocale}}</span>
-                }
-                @if (s.hasStartTime) {
-                  <span>, {{s.dateTime | date : 'shortTime' : 'UTC' : dateLocale}}</span>
-                }
-              </div>
-
-              <div class="centered mp-card-title">
-                <a [routerLink]="['/symbiocreation/', s.id]" class="ellipsed-2">{{s.name}}</a>
-              </div>
-
-              <div class="mp-card-avatars"
-                [style.width]="(s.participantsToDisplay.length - 1) * 24 + 45 + computeNMoreSpanWidth(s.participants.length, s.participantsToDisplay.length) + 'px'">
-                @for (p of s.participantsToDisplay; track p; let i = $index) {
-                  <advanced-image
-                    [cldImg]="p.user.cloudinaryImage"
-                    width="40px" height="auto"
-                    style="position: absolute;"
-                    [style.z-index]="5-i" [style.left]="i*24 + 'px'"
-                    [matTooltip]="p.user.name" matTooltipPosition="above">
-                  </advanced-image>
-                }
-                @if (s.participantsToDisplay.length > 0 && s.participants.length - s.participantsToDisplay.length > 0) {
-                  <span class="mp-card-more"
-                    [style.left]="(s.participantsToDisplay.length - 1) * 24 + 45 + 'px'">
-                    {{s.participants.length - s.participantsToDisplay.length}} {{ 'EXPLORE.MORE_PARTICIPANTS' | translate }}
-                  </span>
-                }
-              </div>
-
-              <div class="mp-card-footer">
-                <div [matTooltip]="('EXPLORE.UPDATED' | translate) + ' ' + getTimeAgo(s.lastModified)" matTooltipPosition="above" class="mp-card-updated">
-                  <mat-icon>update</mat-icon>
-                  <span>{{getTimeAgo(s.lastModified)}}</span>
+        <div class="mp-cards-track" [class.mp-cards-grid]="expanded" #cardsTrack>
+          @for (s of displayed; track s) {
+            <a class="mp-card" [routerLink]="['/symbiocreation/', s.id]">
+              <div class="mp-card-image">
+                <div class="mp-card-avatars">
+                  @for (p of s.participantsToDisplay | slice:0:5; track p) {
+                    <advanced-image
+                      [cldImg]="p.user.cloudinaryImage"
+                      width="24px" height="24px"
+                      class="mp-card-avatar"
+                      [matTooltip]="p.user.name" matTooltipPosition="above"
+                      (click)="goToProfile(p, $event)">
+                    </advanced-image>
+                  }
+                  @if (s.participants.length - s.participantsToDisplay.length > 0) {
+                    <span class="mp-card-more-badge"
+                      [matTooltip]="(s.participants.length - s.participantsToDisplay.length) + ' ' + ('EXPLORE.MORE_PARTICIPANTS' | translate)"
+                      matTooltipPosition="above">
+                      +
+                    </span>
+                  }
                 </div>
-                <button mat-icon-button class="mp-card-info"
-                  [matTooltip]="'EXPLORE.VIEW_MORE_INFO' | translate" matTooltipPosition="above"
-                  (click)="openSymbioDetailDialog(s)">
-                  <mat-icon>info</mat-icon>
-                </button>
               </div>
-            </mat-card>
+              <div class="mp-card-body">
+                <div class="mp-card-title">{{ truncate(s.name, 45) }}</div>
+                <p class="mp-card-desc">{{ truncate(s.description, 90) }}</p>
+              </div>
+            </a>
           }
         </div>
 
-        <button mat-mini-fab class="mp-slider-arrow" (click)="scrollCards(1)" aria-label="next">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
+        @if (!expanded) {
+          <button mat-mini-fab class="mp-slider-arrow" (click)="scrollCards(1)" aria-label="next">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        }
       </div>
+
+      @if (total > pageSize) {
+        <mat-paginator class="mp-paginator"
+          [length]="total"
+          [pageSize]="pageSize"
+          [pageIndex]="page"
+          [hidePageSize]="true"
+          (page)="onPage($event)">
+        </mat-paginator>
+      }
     }
   </section>
 
+  </div>
 </div>

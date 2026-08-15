@@ -45,7 +45,7 @@
   }
 
   <mat-menu #userMenu="matMenu">
-    <button mat-menu-item routerLink="/mi-perfil">
+    <button mat-menu-item routerLink="/dashboard/my-symbios">
       <mat-icon>person</mat-icon>
       <span>{{ 'NAV.MY_PROFILE' | translate }}</span>
     </button>
@@ -105,10 +105,10 @@
     </div>
 
     @if (auth.loggedIn) {
-      <a class="no-hover menu-item-mobile menu-profile" mat-button routerLink="/profile" (click)="menuMobile.close()">{{ 'NAV.MY_PROFILE' | translate }}</a>
+      <a class="no-hover menu-item-mobile menu-profile" mat-button routerLink="/dashboard/my-symbios" (click)="menuMobile.close()">{{ 'NAV.MY_PROFILE' | translate }}</a>
     }
     @if (auth.loggedIn) {
-      <a class="no-hover menu-item-mobile menu-dashboard" mat-button routerLink="/dashboard/my-symbios" (click)="menuMobile.close()">{{ 'NAV.DASHBOARD' | translate }}</a>
+      <a class="no-hover menu-item-mobile menu-dashboard" mat-button routerLink="/profile" (click)="menuMobile.close()">{{ 'NAV.SETTINGS' | translate }}</a>
     }
     <a class="no-hover menu-item-mobile menu-explore" mat-button routerLink="/explore" (click)="menuMobile.close()">{{ 'NAV.EXPLORE' | translate }}</a>
     <a class="no-hover menu-item-mobile menu-ranking" mat-button routerLink="/ranking" (click)="menuMobile.close()">{{ 'NAV.RANKING' | translate }}</a>

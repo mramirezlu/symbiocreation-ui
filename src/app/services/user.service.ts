@@ -36,6 +36,12 @@ export class UserService {
         return this.http.get<User>(API_URL);
     }
 
+    // Perfil público: solo nombres + foto + puntaje (el backend no expone el email).
+    getUserPublic(idUser: string): Observable<User> {
+        let API_URL = `${this.apiUrl}/users/${idUser}/public`;
+        return this.http.get<User>(API_URL);
+    }
+
     // update
     updateUser(data: User): Observable<User> {
         let API_URL = `${this.apiUrl}/users`;

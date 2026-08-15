@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Symbiocreation, Participant } from '../models/symbioTypes';
 import { SymbiocreationService } from '../services/symbiocreation.service';
 import { AuthService } from '../services/auth.service';
@@ -27,6 +28,7 @@ export class FrontpageComponent implements OnInit {
     symbiocreations: Symbiocreation[] = [];
     searchName: string = '';
     activeSort: string = 'ideas'; // 'ideas' (Destacados) | 'new' (Nuevos) | 'collaborators' (Más colaborados)
+    loading = false;
 
     constructor(
         public auth: AuthService,
@@ -34,7 +36,15 @@ export class FrontpageComponent implements OnInit {
         private symbioService: SymbiocreationService,
         private imageService: ImageService,
         public dialog: MatDialog,
+        private router: Router,
     ) { }
+
+    // Clic en el avatar de un participante → su perfil público (evita el enlace de la tarjeta a la simbio).
+    goToProfile(p: Participant, event: Event): void {
+        event.preventDefault();
+        event.stopPropagation();
+        if (p?.user?.id) this.router.navigate(['/perfil', p.user.id]);
+    }
 
     ngOnInit(): void {
         this.loadSymbios();
@@ -43,11 +53,22 @@ export class FrontpageComponent implements OnInit {
     // Trae el top de públicas según el orden activo (Destacados/Nuevos/Más colaborados) para el slider.
     private loadSymbios(): void {
         const name = this.searchName?.trim() || undefined;
+        this.loading = true;
         this.symbioService.getPublicRankedSymbiocreations(this.activeSort, name)
-            .subscribe(symbios => {
-                this.symbiocreations = symbios;
-                this.symbiocreations.forEach(s => s.participantsToDisplay = this.getParticipantsToDisplay(s.participants));
+            .subscribe({
+                next: symbios => {
+                    this.symbiocreations = symbios;
+                    this.symbiocreations.forEach(s => s.participantsToDisplay = this.getParticipantsToDisplay(s.participants));
+                    this.loading = false;
+                },
+                error: () => { this.loading = false; },
             });
+    }
+
+    // Limita la cantidad de caracteres para que las tarjetas no queden de distinto tamaño.
+    truncate(text: string, max: number): string {
+        if (!text) return '';
+        return text.length > max ? text.substring(0, max).trim() + '…' : text;
     }
 
     setSort(sort: string): void {

@@ -1,0 +1,16 @@
+<nav class="im-menu">
+  <a class="im-menu-item" routerLink="/dashboard/my-symbios" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <mat-icon>dashboard</mat-icon>
+    <span>{{ 'NAV.MY_SYMBIOS' | translate }}</span>
+  </a>
+  <a class="im-menu-item" routerLink="/dashboard/my-onedots" routerLinkActive="active">
+    <mat-icon>interests</mat-icon>
+    <span>{{ 'NAV.MY_SYMBIOGAMES' | translate }}</span>
+  </a>
+  @if ((sharedService.appUser$ | async)?.role === 'SUPER_ADMIN') {
+    <a class="im-menu-item" routerLink="/dashboard/stats-overview" routerLinkActive="active">
+      <mat-icon>bar_chart</mat-icon>
+      <span>{{ 'NAV.GENERAL_STATS' | translate }}</span>
+    </a>
+  }
+</nav>

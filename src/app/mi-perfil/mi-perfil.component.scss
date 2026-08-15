@@ -3,10 +3,19 @@ $dark: #1f2430;
 $gray-600: #6b7280;
 
 .mp {
-  max-width: 1120px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 30px 24px 60px;
   color: $dark;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* El menú superior ahora es el componente compartido <app-intranet-menu> */
+
+.mp-content {
+  width: 100%;
 }
 
 /* ===================== Saludo + imagen ===================== */
@@ -86,7 +95,7 @@ $gray-600: #6b7280;
   display: flex;
   align-items: center;
   gap: 14px;
-  flex: 1 1 220px;
+  flex: 1 1 160px;
 }
 
 .mp-kpi-value { font-size: 28px; font-weight: 800; line-height: 1; }
@@ -105,6 +114,8 @@ $gray-600: #6b7280;
 
   &.pink { background: rgba(233, 30, 140, 0.12); mat-icon { color: #e91e8c; } }
   &.green { background: rgba(52, 168, 83, 0.12); mat-icon { color: #34a853; } }
+  &.purple { background: rgba(124, 77, 255, 0.12); mat-icon { color: #7c4dff; } }
+  &.orange { background: rgba(255, 152, 0, 0.15); mat-icon { color: #ff9800; } }
 }
 
 /* ===================== Mis Simbios (slider) ===================== */
@@ -124,16 +135,96 @@ $gray-600: #6b7280;
 }
 
 .mp-see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
   color: $pink;
   font-weight: 600;
+  font-size: 14px;
   text-decoration: none;
   white-space: nowrap;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.mp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mp-view-toggle mat-icon {
+  color: #6b7280;
 }
 
 .mp-no-results {
   color: $gray-600;
   text-align: center;
   padding: 20px 0;
+}
+
+/* ===================== Descubrir (buscador + tabs) ===================== */
+.mp-cards-header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.mp-tabs {
+  display: flex;
+  gap: 18px;
+}
+
+.mp-tab {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+
+  &.active {
+    color: $pink;
+    border-bottom-color: $pink;
+  }
+}
+
+.mp-filters {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 4px 0 16px;
+}
+
+.mp-search-field {
+  flex: 1 1 240px;
+  max-width: 420px;
+}
+
+.mp-date-field {
+  flex: 0 0 auto;
+  width: 170px;
+}
+
+.mp-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 0;
+  color: $gray-600;
 }
 
 .mp-slider {
@@ -156,59 +247,112 @@ $gray-600: #6b7280;
   &::-webkit-scrollbar { display: none; }
 }
 
+/* Expandido ("Ver todos"): grilla vertical (varias filas) en vez de slider horizontal */
+.mp-cards-grid {
+  flex-wrap: wrap;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.mp-paginator {
+  background: transparent;
+  margin-top: 6px;
+}
+
+/* Nuevo diseño de card (igual al de la vista inicial / frontpage) */
 .mp-card {
   scroll-snap-align: start;
-  flex: 0 0 calc((100% - 3 * 16px) / 4); /* 4 items visibles a la vez */
-  min-width: 190px;
-  background: #fcfcfc;
-  border: 1px solid #c9c9c9;
-  border-radius: 8px;
-  padding: 12px;
+  /* Siempre 4 tarjetas completas (mismo cálculo en slider colapsado y en grilla expandida) */
+  flex: 0 0 calc((100% - 3 * 16px) / 4);
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #eef0f3;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: $dark;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s ease;
+
+  &:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); }
 }
 
-.mp-card-date { height: 26px; color: #b4b4b4; }
+/* Imagen de portada por defecto */
+.mp-card-image {
+  position: relative;
+  height: 150px;
+  background: url('/assets/images/Symbio_background4.jpg') center / cover no-repeat;
+}
+
+/* Avatares: pequeños, separados, abajo a la izquierda */
+.mp-card-avatars {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 4px;
+}
+
+.mp-card-avatars ::ng-deep img {
+  display: block;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* Avatar clickeable → perfil del participante */
+.mp-card-avatar { cursor: pointer; }
+
+/* 6to elemento: "+" con tooltip "N más" */
+.mp-card-more-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #5f656d;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: default;
+}
+
+.mp-card-body {
+  padding: 12px 14px 16px;
+}
 
 .mp-card-title {
-  height: 48px;
-  font-size: 18px;
-  font-weight: 700;
-
-  a {
-    color: #5F656D;
-    text-decoration: none;
-
-    &:hover { color: #000; text-decoration: underline; }
-  }
+  font-size: 15px;
+  font-weight: 800;
+  color: $dark;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.mp-card-avatars { margin: 16px auto 0; height: 40px; position: relative; }
-.mp-card-more { position: absolute; top: 10px; font-size: 12px; color: #b4b4b4; }
-
-.mp-card-footer {
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 30px;
-}
-
-.mp-card-updated {
-  display: flex;
-  align-items: center;
-  color: #b4b4b4;
-  font-size: 12px;
-
-  mat-icon { font-size: 17px; width: 17px; height: 17px; }
+.mp-card-desc {
+  margin: 0;
+  font-size: 13px;
+  color: $gray-600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ===================== Responsive ===================== */
-@media only screen and (max-width: 1100px) {
-  .mp-card { flex-basis: calc((100% - 2 * 16px) / 3); }
-}
-
+/* Se mantienen 4 tarjetas completas en desktop/tablet (contenido full-width por el menú superior);
+   en mobile bajan a 2 para que sigan siendo legibles. */
 @media only screen and (max-width: 768px) {
   .mp { padding: 20px 16px 40px; }
   .mp-title { font-size: 32px; }
   .mp-image-placeholder { width: 100%; height: 150px; }
   .mp-card { flex-basis: calc((100% - 16px) / 2); }
+  .mp-search-field { flex-basis: 100%; max-width: none; }
+  .mp-date-field { flex: 1 1 calc(50% - 6px); width: auto; }
 }

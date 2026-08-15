@@ -7,7 +7,7 @@
       <mat-list-item>
         <span matListItemIcon class="bolder font-26 pink-A200">{{ i + 1 }}</span>
         <div matListItemTitle>
-          <span class="bold font-18 cyan-color-2">{{ user.name || user.firstName + " " + user.lastName }}</span>
+          <a class="bold font-18 cyan-color-2 rk-name" [routerLink]="['/perfil', user.id]">{{ user.name || user.firstName + " " + user.lastName }}</a>
           <span class="font-14 gray-600" style="float: right; margin-top: 18px;">{{ user.email }}</span>
         </div>
         <div matListItemLine>

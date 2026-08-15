@@ -178,6 +178,7 @@
     "NO_GROUP": "No group",
     "CREATE_GROUP": "Create group",
     "VIEW_IDEA": "View idea",
+    "VIEW_PROFILE": "View profile",
     "ASSIGN_GROUP": "Assign group",
     "CHANGE_NAME": "Change name",
     "ASSIGN_MODERATOR": "Assign moderator",
@@ -229,6 +230,7 @@
     "RETRY": "Retry"
   },
   "FRONTPAGE": {
+    "NAV_HOME": "Home",
     "NAV_EXPLORE": "Explore",
     "NAV_METHODOLOGY": "Methodology",
     "NAV_WORKSHOPS": "Workshops",
@@ -247,6 +249,7 @@
     "SEARCH_PLACEHOLDER": "Search Simbios by keyword...",
     "CARDS_TITLE": "Featured Simbios",
     "SEE_ALL": "See all",
+    "LOADING": "Loading",
     "TAB_FEATURED": "Featured",
     "TAB_NEW": "New",
     "TAB_MOST_COLLABORATED": "Most collaborated",
@@ -270,6 +273,14 @@
     "KPI_IDEAS": "Ideas created",
     "KPI_COLLABORATIONS": "Collaborations",
     "MY_SIMBIOS": "My Simbios",
-    "NO_SIMBIOS": "You don't have any Simbios yet."
+    "NO_SIMBIOS": "You don't have any Simbios yet.",
+    "DISCOVER_TITLE": "Explore Simbios",
+    "SEE_LESS": "See less"
+  },
+  "PUBLICPROFILE": {
+    "KPI_SCORE": "Score",
+    "KPI_PUBLIC_SYMBIOS": "Public Simbios",
+    "PUBLIC_SYMBIOS_TITLE": "Public Simbios",
+    "NO_PUBLIC_SYMBIOS": "No public Simbios yet."
   }
 }

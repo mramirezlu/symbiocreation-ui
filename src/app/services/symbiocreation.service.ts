@@ -41,6 +41,15 @@ export class SymbiocreationService {
         return this.http.get<Symbiocreation[]>(API_URL);
     }
 
+    // Perfil público: simbios públicas del usuario (paginadas 12/pág) + su conteo.
+    getPublicSymbiosOfUser(userId: string, page: number): Observable<Symbiocreation[]> {
+        return this.http.get<Symbiocreation[]>(`${this.apiUrl}/symbiocreations/getPublicOfUser/${userId}/${page}`);
+    }
+
+    countPublicSymbiosOfUser(userId: string): Observable<number> {
+        return this.http.get<number>(`${this.apiUrl}/symbiocreations/countPublicOfUser/${userId}`);
+    }
+
     // find all public symbiocreations (nombre + rango de fecha de creación opcionales; from/to en epoch millis)
     getAllPublicSymbiocreations(page: number, name?: string, from?: number, to?: number): Observable<Symbiocreation[]> {
         let API_URL = `${this.apiUrl}/symbiocreations/getAllPublic/${page}${this.buildPublicFilterParams(name, from, to)}`;
@@ -57,9 +66,12 @@ export class SymbiocreationService {
     }
 
     // Ranking de públicas para el frontpage. sort: 'ideas' (Destacados) | 'new' (Nuevos) | 'collaborators' (Más colaborados).
-    getPublicRankedSymbiocreations(sort: string, name?: string, limit: number = 20): Observable<Symbiocreation[]> {
-        const params: string[] = [`sort=${sort}`, `limit=${limit}`];
+    // from/to filtran por rango de fecha de creación (epoch millis, opcionales). page pagina el ranking (base 0).
+    getPublicRankedSymbiocreations(sort: string, name?: string, limit: number = 20, from?: number, to?: number, page: number = 0): Observable<Symbiocreation[]> {
+        const params: string[] = [`sort=${sort}`, `limit=${limit}`, `page=${page}`];
         if (name) params.push(`name=${encodeURIComponent(name)}`);
+        if (from != null) params.push(`from=${from}`);
+        if (to != null) params.push(`to=${to}`);
         return this.http.get<Symbiocreation[]>(`${this.apiUrl}/symbiocreations/getPublicRanked?${params.join('&')}`);
     }
 

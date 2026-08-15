@@ -14,6 +14,8 @@ import { LinkyModule } from 'ngx-linky';
 
 import { TranslatePipe, TranslateDirective, provideTranslateService, provideTranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { CustomMatPaginatorIntl } from './custom-paginator-intl';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -50,6 +52,8 @@ import { OnedotGridComponent } from './onedot-grid/onedot-grid.component';
 import { ChatgptIdeaSuggestionsComponent } from './chatgpt-idea-suggestions/chatgpt-idea-suggestions.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
 import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
+import { PublicProfileComponent } from './public-profile/public-profile.component';
+import { IntranetMenuComponent } from './intranet-menu/intranet-menu.component';
 // import { MatSidenavModule } from '@angular/material/sidenav';
 // import {MatGridListModule} from '@angular/material/grid-list';
 // import {CdkAccordionModule} from '@angular/cdk/accordion';
@@ -91,6 +95,8 @@ import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
         ChatgptIdeaSuggestionsComponent,
         FrontpageComponent,
         MiPerfilComponent,
+        PublicProfileComponent,
+        IntranetMenuComponent,
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
@@ -111,6 +117,7 @@ import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
             fallbackLang: 'es',
             lang: 'es',
             loader: provideTranslateLoader(TranslateHttpLoader)
-        })
+        }),
+        { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
     ] })
 export class AppModule { }

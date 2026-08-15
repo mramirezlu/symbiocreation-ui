@@ -1,3 +1,11 @@
+/* Nombre clickeable → perfil público del usuario */
+.rk-name {
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
+}
+
 .container-general {
     padding: 55px 25px;
 

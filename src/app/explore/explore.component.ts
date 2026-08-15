@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Symbiocreation, Participant } from '../models/symbioTypes';
 import { SymbiocreationService } from '../services/symbiocreation.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,7 +36,15 @@ export class ExploreComponent implements OnInit {
     private sharedService: SharedService,
     public dialog: MatDialog,
     private imageService: ImageService,
+    private router: Router,
   ) { }
+
+  // Clic en el avatar de un participante → su perfil público (evita el enlace de la tarjeta a la simbio).
+  goToProfile(p: Participant, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (p?.user?.id) this.router.navigate(['/perfil', p.user.id]);
+  }
 
   ngOnInit(): void {
     this.refresh();
@@ -126,6 +135,12 @@ export class ExploreComponent implements OnInit {
   getTimeAgo(lastModified: number): string {
     moment.locale('es');
     return moment(lastModified).fromNow();
+  }
+
+  // Limita la cantidad de caracteres para uniformar el tamaño de las tarjetas (igual que Mi Perfil/Frontpage).
+  truncate(text: string, max: number): string {
+    if (!text) return '';
+    return text.length > max ? text.substring(0, max).trim() + '…' : text;
   }
 
   private sanitizeSearchName(): string {

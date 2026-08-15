@@ -1,0 +1,108 @@
+<div class="pp">
+
+  <!-- ===================== Header: avatar + nombre ===================== -->
+  <section class="pp-header">
+    @if (headerAvatar) {
+      <advanced-image class="pp-avatar" [cldImg]="headerAvatar" width="120px" height="120px"></advanced-image>
+    } @else {
+      <div class="pp-avatar pp-avatar-fallback">{{ (displayName || '?').charAt(0) }}</div>
+    }
+    <h1 class="pp-name">{{ displayName }}</h1>
+  </section>
+
+  <!-- ===================== KPIs (los más livianos) ===================== -->
+  <section class="pp-kpis">
+    <div class="pp-kpi">
+      <div class="pp-kpi-icon pink"><mat-icon>emoji_events</mat-icon></div>
+      <div class="pp-kpi-text">
+        <div class="pp-kpi-value">{{ user?.score || 0 }}</div>
+        <div class="pp-kpi-label">{{ 'PUBLICPROFILE.KPI_SCORE' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="pp-kpi">
+      <div class="pp-kpi-icon green"><mat-icon>hub</mat-icon></div>
+      <div class="pp-kpi-text">
+        <div class="pp-kpi-value">{{ total }}</div>
+        <div class="pp-kpi-label">{{ 'PUBLICPROFILE.KPI_PUBLIC_SYMBIOS' | translate }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Simbios públicas ===================== -->
+  <section class="pp-cards-section">
+    <div class="pp-cards-header">
+      <h2>{{ 'PUBLICPROFILE.PUBLIC_SYMBIOS_TITLE' | translate }}</h2>
+      @if (symbios.length > 0) {
+        <button class="pp-see-all" (click)="expanded = !expanded">
+          {{ (expanded ? 'MYPROFILE.SEE_LESS' : 'FRONTPAGE.SEE_ALL') | translate }}
+          <mat-icon>{{ expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+      }
+    </div>
+
+    @if (loading) {
+      <div class="pp-loading">
+        <mat-progress-spinner mode="indeterminate" diameter="44" color="accent"></mat-progress-spinner>
+      </div>
+    } @else if (symbios.length === 0) {
+      <p class="pp-no-results">{{ 'PUBLICPROFILE.NO_PUBLIC_SYMBIOS' | translate }}</p>
+    } @else {
+      <div class="pp-slider">
+        @if (!expanded) {
+          <button mat-mini-fab class="pp-slider-arrow" (click)="scrollCards(-1)" aria-label="prev">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        }
+
+        <div class="pp-cards-track" [class.pp-cards-grid]="expanded" #cardsTrack>
+          @for (s of symbios; track s) {
+            <a class="pp-card" [routerLink]="['/symbiocreation/', s.id]">
+              <div class="pp-card-image">
+                <div class="pp-card-avatars">
+                  @for (p of s.participantsToDisplay | slice:0:5; track p) {
+                    <advanced-image
+                      [cldImg]="p.user.cloudinaryImage"
+                      width="24px" height="24px"
+                      class="pp-card-avatar"
+                      [matTooltip]="p.user.name" matTooltipPosition="above"
+                      (click)="goToProfile(p, $event)">
+                    </advanced-image>
+                  }
+                  @if (s.participants.length - s.participantsToDisplay.length > 0) {
+                    <span class="pp-card-more-badge"
+                      [matTooltip]="(s.participants.length - s.participantsToDisplay.length) + ' ' + ('EXPLORE.MORE_PARTICIPANTS' | translate)"
+                      matTooltipPosition="above">
+                      +
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="pp-card-body">
+                <div class="pp-card-title">{{ truncate(s.name, 45) }}</div>
+                <p class="pp-card-desc">{{ truncate(s.description, 90) }}</p>
+              </div>
+            </a>
+          }
+        </div>
+
+        @if (!expanded) {
+          <button mat-mini-fab class="pp-slider-arrow" (click)="scrollCards(1)" aria-label="next">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        }
+      </div>
+
+      @if (total > pageSize) {
+        <mat-paginator class="pp-paginator"
+          [length]="total"
+          [pageSize]="pageSize"
+          [pageIndex]="page"
+          [hidePageSize]="true"
+          (page)="onPage($event)">
+        </mat-paginator>
+      }
+    }
+  </section>
+
+</div>

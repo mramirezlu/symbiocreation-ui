@@ -51,60 +51,35 @@
       </div>
     }
 
-    <div class="container-80" fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="9px">
-
-      <!-- card -->
+    <div class="container-80 ex-cards">
       @for (s of symbiocreations; track s) {
-        <mat-card class="card-1 pink-bg">
-          <div class="centered font-13 gray-300 uppercase" style="height: 30px;">
-            <!--<mat-icon *ngIf="s.dateTime" class="font-16">event</mat-icon>-->
-            @if (s.dateTime) {
-              <span class="txt-2">{{s.dateTime | date : 'E d MMM' : 'UTC'}}</span>
-            }
-            @if (s.hasStartTime) {
-              <span class="txt-2">, {{s.dateTime | date : 'shortTime' : 'UTC'}}</span>
-            }
-          </div>
-          <div class="centered font-20 bold" style="color: white; height: 48px;">
-            <a [routerLink]="['/symbiocreation/', s.id]" class="ellipsed-2 link-hvr-underline txt-1">{{s.name}}</a>
-          </div>
-          <div style="margin: 20px auto 0; height: 40px; position: relative;"
-            [style.width]="(s.participantsToDisplay.length - 1) * 24 + 45 + computeNMoreSpanWidth(s.participants.length, s.participantsToDisplay.length) + 'px'">
-            @for (p of s.participantsToDisplay; track p; let i = $index) {
-              <advanced-image
-                [cldImg]="p.user.cloudinaryImage"
-                width="40px" height="auto"
-                style="position: absolute;"
-                [style.z-index]="5-i" [style.left]="i*24 + 'px'"
-                [matTooltip]="p.user.name" matTooltipPosition="above">
-              </advanced-image>
-            }
-            @if (s.participantsToDisplay.length > 0 && s.participants.length - s.participantsToDisplay.length > 0) {
-              <span
-                class="font-12 gray-300 txt-2" style="position: absolute; top: 10px;"
-                [style.left]="(s.participantsToDisplay.length - 1) * 24 + 45 + 'px'">
-                {{s.participants.length - s.participantsToDisplay.length}} {{ 'EXPLORE.MORE_PARTICIPANTS' | translate }}
-              </span>
-            }
-          </div>
-          <div style="margin-top: 20px; height: 30px;">
-            <div [matTooltip]="('EXPLORE.UPDATED' | translate) + ' ' + getTimeAgo(s.lastModified)" matTooltipPosition="above" style="max-width: 151px; display: flex; align-items: center;" fxFlex>
-              <mat-icon class="font-17 gray-300 txt-2">update</mat-icon>
-              <span class="font-12 gray-300 txt-2" style="position: relative; left: -4px;">{{getTimeAgo(s.lastModified)}}</span>
-            </div>
-            <div fxFlex="30px">
-              <button class="infoButton"
-                mat-icon-button
-                [matTooltip]="'EXPLORE.VIEW_MORE_INFO' | translate" matTooltipPosition="above"
-                style="position: relative; top: -5px;"
-                (click)="openSymbioDetailDialog(s)">
-                <mat-icon class="font-20 gray-400">info</mat-icon>
-              </button>
+        <a class="ex-card" [routerLink]="['/symbiocreation/', s.id]">
+          <div class="ex-card-image">
+            <div class="ex-card-avatars">
+              @for (p of s.participantsToDisplay | slice:0:5; track p) {
+                <advanced-image
+                  [cldImg]="p.user.cloudinaryImage"
+                  width="24px" height="24px"
+                  class="ex-card-avatar"
+                  [matTooltip]="p.user.name" matTooltipPosition="above"
+                  (click)="goToProfile(p, $event)">
+                </advanced-image>
+              }
+              @if (s.participants.length - s.participantsToDisplay.length > 0) {
+                <span class="ex-card-more-badge"
+                  [matTooltip]="(s.participants.length - s.participantsToDisplay.length) + ' ' + ('EXPLORE.MORE_PARTICIPANTS' | translate)"
+                  matTooltipPosition="above">
+                  +
+                </span>
+              }
             </div>
           </div>
-        </mat-card>
+          <div class="ex-card-body">
+            <div class="ex-card-title">{{ truncate(s.name, 45) }}</div>
+            <p class="ex-card-desc">{{ truncate(s.description, 90) }}</p>
+          </div>
+        </a>
       }
-      <!-- End of card -->
     </div>
 
     <div class="container-80" style="margin-top: 15px;">
