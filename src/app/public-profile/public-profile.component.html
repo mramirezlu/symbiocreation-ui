@@ -58,7 +58,7 @@
         <div class="pp-cards-track" [class.pp-cards-grid]="expanded" #cardsTrack>
           @for (s of symbios; track s) {
             <a class="pp-card" [routerLink]="['/symbiocreation/', s.id]">
-              <div class="pp-card-image">
+              <div class="pp-card-image" [style.background-image]="s.coverUrl ? 'url(' + s.coverUrl + '), url(/assets/images/Symbio_background4.jpg)' : null">
                 <div class="pp-card-avatars">
                   @for (p of s.participantsToDisplay | slice:0:5; track p) {
                     <advanced-image

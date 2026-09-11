@@ -29,6 +29,12 @@ export class FrontpageComponent implements OnInit {
     searchName: string = '';
     activeSort: string = 'ideas'; // 'ideas' (Destacados) | 'new' (Nuevos) | 'collaborators' (Más colaborados)
     loading = false;
+    expanded = false;       // "Ver todos" → grilla vertical + paginador (en vez de redirigir a Explora)
+    page = 0;
+    total = 0;              // total para el paginador (respeta buscador + rango de fecha)
+    readonly pageSize = 20;
+    startDate: moment.Moment | null = null; // filtro fecha de creación desde
+    endDate: moment.Moment | null = null;   // filtro fecha de creación hasta
 
     constructor(
         public auth: AuthService,
@@ -50,19 +56,35 @@ export class FrontpageComponent implements OnInit {
         this.loadSymbios();
     }
 
-    // Trae el top de públicas según el orden activo (Destacados/Nuevos/Más colaborados) para el slider.
+    // Trae la página del ranking de públicas según el orden activo (Destacados/Nuevos/Más colaborados),
+    // respetando buscador y rango de fecha; actualiza también el total para el paginador.
     private loadSymbios(): void {
         const name = this.searchName?.trim() || undefined;
+        const from = this.fromMillis();
+        const to = this.toMillis();
         this.loading = true;
-        this.symbioService.getPublicRankedSymbiocreations(this.activeSort, name)
+        this.symbioService.countPublicSymbiocreations(name, from, to).subscribe(count => this.total = count || 0);
+        this.symbioService.getPublicRankedSymbiocreations(this.activeSort, name, this.pageSize, from, to, this.page)
             .subscribe({
                 next: symbios => {
                     this.symbiocreations = symbios;
-                    this.symbiocreations.forEach(s => s.participantsToDisplay = this.getParticipantsToDisplay(s.participants));
+                    this.symbiocreations.forEach(s => {
+                        s.participantsToDisplay = this.getParticipantsToDisplay(s.participants);
+                        s.coverUrl = this.coverUrlFor(s);
+                    });
                     this.loading = false;
                 },
                 error: () => { this.loading = false; },
             });
+    }
+
+    // Filtro de fecha de creación como epoch millis (inicio/fin del día), o undefined si no está seteado.
+    private fromMillis(): number | undefined {
+        return this.startDate ? this.startDate.clone().startOf('day').valueOf() : undefined;
+    }
+
+    private toMillis(): number | undefined {
+        return this.endDate ? this.endDate.clone().endOf('day').valueOf() : undefined;
     }
 
     // Limita la cantidad de caracteres para que las tarjetas no queden de distinto tamaño.
@@ -71,13 +93,28 @@ export class FrontpageComponent implements OnInit {
         return text.length > max ? text.substring(0, max).trim() + '…' : text;
     }
 
+    // Portada de la tarjeta: URL de Cloudinary si la simbio tiene imgPublicId, o undefined (usa el fondo por defecto).
+    private coverUrlFor(s: Symbiocreation): string | undefined {
+        return s.imgPublicId
+            ? this.imageService.getImage(s.imgPublicId).format('auto').quality('auto').resize(fill().width(600).height(360)).toURL()
+            : undefined;
+    }
+
     setSort(sort: string): void {
         if (this.activeSort === sort) return;
         this.activeSort = sort;
+        this.page = 0;
         this.loadSymbios();
     }
 
+    // Nueva búsqueda / cambio de filtro de fecha → primera página.
     search(): void {
+        this.page = 0;
+        this.loadSymbios();
+    }
+
+    onPage(event: any): void {
+        this.page = event.pageIndex;
         this.loadSymbios();
     }
 

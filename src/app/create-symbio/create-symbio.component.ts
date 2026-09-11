@@ -12,8 +12,10 @@ import { Symbiocreation, Participant } from '../models/symbioTypes';
 import { SymbiocreationService } from '../services/symbiocreation.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
-import { concatMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { concatMap, tap } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
+import { ImageService } from '../services/image.service';
 
 import moment from 'moment-timezone';
 import { TZone } from 'moment-timezone-picker';
@@ -47,6 +49,7 @@ export class CreateSymbioComponent implements OnInit {
   @ViewChild('sdgInput') sdgInput: ElementRef<HTMLInputElement>;
 
   detailsOpened: boolean;
+  selectedImg: ImageSnippet | null = null; // portada elegida (aún sin subir)
 
   constructor(
     private symbioService: SymbiocreationService,
@@ -54,7 +57,8 @@ export class CreateSymbioComponent implements OnInit {
     private auth: AuthService,
     private router: Router,
     public location: Location,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private imageService: ImageService
     ) {
       this.filteredSDGs = this.sdgCtrl.valueChanges.pipe(
         startWith(null),
@@ -87,8 +91,14 @@ export class CreateSymbioComponent implements OnInit {
       }
     }
     
+    // Sube la portada a Cloudinary (si se eligió) y luego crea la simbiocreación con su imgPublicId.
+    const uploadCover$ = this.selectedImg
+      ? this.imageService.uploadImage(this.selectedImg.file).pipe(tap((res: any) => this.model.imgPublicId = res.public_id))
+      : of(null);
+
     // add creator as participant w role 'moderator'
-    this.auth.userProfile$.pipe(
+    uploadCover$.pipe(
+      concatMap(() => this.auth.userProfile$),
       concatMap(user => this.userService.getUserByEmail(user.email)),
       concatMap(u => {
         this.model.participants.push({u_id: u.id, user: u, isModerator: true} as Participant); // participant
@@ -100,6 +110,19 @@ export class CreateSymbioComponent implements OnInit {
       });
       this.router.navigate(['/symbiocreation', res.id]);
     });
+  }
+
+  // Portada: lee el archivo elegido y lo deja listo para subir (preview con dataURL).
+  processCoverFile(imageInput: any): void {
+    const file: File = imageInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event: any) => this.selectedImg = new ImageSnippet(event.target.result, file);
+    reader.readAsDataURL(file);
+  }
+
+  removeCover(): void {
+    this.selectedImg = null;
   }
 
   addTag(event: MatChipInputEvent): void {
@@ -182,4 +205,8 @@ export class CreateSymbioComponent implements OnInit {
     return this.allSDGs.filter(sdg => sdg.toLowerCase().indexOf(filterValue) >= 0);
   }
 
+}
+
+class ImageSnippet {
+  constructor(public src: string, public file: File) {}
 }

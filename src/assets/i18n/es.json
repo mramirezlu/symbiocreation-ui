@@ -64,6 +64,9 @@
   },
   "SYMBIO_DETAIL": {
     "EDIT_INFO": "Editar información",
+    "CAPTURE_COVER": "Usar captura del canvas como portada",
+    "USE_AS_COVER": "Usar como portada",
+    "CAPTURING": "Generando captura…",
     "LOCATION": "Lugar",
     "DATE": "Fecha",
     "TIME": "Hora",
@@ -155,6 +158,9 @@
   "SYMBIO": {
     "EDIT_SYMBIOCREATION": "Editar simbiocreación",
     "SYMBIOCREATION_NAME": "Nombre de la simbiocreación",
+    "COVER_IMAGE": "Imagen de portada",
+    "ADD_COVER": "Agregar portada",
+    "CHANGE_COVER": "Cambiar portada",
     "IS_PRIVATE_EVENT": "Es un evento privado",
     "PLACE": "Lugar",
     "DATE": "Fecha",
@@ -216,6 +222,7 @@
     "SESSION_NAME": "Nombre de la sesión",
     "GRID_WIDTH": "Ancho de la cuadrícula",
     "GRID_HEIGHT": "Alto de la cuadrícula",
+    "SIZE": "Tamaño",
     "JOIN_MESSAGE": "Únete para participar de la sesión",
     "NO_SYMBIOGAMES": "Aún no tienes SymbioGames."
   },

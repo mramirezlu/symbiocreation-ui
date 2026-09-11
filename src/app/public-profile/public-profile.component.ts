@@ -63,7 +63,12 @@ export class PublicProfileComponent implements OnInit {
         this.symbioService.getPublicSymbiosOfUser(this.userId, this.page).subscribe({
             next: symbios => {
                 this.symbios = symbios || [];
-                this.symbios.forEach(s => s.participantsToDisplay = this.getParticipantsToDisplay(s.participants));
+                this.symbios.forEach(s => {
+                    s.participantsToDisplay = this.getParticipantsToDisplay(s.participants);
+                    s.coverUrl = s.imgPublicId
+                        ? this.imageService.getImage(s.imgPublicId).format('auto').quality('auto').resize(fill().width(600).height(360)).toURL()
+                        : undefined;
+                });
                 this.loading = false;
             },
             error: () => { this.loading = false; },

@@ -24,7 +24,9 @@ const routes: Routes = [
   { path: 'dashboard/my-symbios', component: MiPerfilComponent, canActivate: [AuthGuard] }, // Mi Perfil (nuevo dashboard)
   { path: 'dashboard/my-onedots', component: MyOnedotsComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/stats-overview', component: StatsOverviewComponent, canActivate: [AuthGuard] },
-  { path: 'explore', component: ExploreComponent },
+  // Explora anterior (ExploreComponent) retirado de uso: el nuevo Explora es la home (/). Se conserva el componente por si se reusa.
+  // { path: 'explore', component: ExploreComponent },
+  { path: 'explore', redirectTo: '', pathMatch: 'full' },
   { path: 'perfil/:userId', component: PublicProfileComponent }, // perfil público (sin sesión)
   { path: 'ranking', component: RankingUsersPublicComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },

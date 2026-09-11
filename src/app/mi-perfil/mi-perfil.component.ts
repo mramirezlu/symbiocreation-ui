@@ -107,7 +107,12 @@ export class MiPerfilComponent implements OnInit {
 
     private setDisplayed(symbios: Symbiocreation[]): void {
         this.displayed = symbios || [];
-        this.displayed.forEach(s => s.participantsToDisplay = this.getParticipantsToDisplay(s.participants));
+        this.displayed.forEach(s => {
+            s.participantsToDisplay = this.getParticipantsToDisplay(s.participants);
+            s.coverUrl = s.imgPublicId
+                ? this.imageService.getImage(s.imgPublicId).format('auto').quality('auto').resize(fill().width(600).height(360)).toURL()
+                : undefined;
+        });
         // "Mis Simbios" puede mostrarse como lista (necesita saber en cuáles el usuario es moderador).
         this.isModeratorList = this.isMine ? this.buildIsModeratorList() : [];
     }

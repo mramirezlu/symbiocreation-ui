@@ -1,5 +1,19 @@
 > Cambios del **frontend** (`symbiocreation-ui`). Los cambios del **backend** están en `symbiocreation-res/CHANGELOG.md`.
 
+# 17/08/26 mramirez
+✔ [SymbioGames] La vista "Mis SymbioGames" pasó de lista a **grilla de tarjetas**; cada tarjeta muestra título, nro de participantes, última modificación, tamaño (ancho × alto de la cuadrícula) y el enlace para copiar. Nueva clave i18n `ONEDOT.SIZE`
+✔ [SymbioGames] En el espacio de portada de la tarjeta (donde las simbiocreaciones muestran su imagen) se dibuja una **miniatura estática del grid** con la paleta actual, mostrando el estado tal como se cargó (sin socket ni interacción). Nuevo componente `OnedotGridPreviewComponent` (canvas) que reutiliza los colores de `OnedotGridComponent`
+✔ [Frontpage] El botón "Ver todos" ya no redirige a Explora: ahora **expande la sección hacia abajo** (de slider horizontal a grilla vertical) y alterna a "Ver menos", igual que Mi Perfil
+✔ [Frontpage] Al buscador "Buscar Simbios" se le agregaron los **filtros de fecha Desde / Hasta** (rango de fecha de creación, opcionales), que se combinan con el texto y el orden activo
+✔ [Frontpage] Los listados **Destacados / Nuevos / Más colaborados** ahora **paginan** (20/pág vía `getPublicRankedSymbiocreations(..., page)`, total de `countPublicSymbiocreations` respetando nombre + rango de fecha); cambiar orden/búsqueda/fechas resetea a la primera página
+✔ [Frontpage] Se agregó un botón **"Buscar"** a la derecha de "Hasta" (la lupa sola no era intuitiva); la grilla expandida ("Ver todos") ahora se muestra **centrada**. Ajustes de UI en el buscador: campos de fecha compactos y contenido centrado verticalmente
+✔ [Simbiocreación] Ahora se puede **cargar una imagen de portada** por simbiocreación (subida directa a Cloudinary, se persiste `imgPublicId`). Control de agregar/cambiar/quitar con preview en **Crear** (create-symbio) y **Editar** (edit-symbiocreation-detail). Nuevas claves i18n `SYMBIO.COVER_IMAGE` / `ADD_COVER` / `CHANGE_COVER`
+✔ [Tarjetas] Las tarjetas de simbiocreaciones (Frontpage, Mi Perfil, Explora, Perfil público) usan esa portada cuando existe, con fallback a la imagen por defecto (`Symbio_background4.jpg`) — también si la portada **no carga** (capa de respaldo en `background-image`). Campo transitorio `coverUrl` resuelto desde `imgPublicId`
+✔ [Simbiocreación] En el popup de info (i) se agregó un botón (solo moderador, dentro de la vista de la simbio) que **captura el grafo del canvas** y, tras un **preview de confirmación**, lo fija como portada. Rasteriza el SVG a PNG (fondo blanco, escala x2), lo sube a Cloudinary y guarda `imgPublicId`. Nuevas claves i18n `SYMBIO_DETAIL.CAPTURE_COVER` / `USE_AS_COVER`
+✔ [Simbiocreación] El popup de info (i) ahora **muestra la portada actual** arriba (con fallback a la default) y un **spinner "Generando captura…"** mientras se rasteriza el canvas (y al guardar la portada). Nueva clave i18n `SYMBIO_DETAIL.CAPTURING`
+✔ [Navegación] El **Frontpage es ahora "Explora"** (la home `/` ya integra búsqueda, filtros, pestañas y paginación). En el nav del inicio se **quitó "Inicio"** y "Explora" quedó como default apuntando a `/`. El **Explora anterior** (`ExploreComponent`) se **retiró de uso**: la ruta `/explore` ahora redirige a `/` (se conservó el componente y la ruta original quedó comentada por si se reusa)
+✔ [Navegación] En el nav del inicio, cuando hay **sesión iniciada**, aparece un botón **"Dashboard"** a la derecha de "Explora" (pill rosado) que lleva a `/dashboard/my-symbios`. Usa la clave i18n existente `NAV.DASHBOARD`
+
 # 29/07/26 mramirez
 ✔ [Simbiocreación] Título del header centrado independientemente del botón "Participar"
 ✔ [Simbiocreación] Agregado "Ver perfil" en menú de participantes (abre perfil público en pestaña nueva)

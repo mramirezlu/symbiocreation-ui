@@ -10,8 +10,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { UntypedFormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, startWith, concatMap, tap } from 'rxjs/operators';
+import { ImageService } from '../services/image.service';
+import { CloudinaryImage } from '@cloudinary/url-gen';
 
 @Component({
     selector: 'app-edit-symbiocreation-detail',
@@ -41,11 +43,15 @@ export class EditSymbiocreationDetailComponent implements OnInit {
 
   @ViewChild('sdgInput') sdgInput: ElementRef<HTMLInputElement>;
 
+  selectedImg: ImageSnippet | null = null; // nueva portada elegida (aún sin subir)
+  coverImage: CloudinaryImage | null = null; // portada ya guardada (para preview)
+
   constructor(
     private route: ActivatedRoute,
     public location: Location,
     private symbioService: SymbiocreationService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private imageService: ImageService
   ) {
     this.filteredSDGs = this.sdgCtrl.valueChanges.pipe(
       startWith(null),
@@ -65,7 +71,11 @@ export class EditSymbiocreationDetailComponent implements OnInit {
           if (symbio.hasStartTime) {
             this.eventTime = moment(symbio.dateTime).tz('UTC').format('HH:mm');
             this.eventTz = symbio.timeZone.slice(0, -9);
-          } 
+          }
+        }
+
+        if (symbio.imgPublicId) {
+          this.coverImage = this.imageService.getImage(symbio.imgPublicId).format('auto').quality('auto');
         }
 
         this.isPrivate = symbio.visibility === 'private' ? true : false;
@@ -89,7 +99,14 @@ export class EditSymbiocreationDetailComponent implements OnInit {
       }
     }
 
-    this.symbioService.updateSymbiocreationInfo(this.symbio).subscribe(
+    // Sube la nueva portada a Cloudinary (si se eligió) y luego guarda con su imgPublicId.
+    const uploadCover$ = this.selectedImg
+      ? this.imageService.uploadImage(this.selectedImg.file).pipe(tap((res: any) => this.symbio.imgPublicId = res.public_id))
+      : of(null);
+
+    uploadCover$.pipe(
+      concatMap(() => this.symbioService.updateSymbiocreationInfo(this.symbio))
+    ).subscribe(
       res =>  {
         this._snackBar.open('Se actualizó la simbiocreación.', 'ok', {
           duration: 2000,
@@ -98,6 +115,24 @@ export class EditSymbiocreationDetailComponent implements OnInit {
       }
     );
 
+  }
+
+  // Portada: lee el archivo elegido y lo deja listo para subir (preview con dataURL).
+  processCoverFile(imageInput: any): void {
+    const file: File = imageInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.selectedImg = new ImageSnippet(event.target.result, file);
+      this.coverImage = null; // se reemplaza la portada guardada por la nueva
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeCover(): void {
+    this.selectedImg = null;
+    this.coverImage = null;
+    this.symbio.imgPublicId = undefined; // se omite en el PUT → backend lo pone null → portada quitada
   }
 
   addTag(event: MatChipInputEvent): void {
@@ -165,4 +200,8 @@ export class EditSymbiocreationDetailComponent implements OnInit {
     return this.allSDGs.filter(sdg => sdg.toLowerCase().indexOf(filterValue) >= 0);
   }
 
+}
+
+class ImageSnippet {
+  constructor(public src: string, public file: File) {}
 }

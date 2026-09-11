@@ -64,6 +64,9 @@
   },
   "SYMBIO_DETAIL": {
     "EDIT_INFO": "Edit information",
+    "CAPTURE_COVER": "Use canvas snapshot as cover",
+    "USE_AS_COVER": "Use as cover",
+    "CAPTURING": "Generating snapshot…",
     "LOCATION": "Location",
     "DATE": "Date",
     "TIME": "Time",
@@ -155,6 +158,9 @@
   "SYMBIO": {
     "EDIT_SYMBIOCREATION": "Edit symbiocreation",
     "SYMBIOCREATION_NAME": "Symbiocreation name",
+    "COVER_IMAGE": "Cover image",
+    "ADD_COVER": "Add cover",
+    "CHANGE_COVER": "Change cover",
     "IS_PRIVATE_EVENT": "Is a private event",
     "PLACE": "Place",
     "DATE": "Date",
@@ -216,6 +222,7 @@
     "SESSION_NAME": "Session name",
     "GRID_WIDTH": "Grid width",
     "GRID_HEIGHT": "Grid height",
+    "SIZE": "Size",
     "JOIN_MESSAGE": "Join to participate in the session",
     "NO_SYMBIOGAMES": "You don't have any SymbioGames yet."
   },

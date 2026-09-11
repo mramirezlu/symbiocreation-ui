@@ -689,7 +689,8 @@ export class SymbiocreationComponent implements OnInit, OnDestroy {
       width: '600px',
       data: {
         symbio: this.symbiocreation,
-        isModerator: this.participant?.isModerator
+        isModerator: this.participant?.isModerator,
+        canCaptureCover: true // abierto desde la vista de la simbio: el grafo está en el DOM para capturarlo
       }
     });
 

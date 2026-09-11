@@ -39,68 +39,88 @@
     border-radius: 14px;
 }
 
-.og-panel {
+.og-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.og-card {
+    display: flex;
+    flex-direction: column;
     background: #fff;
     border: 1px solid #eef0f3;
     border-radius: 14px;
-    padding: 8px 18px;
+    overflow: hidden;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-.og-list-head {
+.og-card:hover {
+    box-shadow: 0 6px 18px rgba(31, 36, 48, 0.10);
+    transform: translateY(-2px);
+}
+
+/* Portada: donde las tarjetas de simbiocreaciones muestran la imagen, aquí va la miniatura del grid */
+.og-card-cover {
+    display: block;
+    height: 150px;
+    padding: 12px;
+    box-sizing: border-box;
+    background: #f5f6f8;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.og-card-body {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 4px;
-    color: #6b7280;
-    font-size: 13px;
-}
-
-.og-col-name { flex: 1 1 auto; }
-.og-col-meta { flex: 0 0 150px; }
-
-.og-item { padding: 14px 4px; }
-
-.og-item-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.og-name {
+    flex-direction: column;
     flex: 1 1 auto;
-    font-size: 17px;
+    padding: 16px 18px 18px;
+}
+
+.og-card-title {
+    font-size: 18px;
     font-weight: 700;
     color: #287987;
     text-decoration: none;
+    line-height: 1.3;
 }
 
-.og-name:hover { text-decoration: underline; }
+.og-card-title:hover { text-decoration: underline; }
 
-.og-item .og-col-meta {
+.og-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 14px 0 16px;
+}
+
+.og-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     color: #6b7280;
     font-size: 14px;
+    width: fit-content;
+}
+
+.og-meta-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #9aa1ac;
 }
 
 .og-share {
     width: 100%;
-    max-width: 360px;
-    margin-top: 10px;
-}
-
-.og-divider {
-    height: 1px;
-    background: #eef0f3;
+    margin-top: auto;
 }
 
 .og-paginator {
     background: transparent;
-    margin-top: 12px;
+    margin-top: 20px;
 }
 
 @media only screen and (max-width: 768px) {
     .og { padding: 20px 16px 40px; }
-    .oculto-mobile { display: none !important; }
-    .og-item-top { flex-wrap: wrap; }
-    .og-col-meta { flex-basis: auto; }
-    .og-share { max-width: 100%; }
+    .og-grid { grid-template-columns: 1fr; }
 }

@@ -69,7 +69,12 @@ export class ExploreComponent implements OnInit {
         symbios => {
           this.sharedService.nextIsLoading(false);
           this.symbiocreations = symbios;
-          this.symbiocreations.forEach(symbio => symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants));
+          this.symbiocreations.forEach(symbio => {
+            symbio.participantsToDisplay = this.getParticipantsToDisplay(symbio.participants);
+            symbio.coverUrl = symbio.imgPublicId
+              ? this.imageService.getImage(symbio.imgPublicId).format('auto').quality('auto').resize(fill().width(600).height(360)).toURL()
+              : undefined;
+          });
         }
       );
   }

@@ -1,0 +1,46 @@
+/* Portada actual de la simbio en el popup de info */
+.detail-cover {
+    height: 140px;
+    border-radius: 10px;
+    border: 1px solid #eef0f3;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 4px 0 12px;
+}
+
+/* Estado "generando captura" */
+.cover-capture-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #6b7280;
+    font-size: 14px;
+    padding: 12px 0;
+}
+
+/* Preview de la captura del canvas para usarla como portada */
+.cover-capture {
+    margin: 8px 0 16px;
+    padding: 12px;
+    border: 1px solid #eef0f3;
+    border-radius: 12px;
+    background: #fafbfc;
+}
+
+.cover-capture-img {
+    display: block;
+    width: 100%;
+    max-height: 220px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid #eef0f3;
+}
+
+.cover-capture-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}

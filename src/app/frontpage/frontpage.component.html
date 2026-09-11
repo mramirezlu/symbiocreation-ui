@@ -7,8 +7,10 @@
     </a>
 
     <nav class="fp-nav">
-      <a class="fp-nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'FRONTPAGE.NAV_HOME' | translate }}</a>
-      <a class="fp-nav-link" routerLink="/explore" routerLinkActive="active">{{ 'FRONTPAGE.NAV_EXPLORE' | translate }}</a>
+      <a class="fp-nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'FRONTPAGE.NAV_EXPLORE' | translate }}</a>
+      @if (auth.userProfile$ | async) {
+        <a class="fp-nav-dashboard" routerLink="/dashboard/my-symbios" routerLinkActive="active">{{ 'NAV.DASHBOARD' | translate }}</a>
+      }
       <a class="fp-nav-link" href="https://simbiocreacion.com/#proceso" target="_blank" rel="noopener">{{ 'FRONTPAGE.NAV_METHODOLOGY' | translate }}</a>
       <a class="fp-nav-link" href="https://simbiocreacion.com/#workshops" target="_blank" rel="noopener">{{ 'FRONTPAGE.NAV_WORKSHOPS' | translate }}</a>
       <a class="fp-nav-link" href="https://simbiocreacion.com/#equipo" target="_blank" rel="noopener">{{ 'FRONTPAGE.NAV_TEAM' | translate }}</a>
@@ -24,8 +26,8 @@
         <mat-menu #userMenu="matMenu">
           <div class="fp-user-name">{{ profile.name }}</div>
           <button mat-menu-item routerLink="/dashboard/my-symbios">
-            <mat-icon>person</mat-icon>
-            <span>{{ 'NAV.MY_PROFILE' | translate }}</span>
+            <mat-icon>dashboard</mat-icon>
+            <span>{{ 'NAV.DASHBOARD' | translate }}</span>
           </button>
           <button mat-menu-item (click)="auth.logout()">
             <mat-icon>exit_to_app</mat-icon>
@@ -69,13 +71,44 @@
       <h2>{{ 'FRONTPAGE.SEARCH_TITLE' | translate }}</h2>
       <p>{{ 'FRONTPAGE.SEARCH_SUBTITLE' | translate }}</p>
     </div>
-    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-search-field">
-      <input matInput [(ngModel)]="searchName" (keyup.enter)="search()"
-        [placeholder]="'FRONTPAGE.SEARCH_PLACEHOLDER' | translate" maxlength="50">
-      <button matSuffix mat-icon-button (click)="search()" [attr.aria-label]="'FRONTPAGE.SEARCH_PLACEHOLDER' | translate">
+    <div class="fp-search-fields">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-search-field">
+        <input matInput [(ngModel)]="searchName" (keyup.enter)="search()"
+          [placeholder]="'FRONTPAGE.SEARCH_PLACEHOLDER' | translate" maxlength="50">
+        <button matSuffix mat-icon-button (click)="search()" [attr.aria-label]="'FRONTPAGE.SEARCH_PLACEHOLDER' | translate">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-date-field">
+        <mat-label>{{ 'EXPLORE.DATE_FROM' | translate }}</mat-label>
+        <input matInput [matDatepicker]="fromPicker" [(ngModel)]="startDate" (dateChange)="search()" readonly>
+        @if (startDate) {
+          <button matSuffix mat-icon-button (click)="startDate = null; search()">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="fp-date-field">
+        <mat-label>{{ 'EXPLORE.DATE_TO' | translate }}</mat-label>
+        <input matInput [matDatepicker]="toPicker" [(ngModel)]="endDate" (dateChange)="search()" readonly>
+        @if (endDate) {
+          <button matSuffix mat-icon-button (click)="endDate = null; search()">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" class="fp-search-btn" (click)="search()">
         <mat-icon>search</mat-icon>
+        <span>{{ 'EXPLORE.SEARCH_BUTTON' | translate }}</span>
       </button>
-    </mat-form-field>
+    </div>
   </section>
 
   <!-- ===================== Slider de simbios ===================== -->
@@ -89,7 +122,12 @@
           <button class="fp-tab" [class.active]="activeSort === 'collaborators'" (click)="setSort('collaborators')">{{ 'FRONTPAGE.TAB_MOST_COLLABORATED' | translate }}</button>
         </div>
       </div>
-      <a routerLink="/explore" class="fp-see-all">{{ 'FRONTPAGE.SEE_ALL' | translate }} &rarr;</a>
+      @if (symbiocreations.length > 0) {
+        <button class="fp-see-all" (click)="expanded = !expanded">
+          {{ (expanded ? 'MYPROFILE.SEE_LESS' : 'FRONTPAGE.SEE_ALL') | translate }}
+          <mat-icon>{{ expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+      }
     </div>
 
     @if (loading) {
@@ -101,14 +139,16 @@
       <p class="fp-no-results">{{ 'FRONTPAGE.NO_RESULTS' | translate }}</p>
     } @else {
       <div class="fp-slider">
-        <button mat-mini-fab class="fp-slider-arrow" (click)="scrollCards(-1)" aria-label="prev">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
+        @if (!expanded) {
+          <button mat-mini-fab class="fp-slider-arrow" (click)="scrollCards(-1)" aria-label="prev">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        }
 
-        <div class="fp-cards-track" #cardsTrack>
+        <div class="fp-cards-track" [class.fp-cards-grid]="expanded" #cardsTrack>
           @for (s of symbiocreations; track s) {
             <a class="fp-card" [routerLink]="['/symbiocreation/', s.id]">
-              <div class="fp-card-image">
+              <div class="fp-card-image" [style.background-image]="s.coverUrl ? 'url(' + s.coverUrl + '), url(/assets/images/Symbio_background4.jpg)' : null">
                 <div class="fp-card-avatars">
                   @for (p of s.participantsToDisplay | slice:0:5; track p) {
                     <advanced-image
@@ -136,10 +176,22 @@
           }
         </div>
 
-        <button mat-mini-fab class="fp-slider-arrow" (click)="scrollCards(1)" aria-label="next">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
+        @if (!expanded) {
+          <button mat-mini-fab class="fp-slider-arrow" (click)="scrollCards(1)" aria-label="next">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        }
       </div>
+
+      @if (total > pageSize) {
+        <mat-paginator class="fp-paginator"
+          [length]="total"
+          [pageSize]="pageSize"
+          [pageIndex]="page"
+          [hidePageSize]="true"
+          (page)="onPage($event)">
+        </mat-paginator>
+      }
     }
   </section>
 

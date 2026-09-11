@@ -49,6 +49,7 @@ import { CreateOnedotComponent } from './create-onedot/create-onedot.component';
 import { MyOnedotsComponent } from './my-onedots/my-onedots.component';
 import { OnedotComponent } from './onedot/onedot.component';
 import { OnedotGridComponent } from './onedot-grid/onedot-grid.component';
+import { OnedotGridPreviewComponent } from './onedot-grid-preview/onedot-grid-preview.component';
 import { ChatgptIdeaSuggestionsComponent } from './chatgpt-idea-suggestions/chatgpt-idea-suggestions.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
 import { MiPerfilComponent } from './mi-perfil/mi-perfil.component';
@@ -92,6 +93,7 @@ import { IntranetMenuComponent } from './intranet-menu/intranet-menu.component';
         MyOnedotsComponent,
         OnedotComponent,
         OnedotGridComponent,
+        OnedotGridPreviewComponent,
         ChatgptIdeaSuggestionsComponent,
         FrontpageComponent,
         MiPerfilComponent,

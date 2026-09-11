@@ -163,7 +163,7 @@
         <div class="mp-cards-track" [class.mp-cards-grid]="expanded" #cardsTrack>
           @for (s of displayed; track s) {
             <a class="mp-card" [routerLink]="['/symbiocreation/', s.id]">
-              <div class="mp-card-image">
+              <div class="mp-card-image" [style.background-image]="s.coverUrl ? 'url(' + s.coverUrl + '), url(/assets/images/Symbio_background4.jpg)' : null">
                 <div class="mp-card-avatars">
                   @for (p of s.participantsToDisplay | slice:0:5; track p) {
                     <advanced-image

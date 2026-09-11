@@ -28,6 +28,7 @@ export interface Symbiocreation {
     tags?: string[];
     extraUrls?: string[];
     sdgs?: string[];
+    imgPublicId?: string; // portada (public_id de Cloudinary)
 
     lastModified?: Date;
     enabled?: boolean;
@@ -37,6 +38,7 @@ export interface Symbiocreation {
     nparticipants?: number;
 
     participantsToDisplay?: Participant[];
+    coverUrl?: string; // transitorio: URL de la portada resuelta desde imgPublicId (para las tarjetas)
 }
 
 export interface Participant {

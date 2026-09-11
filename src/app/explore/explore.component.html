@@ -54,7 +54,7 @@
     <div class="container-80 ex-cards">
       @for (s of symbiocreations; track s) {
         <a class="ex-card" [routerLink]="['/symbiocreation/', s.id]">
-          <div class="ex-card-image">
+          <div class="ex-card-image" [style.background-image]="s.coverUrl ? 'url(' + s.coverUrl + '), url(/assets/images/Symbio_background4.jpg)' : null">
             <div class="ex-card-avatars">
               @for (p of s.participantsToDisplay | slice:0:5; track p) {
                 <advanced-image

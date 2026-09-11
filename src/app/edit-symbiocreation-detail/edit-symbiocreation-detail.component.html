@@ -45,6 +45,28 @@
           <textarea matInput [(ngModel)]="symbio.description" name="description" rows="9"></textarea>
         </mat-form-field>
       </div>
+
+      <!-- Portada (imagen de la simbiocreación) -->
+      <div class="cover-field">
+        <span class="cover-label">{{ 'SYMBIO.COVER_IMAGE' | translate }}</span>
+        <div class="cover-row">
+          @if (selectedImg || coverImage) {
+            <div class="cover-preview"
+              [style.background-image]="selectedImg ? 'url(' + selectedImg.src + ')' : 'url(' + coverImage.toURL() + ')'"></div>
+          }
+          <div class="cover-buttons">
+            <input hidden type="file" accept="image/*" #coverInput (change)="processCoverFile(coverInput); coverInput.value = ''">
+            <button type="button" mat-stroked-button (click)="coverInput.click()">
+              <mat-icon>image</mat-icon>
+              <span>{{ ((selectedImg || coverImage) ? 'SYMBIO.CHANGE_COVER' : 'SYMBIO.ADD_COVER') | translate }}</span>
+            </button>
+            @if (selectedImg || coverImage) {
+              <button type="button" mat-button color="warn" (click)="removeCover()">{{ 'COMMON.DELETE' | translate }}</button>
+            }
+          </div>
+        </div>
+      </div>
+
       <div>
         <mat-form-field fxFlex>
           <mat-label>{{ 'SYMBIO.INFO_URL' | translate }}</mat-label>

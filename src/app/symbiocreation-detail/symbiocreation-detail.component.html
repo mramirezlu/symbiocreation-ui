@@ -6,6 +6,12 @@
 
   <span fxFlex></span>
 
+  @if (data.isModerator && data.canCaptureCover) {
+    <button mat-icon-button [matTooltip]="'SYMBIO_DETAIL.CAPTURE_COVER' | translate" [disabled]="capturing" (click)="captureCover()">
+      <mat-icon>add_a_photo</mat-icon>
+    </button>
+  }
+
   @if (data.isModerator) {
     <button mat-icon-button [matTooltip]="'SYMBIO_DETAIL.EDIT_INFO' | translate" (click)="editSymbiocreationInfo(data.symbio)">
       <mat-icon>edit</mat-icon>
@@ -18,6 +24,34 @@
 </h1>
 
 <mat-dialog-content>
+
+  <!-- Portada actual de la simbio -->
+  <div class="detail-cover" [style.background-image]="coverBg"></div>
+
+  <!-- Generando la captura del canvas -->
+  @if (capturing) {
+    <div class="cover-capture-loading">
+      <mat-progress-spinner mode="indeterminate" diameter="28" color="accent"></mat-progress-spinner>
+      <span>{{ 'SYMBIO_DETAIL.CAPTURING' | translate }}</span>
+    </div>
+  }
+
+  <!-- Preview de la captura del canvas antes de fijarla como portada -->
+  @if (previewSrc) {
+    <div class="cover-capture">
+      <img class="cover-capture-img" [src]="previewSrc" alt="preview">
+      <div class="cover-capture-actions">
+        @if (savingCover) {
+          <mat-progress-spinner mode="indeterminate" diameter="24" color="accent"></mat-progress-spinner>
+        }
+        <button mat-button [disabled]="savingCover" (click)="cancelCapture()">{{ 'COMMON.CANCEL' | translate }}</button>
+        <button mat-flat-button color="accent" [disabled]="savingCover" (click)="useAsCover()">
+          {{ 'SYMBIO_DETAIL.USE_AS_COVER' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+
 
   <!-- Place -->
   <div style="margin-top: 20px; display: flex; align-items: center;" [hidden]="!data.symbio.place">
